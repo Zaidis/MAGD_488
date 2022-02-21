@@ -1,0 +1,7 @@
+C:\Users\DJ-PC\Desktop\MythosServer\MythosServer\bin\Debug\MythosServer.exe.config
+C:\Users\DJ-PC\Desktop\MythosServer\MythosServer\bin\Debug\MythosServer.exe
+C:\Users\DJ-PC\Desktop\MythosServer\MythosServer\bin\Debug\MythosServer.pdb
+C:\Users\DJ-PC\Desktop\MythosServer\MythosServer\obj\Debug\MythosServer.csprojAssemblyReference.cache
+C:\Users\DJ-PC\Desktop\MythosServer\MythosServer\obj\Debug\MythosServer.csproj.CoreCompileInputs.cache
+C:\Users\DJ-PC\Desktop\MythosServer\MythosServer\obj\Debug\MythosServer.exe
+C:\Users\DJ-PC\Desktop\MythosServer\MythosServer\obj\Debug\MythosServer.pdb
