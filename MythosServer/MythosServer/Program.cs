@@ -18,14 +18,13 @@ namespace MythosServer
         private const string k_GlobalIp = "127.0.0.1"; //External IP
         private const string k_LocalIp = "127.0.0.1"; //Local IP
         private const int k_Port = 2552; //Port selected
-        private static List<Socket> connections = new List<Socket>();
+        private static List<Socket> connections = new List<Socket>(); //List of all connections, and list of matchmaking clients
         private static List<Socket> matchmaking = new List<Socket>();
 
         static void Main(string[] args)
         {
             Server();
         }
-
         private static void Server()
         {
             IPAddress ipAddress = IPAddress.Parse(k_LocalIp);
@@ -38,13 +37,11 @@ namespace MythosServer
 
             Console.WriteLine("Waiting...");
 
-            Thread mmthread = new Thread(new ThreadStart(() => MatchMake()));
+            Thread mmthread = new Thread(new ThreadStart(() => MatchMake())); //Start main matchmaking thread
             mmthread.Start();
 
-            for (; ; )
-            {
-                try
-                {
+            for (; ; ) { //Welcome loop
+                try {
                     Socket handler = listener.Accept(); //Accept incoming client connection requests, create new socket and thread
                     connections.Add(handler);
 
@@ -52,79 +49,69 @@ namespace MythosServer
                     thread.Start();
 
                     PrintConnections();
-                }
-                catch (Exception e)
-                {
+                } catch (Exception e) {
                     Console.Write(e);
                 }
             }
         }
-        private static void ClientHandler(Socket handler)
+        private static void ClientHandler(Socket handler) //Handle client until handed off to matchmaking
         {
             byte[] buffer = new byte[1024];
 
-            for (; ; )
-            {
-                if (!matchmaking.Contains(handler))
-                {
-                    Thread.Sleep(10); //reduce frequency of loop, reducing cpu utilization
+            for (; ; ) {
+                Thread.Sleep(10); //reduce frequency of loop, reducing cpu utilization
+                if (!matchmaking.Contains(handler)) {
                     int numBytesReceived = handler.Receive(buffer); //data stream in
                     string textReceived = Encoding.ASCII.GetString(buffer, 0, numBytesReceived); //decode from stream to ASCII
-                    Console.WriteLine("Received: " + textReceived);
-                    if (textReceived.Equals("quit\r\n", StringComparison.OrdinalIgnoreCase))
-                    { //Exit case
+                    Console.WriteLine("Received: \n" + textReceived);
+                    if (textReceived.Equals("quit\r\n", StringComparison.OrdinalIgnoreCase)) { //Exit case
                         connections.Remove(handler);
                         matchmaking.Remove(handler);
                         PrintConnections();
                         break;
-                    }
-                    if (textReceived.Equals("matchmake\r\n", StringComparison.OrdinalIgnoreCase))
-                    {
+                    } if (textReceived.Equals("matchmake\r\n", StringComparison.OrdinalIgnoreCase)) { //Adding connection to matchmaking queue
                         matchmaking.Add(handler);
                         PrintConnections();
                     }
                 }
             }
-
             handler.Shutdown(SocketShutdown.Both);
             handler.Close();
         }
-        private static void PrintConnections()
+        private static void PrintConnections() //Print current connection statuses
         {
             Console.Clear();
             Console.WriteLine("Current Connections: ");
             foreach (Socket s in connections)
                 Console.WriteLine(s.RemoteEndPoint);
-            if (matchmaking.Count > 0)
-            {
+            if (matchmaking.Count > 0) {
                 Console.WriteLine("Matchmaking Clients: ");
                 foreach (Socket s in matchmaking)
                     if (s.RemoteEndPoint != null)
                         Console.WriteLine(s.RemoteEndPoint);
             }
         }
-
         private static void MatchMake()
         {
-            for (; ; )
-            {
-                if (matchmaking.Count > 1)
-                {
+            for (; ; ) {
+                if (matchmaking.Count > 1) {
                     byte[] buffer = new byte[1024];
 
                     Socket host = matchmaking[0];
                     Socket client = matchmaking[1];
 
-                    host.Send(Encoding.ASCII.GetBytes("start\r\n"));
+                    host.Send(Encoding.ASCII.GetBytes("start\r\n")); //Send start command to selected host
                     Console.WriteLine("Start command sent to host");
+
                     int numBytesReceived = host.Receive(buffer); //data stream in
                     string textReceived = Encoding.ASCII.GetString(buffer, 0, numBytesReceived); //decode from stream to ASCII
                     Console.WriteLine("Recieved Message: " + textReceived);
-                    if (textReceived.IndexOf("code\r\n") == 0)
-                    {
+
+                    if (textReceived.IndexOf("code\r\n") == 0) {
                         client.Send(Encoding.ASCII.GetBytes("connect\r\n" + textReceived.Substring(6, numBytesReceived - 6)));
                         Console.WriteLine("Sent connection message to client");
                     }
+
                     matchmaking.Remove(host);
                     matchmaking.Remove(client);
                 }

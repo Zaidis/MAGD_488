@@ -1,0 +1,7 @@
+C:\Users\DJ-PC\Documents\MAGD_488\MythosServer\MythosServer\bin\Release\MythosServer.exe.config
+C:\Users\DJ-PC\Documents\MAGD_488\MythosServer\MythosServer\bin\Release\MythosServer.exe
+C:\Users\DJ-PC\Documents\MAGD_488\MythosServer\MythosServer\bin\Release\MythosServer.pdb
+C:\Users\DJ-PC\Documents\MAGD_488\MythosServer\MythosServer\obj\Release\MythosServer.csproj.CoreCompileInputs.cache
+C:\Users\DJ-PC\Documents\MAGD_488\MythosServer\MythosServer\obj\Release\MythosServer.exe
+C:\Users\DJ-PC\Documents\MAGD_488\MythosServer\MythosServer\obj\Release\MythosServer.pdb
+C:\Users\DJ-PC\Documents\MAGD_488\MythosServer\MythosServer\obj\Release\MythosServer.csprojAssemblyReference.cache

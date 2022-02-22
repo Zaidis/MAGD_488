@@ -1,0 +1,17 @@
+{
+	"name": "Unity.Services.Relay.Qos",
+	"references": [
+		"Unity.Services.Core",
+		"Unity.Services.Core.Internal",
+		"Unity.Services.Authentication",
+		"Unity.ucg.QoS"
+	],
+	"defineConstraints": ["USE_QOS"],
+	"versionDefines": [
+		{
+			"name": "com.unity.ucg.qos",
+			"expression": "",
+			"define": "USE_QOS"
+		}
+	]
+}
