@@ -10,4 +10,7 @@ public abstract class Card : ScriptableObject
     public int manaCost;
     public string cardName;
     public Sprite cardArt;
+
+    [TextArea()]
+    public string description;
 }

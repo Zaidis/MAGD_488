@@ -10,7 +10,6 @@ public class Creature : Card
     [Header("Creature Info")]
     public int defaultHealthAmount;
     public int defaultPowerAmount; //attack damage
-    public List<string> attributes;
-    
+    public List<attributes> myAttributes;
 
 }

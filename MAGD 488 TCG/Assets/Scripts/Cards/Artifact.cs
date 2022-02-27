@@ -8,6 +8,6 @@ public class Artifact : Card
 
     [Header("Artifact Info")]
     public int defaultHealthAmount;
-    public List<string> attributes;
+    public List<attributes> myAttributes;
 
 }

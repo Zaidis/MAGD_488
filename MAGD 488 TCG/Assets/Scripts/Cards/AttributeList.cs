@@ -1,10 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public abstract class AttributeList : MonoBehaviour
-{
-
-    public Dictionary<string, int> Attributes;
+public enum attributes { 
+    pierce,
+    cleave, 
+    thorn, 
+    lifesteal, 
+    melee, 
+    ranged, 
+    passive,
 
 }
