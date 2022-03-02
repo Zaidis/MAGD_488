@@ -13,7 +13,8 @@ public class MythosClient : MonoBehaviour
     private const string k_GlobalIp = "127.0.0.1"; //Server ip
     private const int k_Port = 2552; //port
     private Socket connection;
-
+    public string pass { get; set; }
+    public string user { get; set; }
     [SerializeField] RelayAllocUtp relay;
 
     public static MythosClient instance;
@@ -80,5 +81,11 @@ public class MythosClient : MonoBehaviour
     {
         Debug.Log("Sent Matchmaking Request");
         connection.Send(Encoding.ASCII.GetBytes("matchmake\r\n"));
+    }
+
+    public void OnLogin()
+    {
+        Debug.Log("Sent Login Request");
+        connection.Send(Encoding.ASCII.GetBytes("login\r\n" + user + "\r\npassword\r\n" + pass));
     }
 }
