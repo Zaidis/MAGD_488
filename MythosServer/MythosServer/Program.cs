@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 
 namespace MythosServer {
     class Program {
+        public static readonly string[] StringSeparators = { "\r\n" };
         class User {
             public Socket Socket;
             public string Username;
@@ -39,6 +40,9 @@ namespace MythosServer {
 
             Console.WriteLine("Waiting...");
 
+            Thread mmthread = new Thread(new ThreadStart(() => Matchmaking()));
+            mmthread.Start();
+
             for (; ; ) { //Welcome loop/matchmaking loop
                 try {
                     Socket handler = listener.Accept(); //Accept incoming client connection requests, create new socket and thread
@@ -51,41 +55,18 @@ namespace MythosServer {
                 } catch (Exception e) {
                     Console.Write(e);
                 }
-                if (_matchmaking.Count > 1) { //matchmake if users matchmaking > 1
-                    byte[] buffer = new byte[1024];
-
-                    Socket host = _matchmaking[0].Socket; //Skill matching will go here
-                    Socket client = _matchmaking[1].Socket;
-
-                    host.Send(Encoding.ASCII.GetBytes("start\r\n")); //Send start command to selected host
-                    Console.WriteLine("Start command sent to host");
-
-                    //SPLIT INTO DIFFERENT THREAD HERE??
-                    int numBytesReceived = host.Receive(buffer); //data stream in
-                    string textReceived = Encoding.ASCII.GetString(buffer, 0, numBytesReceived); //decode from stream to ASCII
-                    Console.WriteLine("Recieved Message: " + textReceived);
-
-                    if (textReceived.IndexOf("code\r\n") == 0) {
-                        client.Send(Encoding.ASCII.GetBytes("connect\r\n" + textReceived.Substring(6, numBytesReceived - 6)));
-                        Console.WriteLine("Sent connection message to client");
-                    }
-
-                    _matchmaking.Remove(_matchmaking.First(user => user.Socket == host));
-                    _matchmaking.Remove(_matchmaking.First(user => user.Socket == client));
-                }
             }
         }
         private static void ClientHandler(Socket handler) //Handle client until handed off to matchmaking
         {
             byte[] buffer = new byte[1024];
-            string[] stringSeparators = new string[] { "\r\n" };
             for (; ; )
             {
                 if (_matchmaking.All(user => user.Socket != handler)) {
                     int numBytesReceived = handler.Receive(buffer); //data stream in
                     string textReceived = Encoding.ASCII.GetString(buffer, 0, numBytesReceived); //decode from stream to ASCII
                     Console.WriteLine("Received: \n" + textReceived);
-                    string[] messageArgArr = textReceived.Split(stringSeparators, StringSplitOptions.None);
+                    string[] messageArgArr = textReceived.Split(StringSeparators, StringSplitOptions.None);
                     
                     if (messageArgArr[0].Equals("matchmake", StringComparison.OrdinalIgnoreCase)) { //Adding connection to matchmaking queue
                         if (_users.Any(user => user.Socket == handler)) { //checking if client is logged in
@@ -163,10 +144,35 @@ namespace MythosServer {
                 return true; //after user has been created return true
             }
         }
-        private static User? Login(string username, string password, Socket socket)
+
+        private static void Matchmaking()
         {
-            using (SqliteConnection connection = new SqliteConnection("Data Source=Mythos.db"))
-            {
+            if (_matchmaking.Count > 1) { //matchmake if users matchmaking > 1
+                byte[] buffer = new byte[1024];
+
+                Socket host = _matchmaking[0].Socket; //Skill matching will go here
+                Socket client = _matchmaking[1].Socket;
+
+                host.Send(Encoding.ASCII.GetBytes("start\r\n")); //Send start command to selected host
+                Console.WriteLine("Start command sent to host");
+
+                //SPLIT INTO DIFFERENT THREAD HERE??
+                int numBytesReceived = host.Receive(buffer); //data stream in
+                string textReceived = Encoding.ASCII.GetString(buffer, 0, numBytesReceived); //decode from stream to ASCII
+                string[] messageArgArr =  textReceived.Split(StringSeparators, StringSplitOptions.None);
+                Console.WriteLine("Recieved Message: " + textReceived);
+
+                if (messageArgArr[0].Equals("code")) {
+                    client.Send(Encoding.ASCII.GetBytes("connect\r\n" + messageArgArr[1]));
+                    Console.WriteLine("Sent connection message to client");
+                }
+
+                _matchmaking.Remove(_matchmaking.First(user => user.Socket == host));
+                _matchmaking.Remove(_matchmaking.First(user => user.Socket == client));
+            }
+        }
+        private static User? Login(string username, string password, Socket socket) {
+            using (SqliteConnection connection = new SqliteConnection("Data Source=Mythos.db")) {
                 connection.Open();
                 SqliteCommand command = connection.CreateCommand();
                 command.CommandText = @"SELECT u.Username, u.Salt, u.Hash, s.Skill FROM User u, Skill s WHERE Username = $Username";
