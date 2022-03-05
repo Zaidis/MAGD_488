@@ -7,21 +7,25 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEditor.VersionControl;
 
 public class MythosClient : MonoBehaviour
 {
+    public static readonly string[] StringSeparators = { "\r\n" };
     private const string k_GlobalIp = "127.0.0.1"; //Server ip
     private const int k_Port = 2552; //port
     private Socket connection;
-    public string pass { get; set; }
-    public string user { get; set; }
     [SerializeField] RelayAllocUtp relay;
+    public Text user;
+    [SerializeField] private Text pass;
 
     public static MythosClient instance;
 
     private bool start = false;
     private string code = "";
     private bool codeIn = false;
+    private bool waitingForResponse = false;
 
     void Awake()
     {
@@ -56,14 +60,17 @@ public class MythosClient : MonoBehaviour
         byte[] buffer = new byte[1024]; //buffer for incoming data
         int numBytesReceived = connection.Receive(buffer); //data stream in
         string textReceived = Encoding.ASCII.GetString(buffer, 0, numBytesReceived); //decode from stream to ASCII
+        string[] messageArgArr = textReceived.Split(StringSeparators, StringSplitOptions.None);
         Debug.Log("Received String: " + textReceived);
-        if (textReceived.Length > 0) {
-            if (textReceived.IndexOf("start\r\n", StringComparison.Ordinal) == 0) {
-                start = true;
-            } else if (textReceived.IndexOf("connect\r\n", StringComparison.Ordinal) == 0) {
-                code = textReceived.Substring(9, 6);
-                codeIn = true;
-            }
+        if (messageArgArr[0].Equals("start", StringComparison.OrdinalIgnoreCase)) {
+            start = true;
+        } else if (messageArgArr[0].Equals("connect", StringComparison.OrdinalIgnoreCase)) {
+            code = messageArgArr[1];
+            codeIn = true;
+        } else if (messageArgArr[0].Equals("loginbad", StringComparison.OrdinalIgnoreCase) || messageArgArr[0].Equals("creationbad", StringComparison.OrdinalIgnoreCase)) {
+            waitingForResponse = false;
+        } else if (messageArgArr[0].Equals("logingood", StringComparison.OrdinalIgnoreCase) || messageArgArr[0].Equals("creationgood", StringComparison.OrdinalIgnoreCase)) {
+            waitingForResponse = false;
         }
     }
     public void SendCode(string join) //Called when host is done connected to relay, sends join code to server
@@ -85,7 +92,21 @@ public class MythosClient : MonoBehaviour
 
     public void OnLogin()
     {
-        Debug.Log("Sent Login Request");
-        connection.Send(Encoding.ASCII.GetBytes("login\r\n" + user + "\r\npassword\r\n" + pass));
+        if (!waitingForResponse)
+        {
+            Debug.Log("Sent Login Request");
+            connection.Send(Encoding.ASCII.GetBytes("login\r\n" + user.text + "\r\npassword\r\n" + pass.text));
+            waitingForResponse = true;
+        }
+    }
+
+    public void OnCreateAccount()
+    {
+        if (!waitingForResponse) {
+            Debug.Log("Sent Account Creation Request");
+            connection.Send(Encoding.ASCII.GetBytes("newaccount\r\n" + user.text + "\r\npassword\r\n" + pass.text));
+            waitingForResponse = true;
+        }
+        
     }
 }
