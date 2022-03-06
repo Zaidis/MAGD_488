@@ -91,26 +91,29 @@ namespace MythosServer {
                         User? newUser = Login(messageArgArr[1], messageArgArr[2], handler);
                         if (newUser != null) {
                             handler.Send(Encoding.ASCII.GetBytes("logingood\r\n"));
-                            Console.WriteLine("Login Successful!");
                             Users.Add(newUser);
                             user = newUser;
                         } else {
                             handler.Send(Encoding.ASCII.GetBytes("loginbad\r\n"));
-                            Console.WriteLine("Login Unsuccessful!");
-                        }                            
+                        }
+                        PrintConnections();
                     } else if (messageArgArr[0].Equals("newaccount", StringComparison.OrdinalIgnoreCase)) {
                         if (NewUser(messageArgArr[1], messageArgArr[2])) {
                             handler.Send(Encoding.ASCII.GetBytes("creationgood\r\n"));
-                            Console.WriteLine("Creation Successful!");
                         } else {
                             handler.Send(Encoding.ASCII.GetBytes("creationbad\r\n"));
-                            Console.WriteLine("Creation Unsuccessful!");
                         }
+                        PrintConnections();
                     } else if(messageArgArr[0].Equals("outcome", StringComparison.OrdinalIgnoreCase)) {
                         if(user != null)
                             MatchOutcome(messageArgArr[1], user);
                     } else if (messageArgArr[0].Equals("quit", StringComparison.OrdinalIgnoreCase)) { //Exit case
                         Connections.Remove(handler);
+                        if (user != null) {
+                            Users.Remove(user);
+                            _matchmaking.Remove(user);
+                        }
+
                         PrintConnections();
                         break;
                     }
@@ -145,8 +148,8 @@ namespace MythosServer {
             using SqliteConnection connection = new SqliteConnection("Data Source=Mythos.db");
             connection.Open();
             SqliteCommand command = connection.CreateCommand();
-            command.CommandText = @"SELECT EXISTS(SELECT 1 FROM User WHERE Username = @u) ";
-            command.Parameters.AddWithValue("@u", username);
+            command.CommandText = @"SELECT EXISTS(SELECT 1 FROM User WHERE Username = @us) ";
+            command.Parameters.AddWithValue("@us", username);
             using (SqliteDataReader reader = command.ExecuteReader()) {
                 while (reader.Read()) {
                     if (reader.GetInt32(0) == 1) {
@@ -167,7 +170,7 @@ namespace MythosServer {
             command.Parameters.AddWithValue("@s", salt);
             command.Parameters.AddWithValue("@h", hashed);
             command.ExecuteNonQuery();
-            connection.Close();
+            connection.Close(); //bug in adding paramters
             //sqlLock.ReleaseMutex();
             return true; //after user has been created return true
         }
@@ -263,10 +266,9 @@ namespace MythosServer {
             }
             string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2( password, salt, KeyDerivationPrf.HMACSHA256, 100000, 256 / 8));
 
-            Console.WriteLine("Stored Hash: " + hashed + " \nCurrent Hash: " + hash);
             if (hash.Equals(hashed)) {
                 connection.Close();
-                if (Users.First(u => u.Username == username) == null)
+                if (Users.All(u => u.Username != username))
                     return user;
                 Console.WriteLine("Already Logged In!");
                 //sqlLock.ReleaseMutex();
