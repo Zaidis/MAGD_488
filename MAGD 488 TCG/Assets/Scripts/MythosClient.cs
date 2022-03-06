@@ -130,4 +130,13 @@ public class MythosClient : MonoBehaviour {
             waitingForResponse = true;
         }
     }
+
+    public void OnOutcome(string outcome)//takes in clientvictory/hostvictory as string to pass
+    {
+        if (!waitingForResponse) {
+            Debug.Log("Sent Outcome Message");
+            connection.Send(Encoding.ASCII.GetBytes("outcome\r\n" + outcome));
+            waitingForResponse = true;
+        }
+    } 
 }
