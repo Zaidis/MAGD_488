@@ -10,6 +10,8 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class MythosClient : MonoBehaviour {
+    public static MythosClient instance; //Singleton
+
     public static readonly string[] StringSeparators = { "\r\n" };
     private const string k_GlobalIp = "127.0.0.1"; //Server ip
     private const int k_Port = 2552; //port
@@ -19,13 +21,9 @@ public class MythosClient : MonoBehaviour {
     [SerializeField] private Text pass;
     public List<string> deckNames { get; private set; }
     public List<int> currentDeck { get; private set; }
-
-    public static MythosClient instance; //Singleton
-
     private bool start = false;
     private string code = "";
     private bool codeIn = false;
-    private bool waitingForResponse = false;
 
     void Awake() {
         DontDestroyOnLoad(this);
@@ -69,18 +67,18 @@ public class MythosClient : MonoBehaviour {
             code = messageArgArr[1];
             codeIn = true;
         } else if (messageArgArr[0].Equals("loginbad", StringComparison.OrdinalIgnoreCase) || messageArgArr[0].Equals("creationbad", StringComparison.OrdinalIgnoreCase)) {
-            waitingForResponse = false;
+            //Display Failed Login Message
         } else if (messageArgArr[0].Equals("logingood", StringComparison.OrdinalIgnoreCase) || messageArgArr[0].Equals("creationgood", StringComparison.OrdinalIgnoreCase)) {
-            waitingForResponse = false;
+            //Load next scene do something, good login
         } else if (messageArgArr[0].Equals("decknames", StringComparison.OrdinalIgnoreCase)) {
-            waitingForResponse = false;
             deckNames = new List<string>();
             for (int i = 1; i < messageArgArr.Length; i++) {
                 deckNames.Add(messageArgArr[i]);
             }
         } else if (messageArgArr[0].Equals("deckcontent", StringComparison.OrdinalIgnoreCase)) {
-            for (int i = 1; i < messageArgArr.Length; i++) {
-                currentDeck.Add(Int32.Parse(messageArgArr[i]));
+            int offset = 13;
+            for (int i = 0; i < 80; i+=2) {
+                currentDeck.Add(BitConverter.ToUInt16(buffer, offset + i));
             }
         }
     }
@@ -93,50 +91,30 @@ public class MythosClient : MonoBehaviour {
         connection.Send(Encoding.ASCII.GetBytes("quit\r\n"));
         connection.Shutdown(SocketShutdown.Both);
     }
-
     public void OnMatchMake() {
         Debug.Log("Sent Matchmaking Request");
         connection.Send(Encoding.ASCII.GetBytes("matchmake\r\n"));
     }
-
     public void OnLogin() {
-        if (!waitingForResponse) {
-            Debug.Log("Sent Login Request");
-            connection.Send(Encoding.ASCII.GetBytes("login\r\n" + user.text + "\r\npassword\r\n" + pass.text));
-            waitingForResponse = true;
-        }
+        Debug.Log("Sent Login Request");
+        connection.Send(Encoding.ASCII.GetBytes("login\r\n" + user.text + "\r\npassword\r\n" + pass.text));
     }
-
     public void OnCreateAccount() {
-        if (!waitingForResponse) {
-            Debug.Log("Sent Account Creation Request");
-            connection.Send(Encoding.ASCII.GetBytes("newaccount\r\n" + user.text + "\r\npassword\r\n" + pass.text));
-            waitingForResponse = true;
-        }
-
+        Debug.Log("Sent Account Creation Request");
+        connection.Send(Encoding.ASCII.GetBytes("newaccount\r\n" + user.text + "\r\npassword\r\n" + pass.text));
     }
-    public void OnRetrieveDeckNames()
-    {
-        if (!waitingForResponse) {
-            Debug.Log("Sent Deck Names Request");
-            connection.Send(Encoding.ASCII.GetBytes("getdecknames\r\n"));
-            waitingForResponse = true;
-        }
+    public void OnRetrieveDeckNames() {
+        Debug.Log("Sent Deck Names Request");
+        connection.Send(Encoding.ASCII.GetBytes("getdecknames\r\n"));
     }
     public void OnRetrieveDeckContent(string name) {
-        if (!waitingForResponse) {
-            Debug.Log("Sent Deck Content Request");
-            connection.Send(Encoding.ASCII.GetBytes("getdeckcontent\r\n" + name));
-            waitingForResponse = true;
-        }
+        Debug.Log("Sent Deck Content Request");
+        connection.Send(Encoding.ASCII.GetBytes("getdeckcontent\r\n" + name));
     }
 
-    public void OnOutcome(string outcome)//takes in clientvictory/hostvictory as string to pass
+    public void OnOutcome(bool outcome) //takes in bool, true for hostvictory, false for clientvictory
     {
-        if (!waitingForResponse) {
-            Debug.Log("Sent Outcome Message");
-            connection.Send(Encoding.ASCII.GetBytes("outcome\r\n" + outcome));
-            waitingForResponse = true;
-        }
+        Debug.Log("Sent Outcome Message");
+        connection.Send(Encoding.ASCII.GetBytes("outcome\r\n" + (outcome ? "hostvictory" : "clientvictory")));
     } 
 }

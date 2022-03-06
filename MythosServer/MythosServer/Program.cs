@@ -107,6 +107,12 @@ namespace MythosServer {
                     } else if(messageArgArr[0].Equals("outcome", StringComparison.OrdinalIgnoreCase)) {
                         if(user != null)
                             MatchOutcome(messageArgArr[1], user);
+                    } else if (messageArgArr[0].Equals("getdecknames", StringComparison.OrdinalIgnoreCase)) {
+                        if(user != null)
+                            GetDeckNames(user);
+                    } else if (messageArgArr[0].Equals("getdeckcontent", StringComparison.OrdinalIgnoreCase)) {
+                        if (user != null)
+                            GetDeckContent(user, messageArgArr[1]);
                     } else if (messageArgArr[0].Equals("quit", StringComparison.OrdinalIgnoreCase)) { //Exit case
                         Connections.Remove(handler);
                         if (user != null) {
@@ -276,6 +282,36 @@ namespace MythosServer {
             }
 
             return null;
+        }
+
+        private static void GetDeckNames(User user)
+        {
+            Console.WriteLine("Entered Deck Name Retrieval");
+            using SqliteConnection connection = new SqliteConnection("Data Source=Mythos.db");
+            connection.Open();
+            SqliteCommand command = connection.CreateCommand();
+            command.CommandText = @"SELECT d.Deckname FROM Deck d, User u WHERE @us = u.Username AND u.Username = d.Username";
+            command.Parameters.AddWithValue("@us", user.Username);
+            String message = "decknames\r\n";
+            using (SqliteDataReader reader = command.ExecuteReader())
+                while (reader.Read())
+                    message = message + reader.GetString(0) + "\r\n";
+            user.Socket.Send(Encoding.ASCII.GetBytes(message));
+            connection.Close();
+        }
+        private static void GetDeckContent(User user, string deckname) {
+            Console.WriteLine("Entered Deck Content Retrieval");
+            using SqliteConnection connection = new SqliteConnection("Data Source=Mythos.db");
+            connection.Open();
+            SqliteCommand command = connection.CreateCommand();
+            command.CommandText = @"SELECT d.Deck FROM Deck d, User u WHERE @us = u.Username AND u.Username = d.Username";
+            command.Parameters.AddWithValue("@us", user.Username);
+            byte[] cards = new byte[40*2]; //using uint16
+            using (SqliteDataReader reader = command.ExecuteReader())
+                while (reader.Read())
+                    reader.GetBytes(0, 0, cards, 0, 40*2);
+            user.Socket.Send(Encoding.ASCII.GetBytes("deckcontent\r\n").Concat(cards).ToArray()); //concats cards stored as uint16 byte stream to message
+            connection.Close();
         }
     }
 }
