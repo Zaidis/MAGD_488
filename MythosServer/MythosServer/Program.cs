@@ -37,13 +37,13 @@ namespace MythosServer {
         private static readonly List<User> Users = new List<User>();
         private static readonly List<Match> Matches = new List<Match>();
         private static List<User?> _matchmaking = new List<User?>();
-        private static Mutex sqlLock = new Mutex();
+        //private static Mutex sqlLock = new Mutex();
 
         static void Main() {
             IPAddress ipAddress = IPAddress.Parse(KLocalIp);
             IPEndPoint localEp = new IPEndPoint(ipAddress, KPort);
 
-            Socket listener = new Socket(ipAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+            Socket listener = new Socket(ipAddress.AddressFamily, SocketType.Stream, ProtocolType.IPv4);
 
             listener.Bind(localEp); //Bind to local ip and port
             listener.Listen(1);
@@ -283,7 +283,6 @@ namespace MythosServer {
 
             return null;
         }
-
         private static void GetDeckNames(User user)
         {
             Console.WriteLine("Entered Deck Name Retrieval");
