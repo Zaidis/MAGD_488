@@ -43,7 +43,7 @@ namespace MythosServer {
             IPAddress ipAddress = IPAddress.Parse(KLocalIp);
             IPEndPoint localEp = new IPEndPoint(ipAddress, KPort);
 
-            Socket listener = new Socket(ipAddress.AddressFamily, SocketType.Stream, ProtocolType.IPv4);
+            Socket listener = new Socket(ipAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
 
             listener.Bind(localEp); //Bind to local ip and port
             listener.Listen(1);
