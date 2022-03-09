@@ -23,11 +23,11 @@ namespace MythosServer {
         }
         class Match 
         {
-            public Socket host;
-            public Socket client;
-            public string hostoutcome = "";
-            public string clientoutcome = "";
-            public Match(Socket h, Socket c) { host = h; client = c; }
+            public Socket Host;
+            public Socket Client;
+            public string Hostoutcome = "";
+            public string Clientoutcome = "";
+            public Match(Socket h, Socket c) { Host = h; Client = c; }
         }
 
         private const string KLocalIp = "127.0.0.1"; //Local IP
@@ -36,8 +36,8 @@ namespace MythosServer {
         private static readonly List<User> Users = new List<User>();
         private static readonly List<Match> Matches = new List<Match>();
         private static List<Socket> _matchmaking = new List<Socket>();
-        private static Dictionary<Socket, User> userSocketDictionary = new Dictionary<Socket, User>();
-        //private static Mutex sqlLock = new Mutex();
+        private static readonly Dictionary<Socket, User> UserSocketDictionary = new Dictionary<Socket, User>();
+        private static Mutex sqlLock = new Mutex();
 
         static void Main() {
             IPAddress ipAddress = IPAddress.Parse(KLocalIp);
@@ -62,9 +62,7 @@ namespace MythosServer {
                     thread.Start();
 
                     PrintConnections();
-                } catch (Exception e) {
-                    Console.Write(e);
-                }
+                } catch (Exception e) { Console.Write(e); }
             }
         }
         private static void ClientHandler(Socket handler) //Handle client communication, run in thread
@@ -72,13 +70,14 @@ namespace MythosServer {
             byte[] buffer = new byte[1024];
             bool loggedIn = false;
             for (; ; ) {
-                if (_matchmaking.All(u => u != handler)) {
+                Thread.Sleep(1);
+                if (!_matchmaking.Contains(handler)) {
                     int numBytesReceived = handler.Receive(buffer); //data stream in
                     string textReceived = Encoding.ASCII.GetString(buffer, 0, numBytesReceived); //decode from stream to ASCII
                     string[] messageArgArr = textReceived.Split(StringSeparators, StringSplitOptions.None);
 
                     if (messageArgArr[0].Equals("matchmake", StringComparison.OrdinalIgnoreCase)) { //Adding connection to matchmaking queue
-                        if (userSocketDictionary.ContainsKey(handler)) { //checking if client is logged in
+                        if (UserSocketDictionary.ContainsKey(handler)) { //checking if client is logged in
                             if (!_matchmaking.Contains(handler)) {
                                 _matchmaking.Add(handler); //add struct which contains needed info to matchmaking list
                                 PrintConnections();
@@ -89,16 +88,13 @@ namespace MythosServer {
                         if (newUserLogin != null) {
                             handler.Send(Encoding.ASCII.GetBytes("logingood\r\n"));
                             Users.Add(newUserLogin);
-                            userSocketDictionary.Add(handler, newUserLogin);
+                            UserSocketDictionary.Add(handler, newUserLogin);
                             loggedIn = true;
                         } else
                             handler.Send(Encoding.ASCII.GetBytes("loginbad\r\n"));
                         PrintConnections();
                     } else if (messageArgArr[0].Equals("newaccount", StringComparison.OrdinalIgnoreCase)) {
-                        if (NewUser(messageArgArr[1], messageArgArr[2]))
-                            handler.Send(Encoding.ASCII.GetBytes("creationgood\r\n"));
-                        else
-                            handler.Send(Encoding.ASCII.GetBytes("creationbad\r\n"));
+                        handler.Send(NewUser(messageArgArr[1], messageArgArr[2]) ? Encoding.ASCII.GetBytes("creationgood\r\n") : Encoding.ASCII.GetBytes("creationbad\r\n"));
                         PrintConnections();
                     } else if(messageArgArr[0].Equals("outcome", StringComparison.OrdinalIgnoreCase)) {
                         if(loggedIn)
@@ -112,8 +108,8 @@ namespace MythosServer {
                     } else if (messageArgArr[0].Equals("quit", StringComparison.OrdinalIgnoreCase)) { //Exit case
                         Connections.Remove(handler);
                         _matchmaking.Remove(handler);
-                        Users.Remove(userSocketDictionary[handler]);
-                        userSocketDictionary.Remove(handler);
+                        Users.Remove(UserSocketDictionary[handler]);
+                        UserSocketDictionary.Remove(handler);
                         PrintConnections();
                         break;
                     }
@@ -130,18 +126,18 @@ namespace MythosServer {
                 Console.WriteLine(s.RemoteEndPoint);
             if (Users.Count > 0) {
                 Console.WriteLine("Logged in Clients: ");
-                foreach (var sock in userSocketDictionary)
+                foreach (var sock in UserSocketDictionary)
                     Console.WriteLine(sock.Key.RemoteEndPoint + " : " + sock.Value.Username + " : Skill : " + sock.Value.Skill);
             }
             if (_matchmaking.Count > 0) {
                 Console.WriteLine("Matchmaking Clients: ");
                 foreach (Socket s in _matchmaking)
-                    Console.WriteLine(s.RemoteEndPoint + " : " + userSocketDictionary[s].Username + " : Skill : " + userSocketDictionary[s].Skill);
+                    Console.WriteLine(s.RemoteEndPoint + " : " + UserSocketDictionary[s].Username + " : Skill : " + UserSocketDictionary[s].Skill);
             }
         }
         private static bool NewUser(string username, string password) //Attempt to create a user based on passed username and password, return true for success, return false for failure
         {
-            //sqlLock.WaitOne();
+            sqlLock.WaitOne();
             Console.WriteLine("Entered User Creation");
             using SqliteConnection connection = new SqliteConnection("Data Source=Mythos.db");
             connection.Open();
@@ -152,7 +148,7 @@ namespace MythosServer {
                 while (reader.Read()) {
                     if (reader.GetInt32(0) == 1) {
                         connection.Close();
-                        //sqlLock.ReleaseMutex();
+                        sqlLock.ReleaseMutex();
                         return false; //if Username exists, return false, else continue
                     }
                 }
@@ -169,19 +165,20 @@ namespace MythosServer {
             command.Parameters.AddWithValue("@h", hashed);
             command.ExecuteNonQuery();
             connection.Close(); //bug in adding paramters
-            //sqlLock.ReleaseMutex();
+            sqlLock.ReleaseMutex();
             return true; //after user has been created return true
         }
         private static void Matchmaking() //Function responsible for matchmaking loop, runs continuously, if at least 2 users are in the queue, match closest two in skill, add to a match, and remove from pool
         {
             for(; ; ) {
+                Thread.Sleep(1);
                 if (_matchmaking.Count > 1) { //matchmake if users matchmaking > 1
                     byte[] buffer = new byte[1024];
                     int minDifference = int.MaxValue;
                     Socket host = _matchmaking[0], client = _matchmaking[1];
-                    _matchmaking = _matchmaking.OrderBy(s => userSocketDictionary[s].Skill).ToList();
+                    _matchmaking = _matchmaking.OrderBy(s => UserSocketDictionary[s].Skill).ToList();
                     for (int i = 2; i < _matchmaking.Count; i++) { //find two users with closest skill, match together
-                        int currentDifference = Math.Abs(userSocketDictionary[_matchmaking[i]].Skill - userSocketDictionary[_matchmaking[i]].Skill);
+                        int currentDifference = Math.Abs(UserSocketDictionary[_matchmaking[i]].Skill - UserSocketDictionary[_matchmaking[i]].Skill);
                         if (currentDifference < minDifference) {
                             minDifference = currentDifference;
                             host = _matchmaking[i];
@@ -195,7 +192,7 @@ namespace MythosServer {
                     int numBytesReceived = host.Receive(buffer); //data stream in
                     string textReceived = Encoding.ASCII.GetString(buffer, 0, numBytesReceived); //decode from stream to ASCII
                     string[] messageArgArr = textReceived.Split(StringSeparators, StringSplitOptions.None);
-                    Console.WriteLine("Recieved Message: " + textReceived);
+                    Console.WriteLine("Received Message: " + textReceived);
 
                     if (messageArgArr[0].Equals("code")) {
                         client.Send(Encoding.ASCII.GetBytes("connect\r\n" + messageArgArr[1]));
@@ -205,8 +202,8 @@ namespace MythosServer {
                     Match newMatch = new Match(host, client);
                     Matches.Add(newMatch);
 
-                    userSocketDictionary[host].Match = newMatch;
-                    userSocketDictionary[client].Match = newMatch;
+                    UserSocketDictionary[host].Match = newMatch;
+                    UserSocketDictionary[client].Match = newMatch;
 
                     _matchmaking.Remove(host);
                     _matchmaking.Remove(client);
@@ -215,27 +212,27 @@ namespace MythosServer {
         }
         private static void MatchOutcome(string outcome, Socket comm) //set outcome of match of passed User according to if socket is host or client in match, then eval
         {
-            if (userSocketDictionary[comm].Match != null)
-                return;
-            Match? match = userSocketDictionary[comm].Match;
-            if (comm == match!.host)
-                match.hostoutcome = outcome;
-            else
-                match.clientoutcome = outcome;
-            EvaluateOutcome(match);
+            if (UserSocketDictionary[comm].Match != null) {
+                Match match = UserSocketDictionary[comm].Match!;
+                if (comm == match.Host)
+                    match.Hostoutcome = outcome;
+                else
+                    match.Clientoutcome = outcome;
+                EvaluateOutcome(match);
+            }
         }
         private static void EvaluateOutcome(Match match)  //evaulate outcome of a match, if outcomes match change skill accordingly, if not, change nothing
         {
-            if (match.hostoutcome.Equals(match.clientoutcome)) {
-                //sqlLock.WaitOne();
+            if (match.Hostoutcome.Equals(match.Clientoutcome)) {
+                sqlLock.WaitOne();
                 //Code that changes skill of users based on win/loss, and stores it with sqlite
-                //sqlLock.ReleaseMutex();                
-            } else if (!match.hostoutcome.Equals("") && !match.clientoutcome.Equals(""))
+                sqlLock.ReleaseMutex();                
+            } else if (!match.Hostoutcome.Equals("") && !match.Clientoutcome.Equals(""))
                 Console.Write("u1 and u2 outcome do not match no skill will be changed!");
         }
         private static User? Login(string username, string password, Socket socket)  //login "socket" based on passed username and password, create User and return it
         {
-            //sqlLock.WaitOne();
+            sqlLock.WaitOne();
             Console.WriteLine("Entered User Login");
             using SqliteConnection connection = new SqliteConnection("Data Source=Mythos.db");
             connection.Open();
@@ -250,7 +247,7 @@ namespace MythosServer {
                     string parsedUsername = reader.GetString(0);
                     if (parsedUsername.Equals("")) {
                         connection.Close();
-                        //sqlLock.ReleaseMutex();
+                        sqlLock.ReleaseMutex();
                         return null;
                     }
                     reader.GetBytes(1, 0, salt, 0, 16);
@@ -265,7 +262,7 @@ namespace MythosServer {
                 if (Users.All(u => u.Username != username))
                     return user;
                 Console.WriteLine("Already Logged In!");
-                //sqlLock.ReleaseMutex();
+                sqlLock.ReleaseMutex();
 
             }
 
@@ -278,7 +275,7 @@ namespace MythosServer {
             connection.Open();
             SqliteCommand command = connection.CreateCommand();
             command.CommandText = @"SELECT d.Deckname FROM Deck d, User u WHERE @us = u.Username AND u.Username = d.Username";
-            command.Parameters.AddWithValue("@us", userSocketDictionary[sock].Username);
+            command.Parameters.AddWithValue("@us", UserSocketDictionary[sock].Username);
             String message = "decknames\r\n";
             using (SqliteDataReader reader = command.ExecuteReader())
                 while (reader.Read())
@@ -292,7 +289,7 @@ namespace MythosServer {
             connection.Open();
             SqliteCommand command = connection.CreateCommand();
             command.CommandText = @"SELECT d.Deck FROM Deck d, User u WHERE @us = u.Username AND u.Username = d.Username";
-            command.Parameters.AddWithValue("@us", userSocketDictionary[sock].Username);
+            command.Parameters.AddWithValue("@us", UserSocketDictionary[sock].Username);
             byte[] cards = new byte[40*2]; //using uint16
             using (SqliteDataReader reader = command.ExecuteReader())
                 while (reader.Read())
