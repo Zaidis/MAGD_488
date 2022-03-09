@@ -16,19 +16,18 @@ namespace MythosServer {
         public static readonly string[] StringSeparators = { "\r\n" };
         class User 
         {
-            public readonly Socket Socket;
             public readonly string Username;
             public readonly int Skill;
             public Match? Match = null;
-            public User(Socket s, string u, int sk) { Socket = s; Username = u; Skill = sk; }
+            public User(string u, int sk) { Username = u; Skill = sk; }
         }
         class Match 
         {
-            public readonly User host;
-            public User client;
+            public Socket host;
+            public Socket client;
             public string hostoutcome = "";
             public string clientoutcome = "";
-            public Match(User u1, User u2) { host = u1; client = u2; }
+            public Match(Socket h, Socket c) { host = h; client = c; }
         }
 
         private const string KLocalIp = "127.0.0.1"; //Local IP
@@ -36,14 +35,15 @@ namespace MythosServer {
         private static readonly List<Socket> Connections = new List<Socket>(); //List of all connections, and list of matchmaking clients
         private static readonly List<User> Users = new List<User>();
         private static readonly List<Match> Matches = new List<Match>();
-        private static List<User?> _matchmaking = new List<User?>();
+        private static List<Socket> _matchmaking = new List<Socket>();
+        private static Dictionary<Socket, User> userSocketDictionary = new Dictionary<Socket, User>();
         //private static Mutex sqlLock = new Mutex();
 
         static void Main() {
             IPAddress ipAddress = IPAddress.Parse(KLocalIp);
             IPEndPoint localEp = new IPEndPoint(ipAddress, KPort);
 
-            Socket listener = new Socket(ipAddress.AddressFamily, SocketType.Stream, ProtocolType.IPv4);
+            Socket listener = new Socket(ipAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
 
             listener.Bind(localEp); //Bind to local ip and port
             listener.Listen(1);
@@ -70,56 +70,50 @@ namespace MythosServer {
         private static void ClientHandler(Socket handler) //Handle client communication, run in thread
         {
             byte[] buffer = new byte[1024];
-            User? user = null;
-            for (; ; )
-            {
-                if (_matchmaking.All(u => u != null && u.Socket != handler)) {
+            bool loggedIn = false;
+            for (; ; ) {
+                if (_matchmaking.All(u => u != handler)) {
                     int numBytesReceived = handler.Receive(buffer); //data stream in
                     string textReceived = Encoding.ASCII.GetString(buffer, 0, numBytesReceived); //decode from stream to ASCII
-                    //Console.WriteLine("Received: \n" + textReceived);
                     string[] messageArgArr = textReceived.Split(StringSeparators, StringSplitOptions.None);
 
                     if (messageArgArr[0].Equals("matchmake", StringComparison.OrdinalIgnoreCase)) { //Adding connection to matchmaking queue
-                        if (Users.Any(u => u != null && u.Socket == handler)) { //checking if client is logged in
-                            User? current = Users.First(u => u != null && u.Socket == handler);
-                            if (!_matchmaking.Contains(current)) {
-                                _matchmaking.Add(current); //add struct which contains needed info to matchmaking list
+                        if (userSocketDictionary.ContainsKey(handler)) { //checking if client is logged in
+                            if (!_matchmaking.Contains(handler)) {
+                                _matchmaking.Add(handler); //add struct which contains needed info to matchmaking list
                                 PrintConnections();
                             }
                         }
                     } else if (messageArgArr[0].Equals("login", StringComparison.OrdinalIgnoreCase)) {
-                        User? newUser = Login(messageArgArr[1], messageArgArr[2], handler);
-                        if (newUser != null) {
+                        User? newUserLogin = Login(messageArgArr[1], messageArgArr[2], handler);
+                        if (newUserLogin != null) {
                             handler.Send(Encoding.ASCII.GetBytes("logingood\r\n"));
-                            Users.Add(newUser);
-                            user = newUser;
-                        } else {
+                            Users.Add(newUserLogin);
+                            userSocketDictionary.Add(handler, newUserLogin);
+                            loggedIn = true;
+                        } else
                             handler.Send(Encoding.ASCII.GetBytes("loginbad\r\n"));
-                        }
                         PrintConnections();
                     } else if (messageArgArr[0].Equals("newaccount", StringComparison.OrdinalIgnoreCase)) {
-                        if (NewUser(messageArgArr[1], messageArgArr[2])) {
+                        if (NewUser(messageArgArr[1], messageArgArr[2]))
                             handler.Send(Encoding.ASCII.GetBytes("creationgood\r\n"));
-                        } else {
+                        else
                             handler.Send(Encoding.ASCII.GetBytes("creationbad\r\n"));
-                        }
                         PrintConnections();
                     } else if(messageArgArr[0].Equals("outcome", StringComparison.OrdinalIgnoreCase)) {
-                        if(user != null)
-                            MatchOutcome(messageArgArr[1], user);
+                        if(loggedIn)
+                            MatchOutcome(messageArgArr[1], handler);
                     } else if (messageArgArr[0].Equals("getdecknames", StringComparison.OrdinalIgnoreCase)) {
-                        if(user != null)
-                            GetDeckNames(user);
+                        if(loggedIn)
+                            GetDeckNames(handler);
                     } else if (messageArgArr[0].Equals("getdeckcontent", StringComparison.OrdinalIgnoreCase)) {
-                        if (user != null)
-                            GetDeckContent(user, messageArgArr[1]);
+                        if (loggedIn)
+                            GetDeckContent(handler, messageArgArr[1]);
                     } else if (messageArgArr[0].Equals("quit", StringComparison.OrdinalIgnoreCase)) { //Exit case
                         Connections.Remove(handler);
-                        if (user != null) {
-                            Users.Remove(user);
-                            _matchmaking.Remove(user);
-                        }
-
+                        _matchmaking.Remove(handler);
+                        Users.Remove(userSocketDictionary[handler]);
+                        userSocketDictionary.Remove(handler);
                         PrintConnections();
                         break;
                     }
@@ -136,15 +130,13 @@ namespace MythosServer {
                 Console.WriteLine(s.RemoteEndPoint);
             if (Users.Count > 0) {
                 Console.WriteLine("Logged in Clients: ");
-                foreach (User? u in Users)
-                    if (u != null && u.Socket.RemoteEndPoint != null)
-                        Console.WriteLine(u.Socket.RemoteEndPoint + " : " + u.Username + " : Skill : " + u.Skill);
+                foreach (var sock in userSocketDictionary)
+                    Console.WriteLine(sock.Key.RemoteEndPoint + " : " + sock.Value.Username + " : Skill : " + sock.Value.Skill);
             }
             if (_matchmaking.Count > 0) {
                 Console.WriteLine("Matchmaking Clients: ");
-                foreach (User? u in _matchmaking)
-                    if (u != null && u.Socket.RemoteEndPoint != null)
-                        Console.WriteLine(u.Socket.RemoteEndPoint + " : " + u.Username + " : Skill : " + u.Skill);
+                foreach (Socket s in _matchmaking)
+                    Console.WriteLine(s.RemoteEndPoint + " : " + userSocketDictionary[s].Username + " : Skill : " + userSocketDictionary[s].Skill);
             }
         }
         private static bool NewUser(string username, string password) //Attempt to create a user based on passed username and password, return true for success, return false for failure
@@ -186,10 +178,10 @@ namespace MythosServer {
                 if (_matchmaking.Count > 1) { //matchmake if users matchmaking > 1
                     byte[] buffer = new byte[1024];
                     int minDifference = int.MaxValue;
-                    User? host = null, client = null;
-                    _matchmaking = _matchmaking.OrderBy(u => u!.Skill).ToList();
-                    for (int i = 1; i < _matchmaking.Count; i++) { //find two users with closest skill, match together
-                        int currentDifference = Math.Abs(_matchmaking[i]!.Skill - _matchmaking[i - 1]!.Skill);
+                    Socket host = _matchmaking[0], client = _matchmaking[1];
+                    _matchmaking = _matchmaking.OrderBy(s => userSocketDictionary[s].Skill).ToList();
+                    for (int i = 2; i < _matchmaking.Count; i++) { //find two users with closest skill, match together
+                        int currentDifference = Math.Abs(userSocketDictionary[_matchmaking[i]].Skill - userSocketDictionary[_matchmaking[i]].Skill);
                         if (currentDifference < minDifference) {
                             minDifference = currentDifference;
                             host = _matchmaking[i];
@@ -197,44 +189,40 @@ namespace MythosServer {
                         }
                     }
 
-                    if (host == null || client == null)
-                        return;
-                    host.Socket.Send(Encoding.ASCII.GetBytes("start\r\n")); //Send start command to selected host
+                    host.Send(Encoding.ASCII.GetBytes("start\r\n")); //Send start command to selected host
                     Console.WriteLine("Start command sent to host");
 
-                    int numBytesReceived = host.Socket.Receive(buffer); //data stream in
+                    int numBytesReceived = host.Receive(buffer); //data stream in
                     string textReceived = Encoding.ASCII.GetString(buffer, 0, numBytesReceived); //decode from stream to ASCII
                     string[] messageArgArr = textReceived.Split(StringSeparators, StringSplitOptions.None);
                     Console.WriteLine("Recieved Message: " + textReceived);
 
                     if (messageArgArr[0].Equals("code")) {
-                        client.Socket.Send(Encoding.ASCII.GetBytes("connect\r\n" + messageArgArr[1]));
+                        client.Send(Encoding.ASCII.GetBytes("connect\r\n" + messageArgArr[1]));
                         Console.WriteLine("Sent connection message to client");
                     }
 
                     Match newMatch = new Match(host, client);
                     Matches.Add(newMatch);
 
-                    host.Match = newMatch;
-                    client.Match = newMatch;
+                    userSocketDictionary[host].Match = newMatch;
+                    userSocketDictionary[client].Match = newMatch;
 
-                    _matchmaking.Remove(_matchmaking.First(user => user?.Socket == host.Socket));
-                    _matchmaking.Remove(_matchmaking.First(user => user?.Socket == client.Socket));
+                    _matchmaking.Remove(host);
+                    _matchmaking.Remove(client);
                 }
             }            
         }
-        private static void MatchOutcome(string outcome, User? comm) //set outcome of match of passed User according to if socket is host or client in match, then eval
+        private static void MatchOutcome(string outcome, Socket comm) //set outcome of match of passed User according to if socket is host or client in match, then eval
         {
-            if (comm != null) {
-                if (comm.Match == null)
-                    return;
-                Match match = comm.Match;
-                if (comm == match.host)
-                    match.hostoutcome = outcome;
-                else
-                    match.clientoutcome = outcome;
-                EvaluateOutcome(match);
-            }
+            if (userSocketDictionary[comm].Match != null)
+                return;
+            Match? match = userSocketDictionary[comm].Match;
+            if (comm == match!.host)
+                match.hostoutcome = outcome;
+            else
+                match.clientoutcome = outcome;
+            EvaluateOutcome(match);
         }
         private static void EvaluateOutcome(Match match)  //evaulate outcome of a match, if outcomes match change skill accordingly, if not, change nothing
         {
@@ -267,7 +255,7 @@ namespace MythosServer {
                     }
                     reader.GetBytes(1, 0, salt, 0, 16);
                     hash = reader.GetString(2);
-                    user = new User(socket, username, 1500/*(int)reader["s.Skill"]*/);
+                    user = new User(username, 1500/*(int)reader["s.Skill"]*/);
                 }
             }
             string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2( password, salt, KeyDerivationPrf.HMACSHA256, 100000, 256 / 8));
@@ -283,33 +271,33 @@ namespace MythosServer {
 
             return null;
         }
-        private static void GetDeckNames(User user)
+        private static void GetDeckNames(Socket sock)
         {
             Console.WriteLine("Entered Deck Name Retrieval");
             using SqliteConnection connection = new SqliteConnection("Data Source=Mythos.db");
             connection.Open();
             SqliteCommand command = connection.CreateCommand();
             command.CommandText = @"SELECT d.Deckname FROM Deck d, User u WHERE @us = u.Username AND u.Username = d.Username";
-            command.Parameters.AddWithValue("@us", user.Username);
+            command.Parameters.AddWithValue("@us", userSocketDictionary[sock].Username);
             String message = "decknames\r\n";
             using (SqliteDataReader reader = command.ExecuteReader())
                 while (reader.Read())
                     message = message + reader.GetString(0) + "\r\n";
-            user.Socket.Send(Encoding.ASCII.GetBytes(message));
+            sock.Send(Encoding.ASCII.GetBytes(message));
             connection.Close();
         }
-        private static void GetDeckContent(User user, string deckname) {
+        private static void GetDeckContent(Socket sock, string deckname) {
             Console.WriteLine("Entered Deck Content Retrieval");
             using SqliteConnection connection = new SqliteConnection("Data Source=Mythos.db");
             connection.Open();
             SqliteCommand command = connection.CreateCommand();
             command.CommandText = @"SELECT d.Deck FROM Deck d, User u WHERE @us = u.Username AND u.Username = d.Username";
-            command.Parameters.AddWithValue("@us", user.Username);
+            command.Parameters.AddWithValue("@us", userSocketDictionary[sock].Username);
             byte[] cards = new byte[40*2]; //using uint16
             using (SqliteDataReader reader = command.ExecuteReader())
                 while (reader.Read())
                     reader.GetBytes(0, 0, cards, 0, 40*2);
-            user.Socket.Send(Encoding.ASCII.GetBytes("deckcontent\r\n").Concat(cards).ToArray()); //concats cards stored as uint16 byte stream to message
+            sock.Send(Encoding.ASCII.GetBytes("deckcontent\r\n").Concat(cards).ToArray()); //concats cards stored as uint16 byte stream to message
             connection.Close();
         }
     }

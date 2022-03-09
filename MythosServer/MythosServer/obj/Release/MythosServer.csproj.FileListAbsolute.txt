@@ -4,7 +4,6 @@ C:\Users\DJ-PC\Documents\MAGD_488\MythosServer\MythosServer\bin\Release\MythosSe
 C:\Users\DJ-PC\Documents\MAGD_488\MythosServer\MythosServer\obj\Release\MythosServer.csproj.CoreCompileInputs.cache
 C:\Users\DJ-PC\Documents\MAGD_488\MythosServer\MythosServer\obj\Release\MythosServer.exe
 C:\Users\DJ-PC\Documents\MAGD_488\MythosServer\MythosServer\obj\Release\MythosServer.pdb
-C:\Users\DJ-PC\Documents\MAGD_488\MythosServer\MythosServer\obj\Release\MythosServer.csprojAssemblyReference.cache
 C:\Users\DJ-PC\Documents\MAGD_488\MythosServer\MythosServer\bin\Release\runtimes\win-x86\native\e_sqlite3.dll
 C:\Users\DJ-PC\Documents\MAGD_488\MythosServer\MythosServer\bin\Release\runtimes\win-x64\native\e_sqlite3.dll
 C:\Users\DJ-PC\Documents\MAGD_488\MythosServer\MythosServer\bin\Release\runtimes\win-arm\native\e_sqlite3.dll
@@ -51,3 +50,5 @@ C:\Users\DJ-PC\Documents\MAGD_488\MythosServer\MythosServer\bin\Release\Microsof
 C:\Users\DJ-PC\Documents\MAGD_488\MythosServer\MythosServer\bin\Release\System.Diagnostics.DiagnosticSource.xml
 C:\Users\DJ-PC\Documents\MAGD_488\MythosServer\MythosServer\bin\Release\System.Threading.Tasks.Extensions.xml
 C:\Users\DJ-PC\Documents\MAGD_488\MythosServer\MythosServer\bin\Release\System.ValueTuple.xml
+C:\Users\DJ-PC\Documents\MAGD_488\MythosServer\MythosServer\obj\Release\MythosServer.csproj.AssemblyReference.cache
+C:\Users\DJ-PC\Documents\MAGD_488\MythosServer\MythosServer\obj\Release\MythosServer.csproj.SuggestedBindingRedirects.cache
