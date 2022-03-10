@@ -113,6 +113,15 @@ public class MythosClient : MonoBehaviour {
         connection.Send(Encoding.ASCII.GetBytes("getdeckcontent\r\n" + name));
     }
 
+    public void OnSaveDeck(string name, int[] cards)
+    {
+        string message = "savedeck\r\n" + name + "\r\n";
+        foreach (int i in cards)
+            message += i + ",";
+        message = message.TrimEnd(',');
+        connection.Send(Encoding.ASCII.GetBytes(message));
+    }
+
     public void OnOutcome(bool outcome) //takes in bool, true for hostvictory, false for clientvictory
     {
         Debug.Log("Sent Outcome Message");

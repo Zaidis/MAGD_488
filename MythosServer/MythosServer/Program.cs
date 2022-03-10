@@ -105,7 +105,10 @@ namespace MythosServer {
                     } else if (messageArgArr[0].Equals("getdeckcontent", StringComparison.OrdinalIgnoreCase)) {
                         if (loggedIn)
                             GetDeckContent(handler, messageArgArr[1]);
-                    } else if (messageArgArr[0].Equals("quit", StringComparison.OrdinalIgnoreCase)) { //Exit case
+                    } else if (messageArgArr[0].Equals("savedeck", StringComparison.OrdinalIgnoreCase)) {
+                        if (loggedIn)
+                            SaveDeckContent(handler, messageArgArr[1], messageArgArr[2]);
+                    }else if (messageArgArr[0].Equals("quit", StringComparison.OrdinalIgnoreCase)) { //Exit case
                         Connections.Remove(handler);
                         _matchmaking.Remove(handler);
                         Users.Remove(UserSocketDictionary[handler]);
@@ -265,11 +268,12 @@ namespace MythosServer {
                 sqlLock.ReleaseMutex();
 
             }
-
+            sqlLock.ReleaseMutex();
             return null;
         }
         private static void GetDeckNames(Socket sock)
         {
+            sqlLock.WaitOne();
             Console.WriteLine("Entered Deck Name Retrieval");
             using SqliteConnection connection = new SqliteConnection("Data Source=Mythos.db");
             connection.Open();
@@ -282,8 +286,10 @@ namespace MythosServer {
                     message = message + reader.GetString(0) + "\r\n";
             sock.Send(Encoding.ASCII.GetBytes(message));
             connection.Close();
+            sqlLock.ReleaseMutex();
         }
         private static void GetDeckContent(Socket sock, string deckname) {
+            sqlLock.WaitOne();
             Console.WriteLine("Entered Deck Content Retrieval");
             using SqliteConnection connection = new SqliteConnection("Data Source=Mythos.db");
             connection.Open();
@@ -294,8 +300,23 @@ namespace MythosServer {
             using (SqliteDataReader reader = command.ExecuteReader())
                 while (reader.Read())
                     cards = reader.GetString(0);
-            sock.Send(Encoding.ASCII.GetBytes("deckcontent\r\n" + cards)); //concats cards stored as uint16 byte stream to message
+            sock.Send(Encoding.ASCII.GetBytes("deckcontent\r\n" + cards));
             connection.Close();
+            sqlLock.ReleaseMutex();
+        }
+        private static void SaveDeckContent(Socket sock, string deckname, string deck) {
+            sqlLock.WaitOne();
+            Console.WriteLine("Entered Deck Saving...");
+            using SqliteConnection connection = new SqliteConnection("Data Source=Mythos.db");
+            connection.Open();
+            SqliteCommand command = connection.CreateCommand();
+            command.CommandText = @"INSERT INTO Deck (Username, Deckname, Deck) VALUES (@u, @dn, @d) ON DUPLICATE KEY UPDATE Deck=@d";
+            command.Parameters.AddWithValue("@u", UserSocketDictionary[sock].Username);
+            command.Parameters.AddWithValue("@dn", deckname);
+            command.Parameters.AddWithValue("@d", deck);
+            command.ExecuteNonQuery();
+            connection.Close();
+            sqlLock.ReleaseMutex();
         }
     }
 }
