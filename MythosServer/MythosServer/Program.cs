@@ -290,11 +290,11 @@ namespace MythosServer {
             SqliteCommand command = connection.CreateCommand();
             command.CommandText = @"SELECT d.Deck FROM Deck d, User u WHERE @us = u.Username AND u.Username = d.Username";
             command.Parameters.AddWithValue("@us", UserSocketDictionary[sock].Username);
-            byte[] cards = new byte[40*2]; //using uint16
+            String cards = "";
             using (SqliteDataReader reader = command.ExecuteReader())
                 while (reader.Read())
-                    reader.GetBytes(0, 0, cards, 0, 40*2);
-            sock.Send(Encoding.ASCII.GetBytes("deckcontent\r\n").Concat(cards).ToArray()); //concats cards stored as uint16 byte stream to message
+                    cards = reader.GetString(0);
+            sock.Send(Encoding.ASCII.GetBytes("deckcontent\r\n" + cards)); //concats cards stored as uint16 byte stream to message
             connection.Close();
         }
     }

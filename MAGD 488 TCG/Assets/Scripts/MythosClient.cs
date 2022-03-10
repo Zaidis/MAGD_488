@@ -32,8 +32,10 @@ public class MythosClient : MonoBehaviour {
         else
             instance = this;
     }
-    void Start() {
-        DontDestroyOnLoad(this);
+    void Start()
+    {
+        deckNames = new List<string>();
+        currentDeck = new List<int>();
         Thread thread = new Thread(new ThreadStart(Client));
         thread.Start();
     }
@@ -71,15 +73,14 @@ public class MythosClient : MonoBehaviour {
         } else if (messageArgArr[0].Equals("logingood", StringComparison.OrdinalIgnoreCase) || messageArgArr[0].Equals("creationgood", StringComparison.OrdinalIgnoreCase)) {
             //Load next scene do something, good login
         } else if (messageArgArr[0].Equals("decknames", StringComparison.OrdinalIgnoreCase)) {
-            deckNames = new List<string>();
-            for (int i = 1; i < messageArgArr.Length; i++) {
+            deckNames.Clear();
+            for (int i = 1; i < messageArgArr.Length; i++)
                 deckNames.Add(messageArgArr[i]);
-            }
         } else if (messageArgArr[0].Equals("deckcontent", StringComparison.OrdinalIgnoreCase)) {
-            int offset = 13;
-            for (int i = 0; i < 80; i+=2) {
-                currentDeck.Add(BitConverter.ToUInt16(buffer, offset + i));
-            }
+            currentDeck.Clear();
+            string[] splitIntsAsStrings = messageArgArr[1].Split(',');
+            foreach (string intString in splitIntsAsStrings)
+                currentDeck.Add(Convert.ToInt32(intString));
         }
     }
     public void SendCode(string join) //Called when host is done connected to relay, sends join code to server
