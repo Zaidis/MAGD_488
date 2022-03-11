@@ -126,7 +126,8 @@ namespace MythosServer {
                     }else if (messageArgArr[0].Equals("quit", StringComparison.OrdinalIgnoreCase)) { //Exit case
                         Connections.Remove(handler);
                         _matchmaking.Remove(handler);
-                        Users.Remove(UserSocketDictionary[handler]);
+                        if(UserSocketDictionary.ContainsKey(handler))
+                            Users.Remove(UserSocketDictionary[handler]);
                         UserSocketDictionary.Remove(handler);
                         PrintConnections();
                         break;
@@ -252,14 +253,14 @@ namespace MythosServer {
             SqliteCommand command = connection.CreateCommand();
             command.CommandText = @"SELECT Salt From User WHERE Username=@us";
             command.Parameters.AddWithValue("@us", username);
-            byte[] salt = new byte[128 / 8];
+            string salt = "";
             using (SqliteDataReader reader = command.ExecuteReader())
                 while (reader.Read())
-                    reader.GetBytes(0, 0, salt, 0, 16);
+                    salt = reader.GetString(0);
             connection.Close();
             sqlLock.ReleaseMutex();
 
-            socket.Send(Encoding.ASCII.GetBytes("salt\r\n" + Encoding.ASCII.GetString(salt)));
+            socket.Send(Encoding.ASCII.GetBytes("salt\r\n" + salt));
             int numBytesReceived = socket.Receive(buffer); //data stream in
             string textReceived = Encoding.ASCII.GetString(buffer, 0, numBytesReceived); //decode from stream to ASCII
             string[] messageArgArr = textReceived.Split(StringSeparators, StringSplitOptions.None);
@@ -280,6 +281,7 @@ namespace MythosServer {
                     user = new User(username, 1500/*(int)reader["s.Skill"]*/);
                 }
             }
+            Console.WriteLine("Password Message Recieved: " + hash + " : " + hashed);
             if (hash.Equals(hashed)) {
                 connection.Close();
                 sqlLock.ReleaseMutex();
