@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
+using System.Xml.Serialization;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.Data.Sqlite;
 
@@ -37,9 +39,22 @@ namespace MythosServer {
         private static readonly List<Match> Matches = new List<Match>();
         private static List<Socket> _matchmaking = new List<Socket>();
         private static readonly Dictionary<Socket, User> UserSocketDictionary = new Dictionary<Socket, User>();
+        private static RSACryptoServiceProvider csp;
+        private static RSAParameters privKey;
+        private static RSAParameters pubKey;
+        private static string pubKeyString;
         private static Mutex sqlLock = new Mutex();
 
-        static void Main() {
+        static void Main()
+        {
+            csp = new RSACryptoServiceProvider(2048);
+            privKey = csp.ExportParameters(true);
+            pubKey = csp.ExportParameters(false);
+            StringWriter sw = new System.IO.StringWriter();
+            XmlSerializer xs = new System.Xml.Serialization.XmlSerializer(typeof(RSAParameters));
+            xs.Serialize(sw, pubKey);
+            pubKeyString = sw.ToString();
+
             IPAddress ipAddress = IPAddress.Parse(KLocalIp);
             IPEndPoint localEp = new IPEndPoint(ipAddress, KPort);
 
@@ -84,7 +99,7 @@ namespace MythosServer {
                             }
                         }
                     } else if (messageArgArr[0].Equals("login", StringComparison.OrdinalIgnoreCase)) {
-                        User? newUserLogin = Login(messageArgArr[1], messageArgArr[2], handler);
+                        User? newUserLogin = Login(messageArgArr[1], handler);
                         if (newUserLogin != null) {
                             handler.Send(Encoding.ASCII.GetBytes("logingood\r\n"));
                             Users.Add(newUserLogin);
@@ -94,7 +109,7 @@ namespace MythosServer {
                             handler.Send(Encoding.ASCII.GetBytes("loginbad\r\n"));
                         PrintConnections();
                     } else if (messageArgArr[0].Equals("newaccount", StringComparison.OrdinalIgnoreCase)) {
-                        handler.Send(NewUser(messageArgArr[1], messageArgArr[2]) ? Encoding.ASCII.GetBytes("creationgood\r\n") : Encoding.ASCII.GetBytes("creationbad\r\n"));
+                        handler.Send(NewUser(messageArgArr[1], messageArgArr[2], messageArgArr[3]) ? Encoding.ASCII.GetBytes("creationgood\r\n") : Encoding.ASCII.GetBytes("creationbad\r\n"));
                         PrintConnections();
                     } else if(messageArgArr[0].Equals("outcome", StringComparison.OrdinalIgnoreCase)) {
                         if(loggedIn)
@@ -138,7 +153,7 @@ namespace MythosServer {
                     Console.WriteLine(s.RemoteEndPoint + " : " + UserSocketDictionary[s].Username + " : Skill : " + UserSocketDictionary[s].Skill);
             }
         }
-        private static bool NewUser(string username, string password) //Attempt to create a user based on passed username and password, return true for success, return false for failure
+        private static bool NewUser(string username, string salt, string hash) //Attempt to create a user based on passed username and password, return true for success, return false for failure
         {
             sqlLock.WaitOne();
             Console.WriteLine("Entered User Creation");
@@ -156,18 +171,12 @@ namespace MythosServer {
                     }
                 }
             }
-
-            byte[] salt = new byte[128 / 8];
-            using (var rngCsp = new RNGCryptoServiceProvider())
-                rngCsp.GetNonZeroBytes(salt);
-            string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(password, salt, KeyDerivationPrf.HMACSHA256, 100000, 256 / 8));
-
             command.CommandText = @"INSERT INTO User (Username, Salt, Hash) " + "VALUES (@u, @s, @h)";
             command.Parameters.AddWithValue("@u", username);
             command.Parameters.AddWithValue("@s", salt);
-            command.Parameters.AddWithValue("@h", hashed);
+            command.Parameters.AddWithValue("@h", hash);
             command.ExecuteNonQuery();
-            connection.Close(); //bug in adding paramters
+            connection.Close();
             sqlLock.ReleaseMutex();
             return true; //after user has been created return true
         }
@@ -233,42 +242,51 @@ namespace MythosServer {
             } else if (!match.Hostoutcome.Equals("") && !match.Clientoutcome.Equals(""))
                 Console.Write("u1 and u2 outcome do not match no skill will be changed!");
         }
-        private static User? Login(string username, string password, Socket socket)  //login "socket" based on passed username and password, create User and return it
+        private static User? Login(string username, Socket socket)  //login "socket" based on passed username and password, create User and return it
         {
+            byte[] buffer = new byte[1024];
             sqlLock.WaitOne();
             Console.WriteLine("Entered User Login");
             using SqliteConnection connection = new SqliteConnection("Data Source=Mythos.db");
             connection.Open();
             SqliteCommand command = connection.CreateCommand();
-            command.CommandText = @"SELECT u.Username, u.Salt, u.Hash FROM User u WHERE u.Username = @u";
+            command.CommandText = @"SELECT Salt From User WHERE Username=@us";
+            command.Parameters.AddWithValue("@us", username);
+            byte[] salt = new byte[128 / 8];
+            using (SqliteDataReader reader = command.ExecuteReader())
+                while (reader.Read())
+                    reader.GetBytes(0, 0, salt, 0, 16);
+            connection.Close();
+            sqlLock.ReleaseMutex();
+
+            socket.Send(Encoding.ASCII.GetBytes("salt\r\n" + Encoding.ASCII.GetString(salt)));
+            int numBytesReceived = socket.Receive(buffer); //data stream in
+            string textReceived = Encoding.ASCII.GetString(buffer, 0, numBytesReceived); //decode from stream to ASCII
+            string[] messageArgArr = textReceived.Split(StringSeparators, StringSplitOptions.None);
+            if (!messageArgArr[0].Equals("password", StringComparison.OrdinalIgnoreCase))
+                return null;
+            string hashed = messageArgArr[1];
+
+            sqlLock.WaitOne();
+            connection.Open();
+            command = connection.CreateCommand();
+            command.CommandText = @"SELECT u.Hash FROM User u WHERE u.Username = @u";
             command.Parameters.AddWithValue("@u", username);
             User? user = null;
-            byte[] salt = new byte[128/8];
             string hash = "";
             using (SqliteDataReader reader = command.ExecuteReader()) {
                 while (reader.Read()) {
-                    string parsedUsername = reader.GetString(0);
-                    if (parsedUsername.Equals("")) {
-                        connection.Close();
-                        sqlLock.ReleaseMutex();
-                        return null;
-                    }
-                    reader.GetBytes(1, 0, salt, 0, 16);
-                    hash = reader.GetString(2);
+                    hash = reader.GetString(0);
                     user = new User(username, 1500/*(int)reader["s.Skill"]*/);
                 }
             }
-            string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2( password, salt, KeyDerivationPrf.HMACSHA256, 100000, 256 / 8));
-
             if (hash.Equals(hashed)) {
                 connection.Close();
-                if (Users.All(u => u.Username != username))
+                sqlLock.ReleaseMutex();
+                if (!UserSocketDictionary.ContainsKey(socket))
                     return user;
                 Console.WriteLine("Already Logged In!");
-                sqlLock.ReleaseMutex();
-
             }
-            sqlLock.ReleaseMutex();
             return null;
         }
         private static void GetDeckNames(Socket sock)

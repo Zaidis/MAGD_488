@@ -3,11 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 
 public class MythosClient : MonoBehaviour {
     public static MythosClient instance; //Singleton
@@ -68,6 +70,8 @@ public class MythosClient : MonoBehaviour {
         } else if (messageArgArr[0].Equals("connect", StringComparison.OrdinalIgnoreCase)) {
             code = messageArgArr[1];
             codeIn = true;
+        } else if (messageArgArr[0].Equals("salt", StringComparison.OrdinalIgnoreCase)) {
+            connection.Send(Encoding.ASCII.GetBytes("password\r\n" + Convert.ToBase64String(KeyDerivation.Pbkdf2(pass.text, Encoding.ASCII.GetBytes(messageArgArr[1]), KeyDerivationPrf.HMACSHA256, 100000, 256 / 8))));
         } else if (messageArgArr[0].Equals("loginbad", StringComparison.OrdinalIgnoreCase) || messageArgArr[0].Equals("creationbad", StringComparison.OrdinalIgnoreCase)) {
             //Display Failed Login Message
         } else if (messageArgArr[0].Equals("logingood", StringComparison.OrdinalIgnoreCase) || messageArgArr[0].Equals("creationgood", StringComparison.OrdinalIgnoreCase)) {
@@ -98,11 +102,15 @@ public class MythosClient : MonoBehaviour {
     }
     public void OnLogin() {
         Debug.Log("Sent Login Request");
-        connection.Send(Encoding.ASCII.GetBytes("login\r\n" + user.text + "\r\npassword\r\n" + pass.text));
+        connection.Send(Encoding.ASCII.GetBytes("login\r\n" + user.text));
     }
     public void OnCreateAccount() {
         Debug.Log("Sent Account Creation Request");
-        connection.Send(Encoding.ASCII.GetBytes("newaccount\r\n" + user.text + "\r\npassword\r\n" + pass.text));
+        byte[] salt = new byte[128 / 8];
+        using (var rngCsp = new RNGCryptoServiceProvider())
+            rngCsp.GetNonZeroBytes(salt);
+        string hash = Convert.ToBase64String(KeyDerivation.Pbkdf2(pass.text, salt, KeyDerivationPrf.HMACSHA256, 100000, 256 / 8));
+        connection.Send(Encoding.ASCII.GetBytes("password\r\n" + salt + "\r\n" + hash));
     }
     public void OnRetrieveDeckNames() {
         Debug.Log("Sent Deck Names Request");
