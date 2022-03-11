@@ -64,14 +64,13 @@ public class MythosClient : MonoBehaviour {
         int numBytesReceived = connection.Receive(buffer); //data stream in
         string textReceived = Encoding.ASCII.GetString(buffer, 0, numBytesReceived); //decode from stream to ASCII
         string[] messageArgArr = textReceived.Split(StringSeparators, StringSplitOptions.None);
-        Debug.Log("Received String: " + textReceived);
         if (messageArgArr[0].Equals("start", StringComparison.OrdinalIgnoreCase)) {
             start = true;
         } else if (messageArgArr[0].Equals("connect", StringComparison.OrdinalIgnoreCase)) {
             code = messageArgArr[1];
             codeIn = true;
         } else if (messageArgArr[0].Equals("salt", StringComparison.OrdinalIgnoreCase)) {
-            connection.Send(Encoding.ASCII.GetBytes("password\r\n" + Convert.ToBase64String(KeyDerivation.Pbkdf2(pass.text, Encoding.ASCII.GetBytes(messageArgArr[1]), KeyDerivationPrf.HMACSHA256, 100000, 256 / 8))));
+            connection.Send(Encoding.ASCII.GetBytes("password\r\n" + Convert.ToBase64String(KeyDerivation.Pbkdf2(pass.text, Convert.FromBase64String(messageArgArr[1]), KeyDerivationPrf.HMACSHA256, 100000, 256 / 8))));
         } else if (messageArgArr[0].Equals("loginbad", StringComparison.OrdinalIgnoreCase) || messageArgArr[0].Equals("creationbad", StringComparison.OrdinalIgnoreCase)) {
             //Display Failed Login Message
         } else if (messageArgArr[0].Equals("logingood", StringComparison.OrdinalIgnoreCase) || messageArgArr[0].Equals("creationgood", StringComparison.OrdinalIgnoreCase)) {
@@ -110,7 +109,7 @@ public class MythosClient : MonoBehaviour {
         using (var rngCsp = new RNGCryptoServiceProvider())
             rngCsp.GetNonZeroBytes(salt);
         string hash = Convert.ToBase64String(KeyDerivation.Pbkdf2(pass.text, salt, KeyDerivationPrf.HMACSHA256, 100000, 256 / 8));
-        connection.Send(Encoding.ASCII.GetBytes("password\r\n" + salt + "\r\n" + hash));
+        connection.Send(Encoding.ASCII.GetBytes("newaccount\r\n" + user.text + "\r\n" + Convert.ToBase64String(salt) + "\r\n" + hash));
     }
     public void OnRetrieveDeckNames() {
         Debug.Log("Sent Deck Names Request");
