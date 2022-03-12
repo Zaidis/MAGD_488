@@ -113,6 +113,7 @@ public class MythosClient : MonoBehaviour {
     private void OnApplicationQuit() {
         connection.Send(Encoding.ASCII.GetBytes("quit\r\n"));
         connection.Shutdown(SocketShutdown.Both);
+        connection.Close();
     }
     public void OnMatchMake() {
         Debug.Log("Sent Matchmaking Request");

@@ -44,6 +44,7 @@ namespace MythosServer {
         private static RSAParameters pubKey;
         private static string pubKeyString;
         private static Mutex sqlLock = new Mutex();
+        private static Mutex matchmakingMutex = new Mutex();
 
         static void Main()
         {
@@ -63,11 +64,7 @@ namespace MythosServer {
             listener.Bind(localEp); //Bind to local ip and port
             listener.Listen(1);
 
-            Console.WriteLine("Waiting...");
-
-            Thread mmthread = new Thread(() => Matchmaking());
-            mmthread.Start();
-
+            Console.WriteLine("Server Started!");
             for (; ; ) { //Welcome loop
                 try {
                     Socket handler = listener.Accept(); //Accept incoming client connection requests, create new socket and thread
@@ -84,12 +81,18 @@ namespace MythosServer {
             bool loggedIn = false;
             handler.Send(Encoding.ASCII.GetBytes("rsakey\r\n" + pubKeyString));
             for (; ; ) {
-                if (!Connections.Contains(handler))
+                if (!Connections.Contains(handler) || !handler.Connected)
                     break;
                 Thread.Sleep(1);
                 PrintConnections();
-
-                int numBytesReceived = handler.Receive(buffer); //data stream in
+                int numBytesReceived;
+                try {
+                    numBytesReceived = handler.Receive(buffer);
+                } catch (SocketException e) {
+                    Console.WriteLine(e);
+                    HandleDisconnect(handler);
+                    break;
+                }
                 string textReceived = Encoding.ASCII.GetString(buffer, 0, numBytesReceived); //decode from stream to ASCII
                 string[] messageArgArr = textReceived.Split(StringSeparators, StringSplitOptions.None);
 
@@ -97,7 +100,7 @@ namespace MythosServer {
                     if (UserSocketDictionary.ContainsKey(handler)) { //checking if client is logged in
                         if (!_matchmaking.Contains(handler)) {
                             _matchmaking.Add(handler); //add struct which contains needed info to matchmaking list
-
+                            Matchmaking();
                         }
                     }
                 } else if (messageArgArr[0].Equals("login", StringComparison.OrdinalIgnoreCase)) {
@@ -178,46 +181,45 @@ namespace MythosServer {
         }
         private static void Matchmaking() //Function responsible for matchmaking loop, runs continuously, if at least 2 users are in the queue, match closest two in skill, add to a match, and remove from pool
         {
-            for(; ; ) {
-                Thread.Sleep(1);
-                if (_matchmaking.Count > 1) { //matchmake if users matchmaking > 1
-                    Console.WriteLine("Attempting to Make Match");
-                    byte[] buffer = new byte[1024];
-                    int minDifference = int.MaxValue;
-                    Socket host = _matchmaking[0], client = _matchmaking[1];
-                    _matchmaking = _matchmaking.OrderBy(s => UserSocketDictionary[s].Skill).ToList();
-                    for (int i = 2; i < _matchmaking.Count; i++) { //find two users with closest skill, match together
-                        int currentDifference = Math.Abs(UserSocketDictionary[_matchmaking[i]].Skill - UserSocketDictionary[_matchmaking[i]].Skill);
-                        if (currentDifference < minDifference) {
-                            minDifference = currentDifference;
-                            host = _matchmaking[i];
-                            client = _matchmaking[i - 1];
-                        }
+            matchmakingMutex.WaitOne();
+            if (_matchmaking.Count > 1) { //matchmake if users matchmaking > 1
+                Console.WriteLine("Attempting to Make Match");
+                byte[] buffer = new byte[1024];
+                int minDifference = int.MaxValue;
+                Socket host = _matchmaking[0], client = _matchmaking[1];
+                /*_matchmaking = _matchmaking.OrderBy(s => UserSocketDictionary[s].Skill).ToList();
+                for (int i = 2; i < _matchmaking.Count; i++) { //find two users with closest skill, match together
+                    int currentDifference = Math.Abs(UserSocketDictionary[_matchmaking[i]].Skill - UserSocketDictionary[_matchmaking[i]].Skill);
+                    if (currentDifference < minDifference) {
+                        minDifference = currentDifference;
+                        host = _matchmaking[i];
+                        client = _matchmaking[i - 1];
                     }
+                }*/
 
-                    host.Send(Encoding.ASCII.GetBytes("start\r\n")); //Send start command to selected host
-                    Console.WriteLine("Start command sent to host");
+                host.Send(Encoding.ASCII.GetBytes("start\r\n")); //Send start command to selected host
+                Console.WriteLine("Start command sent to host");
 
-                    int numBytesReceived = host.Receive(buffer); //data stream in
-                    string textReceived = Encoding.ASCII.GetString(buffer, 0, numBytesReceived); //decode from stream to ASCII
-                    string[] messageArgArr = textReceived.Split(StringSeparators, StringSplitOptions.None);
-                    Console.WriteLine("Received Message: " + textReceived);
+                int numBytesReceived = host.Receive(buffer); //data stream in
+                string textReceived = Encoding.ASCII.GetString(buffer, 0, numBytesReceived); //decode from stream to ASCII
+                string[] messageArgArr = textReceived.Split(StringSeparators, StringSplitOptions.None);
+                Console.WriteLine("Received Message: " + textReceived);
 
-                    if (messageArgArr[0].Equals("code")) {
-                        client.Send(Encoding.ASCII.GetBytes("connect\r\n" + messageArgArr[1]));
-                        Console.WriteLine("Sent connection message to client");
-                        Match newMatch = new Match(host, client);
-                        Matches.Add(newMatch);
+                if (messageArgArr[0].Equals("code")) {
+                    client.Send(Encoding.ASCII.GetBytes("connect\r\n" + messageArgArr[1]));
+                    Console.WriteLine("Sent connection message to client");
+                    Match newMatch = new Match(host, client);
+                    Matches.Add(newMatch);
 
-                        UserSocketDictionary[host].Match = newMatch;
-                        UserSocketDictionary[client].Match = newMatch;
+                    UserSocketDictionary[host].Match = newMatch;
+                    UserSocketDictionary[client].Match = newMatch;
 
-                        _matchmaking.Remove(host);
-                        _matchmaking.Remove(client);
-                    } else if (messageArgArr[0].Equals("quit", StringComparison.OrdinalIgnoreCase)) //Exit case
-                        HandleDisconnect(host);
-                }
-            }            
+                    _matchmaking.Remove(host);
+                    _matchmaking.Remove(client);
+                } else if (messageArgArr[0].Equals("quit", StringComparison.OrdinalIgnoreCase)) //Exit case
+                    HandleDisconnect(host);
+            }
+            matchmakingMutex.ReleaseMutex();
         }
         private static void MatchOutcome(string outcome, Socket comm) //set outcome of match of passed User according to if socket is host or client in match, then eval
         {
