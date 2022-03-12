@@ -26,7 +26,6 @@ public class MythosClient : MonoBehaviour {
     private const string k_GlobalIp = "127.0.0.1"; //Server ip
     private const int k_Port = 2552; //port
     private Socket connection;
-    [SerializeField] RelayAllocUtp relay;
     public Text user;
     [SerializeField] private Text pass;
     public List<string> deckNames { get; private set; }
@@ -124,11 +123,6 @@ public class MythosClient : MonoBehaviour {
                     currentDeck.Add(Convert.ToInt32(intString));
             }
         }
-    }
-    public void SendCode(string join) //Called when host is done connected to relay, sends join code to server
-    {
-        connection.Send(Encoding.ASCII.GetBytes("code\r\n" + join));
-        Debug.Log("DEREK: Sent Join Code: " + join);
     }
     private void OnApplicationQuit() {
         connection.Send(Encoding.ASCII.GetBytes("quit\r\n"));
