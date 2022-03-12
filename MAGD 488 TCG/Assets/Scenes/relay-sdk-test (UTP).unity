@@ -346,7 +346,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1044943191}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: RelayAllocUtp, Assembly-CSharp
         m_MethodName: OnJoin
         m_Mode: 5
@@ -733,7 +733,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1044943191}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: RelayAllocUtp, Assembly-CSharp
         m_MethodName: OnDisconnect
         m_Mode: 1
@@ -1030,7 +1030,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1044943191}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: RelayAllocUtp, Assembly-CSharp
         m_MethodName: OnHost
         m_Mode: 1
@@ -1523,6 +1523,10 @@ MonoBehaviour:
     Address: 127.0.0.1
     Port: 7777
     ServerListenAddress: 
+  DebugSimulator:
+    PacketDelayMS: 0
+    PacketJitterMS: 0
+    PacketDropRate: 0
 --- !u!114 &844477193
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1569,7 +1573,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &879971159
 GameObject:
@@ -2160,56 +2164,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1025384087}
   m_CullTransparentMesh: 1
---- !u!1 &1044943190
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1044943192}
-  - component: {fileID: 1044943191}
-  m_Layer: 0
-  m_Name: RelayAllocationProxy (UTP)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1044943191
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1044943190}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fbd67303ab1ea514a8a60241a021298e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  PlayerIdText: {fileID: 1152512575}
-  SelectedRegion: {fileID: 2067498081}
-  HostAllocationIdText: {fileID: 1485206467}
-  JoinCodeText: {fileID: 1520844808}
-  PlayerAllocationIdText: {fileID: 690704453}
-  JoinCodeInput: {fileID: 835314678}
-  joinCode: n/a
---- !u!4 &1044943192
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1044943190}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1092832898
 GameObject:
   m_ObjectHideFlags: 0
@@ -3354,7 +3308,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1833220824
 MonoBehaviour:
@@ -3368,7 +3322,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5cb67684d651ce04c928ae278f4d2de1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  relay: {fileID: 1044943191}
+  relay: {fileID: 0}
   user: {fileID: 676287799}
   pass: {fileID: 879971161}
 --- !u!1 &2046719269

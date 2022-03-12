@@ -13,6 +13,7 @@ using System.Xml.Serialization;
 using UnityEngine;
 using UnityEngine.UI;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using Unity.Netcode;
 using Unity.Services.Authentication;
 using Unity.Services.Core;
 using Unity.Services.Relay;
@@ -34,6 +35,10 @@ public class MythosClient : MonoBehaviour {
     private static RSACryptoServiceProvider csp;
     private static RSAParameters pubKey;
 
+    private (string ipv4address, ushort port, byte[] allocationIdBytes, byte[] connectionData, byte[] key, string joinCode) serverOutcome;
+    private bool serverStarted = false;
+    private (string ipv4address, ushort port, byte[] allocationIdBytes, byte[] connectionData, byte[] hostConnectionData, byte[] key) clientOutcome;
+    private bool clientStarted = false;
     void Awake() {
         DontDestroyOnLoad(this);
         if (instance != null && instance != this)
@@ -56,6 +61,18 @@ public class MythosClient : MonoBehaviour {
         thread.Start();
     }
     void Update() {
+        if (serverStarted) {
+            var (ipv4address, port, allocationIdBytes, connectionData, key, joinCode) = serverOutcome;
+            NetworkManager.Singleton.GetComponent<UnityTransport>().SetHostRelayData(ipv4address, port, allocationIdBytes, key, connectionData, true);
+            NetworkManager.Singleton.StartHost();
+            serverStarted = false;
+        }
+        if (clientStarted) {
+            var (ipv4address, port, allocationIdBytes, connectionData, hostConnectionData, key) = clientOutcome;
+            NetworkManager.Singleton.GetComponent<UnityTransport>().SetClientRelayData(ipv4address, port, allocationIdBytes, key, connectionData, hostConnectionData, true);
+            NetworkManager.Singleton.StartClient();
+            clientStarted = false;
+        }
     }
     private async void Client() //Start threaded, connect to server, receive one message from server, either start as host, or connect
     {
@@ -72,8 +89,9 @@ public class MythosClient : MonoBehaviour {
             string[] messageArgArr = textReceived.Split(StringSeparators, StringSplitOptions.None);
             Debug.Log("TEXT RECEIVED: " + textReceived);
             if (messageArgArr[0].Equals("start", StringComparison.OrdinalIgnoreCase)) {
-                var startHost = await AllocateRelayServerAndGetJoinCode(2);
-                connection.Send(Encoding.ASCII.GetBytes("code\r\n" + startHost.joinCode));
+                serverOutcome =  await AllocateRelayServerAndGetJoinCode(2);
+                connection.Send(Encoding.ASCII.GetBytes("code\r\n" + serverOutcome.joinCode));
+                serverStarted = true;
             } else if (messageArgArr[0].Equals("rsakey", StringComparison.OrdinalIgnoreCase)) {
                 string xmlFile = textReceived.Substring(8, textReceived.Length - 8);
                 StringReader sr = new StringReader(xmlFile);
@@ -82,7 +100,8 @@ public class MythosClient : MonoBehaviour {
                 csp = new RSACryptoServiceProvider();
                 csp.ImportParameters(pubKey);
             } else if (messageArgArr[0].Equals("connect", StringComparison.OrdinalIgnoreCase)) {
-                await JoinRelayServerFromJoinCode(messageArgArr[1]);
+                clientOutcome = await JoinRelayServerFromJoinCode(messageArgArr[1]);
+                clientStarted = true;
             } else if (messageArgArr[0].Equals("salt", StringComparison.OrdinalIgnoreCase)) {
                 byte[] bytesPlainTextData = System.Text.Encoding.Unicode.GetBytes("password\r\n" +
                     Convert.ToBase64String(KeyDerivation.Pbkdf2(pass.text, Convert.FromBase64String(messageArgArr[1]),
@@ -176,6 +195,7 @@ public class MythosClient : MonoBehaviour {
         }
 
         var dtlsEndpoint = allocation.ServerEndpoints.First(e => e.ConnectionType == "dtls");
+
         return (dtlsEndpoint.Host, (ushort)dtlsEndpoint.Port, allocation.AllocationIdBytes, allocation.ConnectionData, allocation.Key, createJoinCode);
     }
     public static async Task<(string ipv4address, ushort port, byte[] allocationIdBytes, byte[] connectionData, byte[] hostConnectionData, byte[] key)> JoinRelayServerFromJoinCode(string joinCode) {
@@ -192,6 +212,7 @@ public class MythosClient : MonoBehaviour {
         Debug.Log($"client: {allocation.AllocationId}");
 
         var dtlsEndpoint = allocation.ServerEndpoints.First(e => e.ConnectionType == "dtls");
+
         return (dtlsEndpoint.Host, (ushort)dtlsEndpoint.Port, allocation.AllocationIdBytes, allocation.ConnectionData, allocation.HostConnectionData, allocation.Key);
     }
 }
