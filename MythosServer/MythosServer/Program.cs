@@ -68,8 +68,6 @@ namespace MythosServer {
             for (; ; ) { //Welcome loop
                 try {
                     Socket handler = listener.Accept(); //Accept incoming client connection requests, create new socket and thread
-                    Connections.Add(handler);
-
                     Thread thread = new Thread(() => ClientHandler(handler));
                     thread.Start();
                 } catch (Exception e) { Console.Write(e); }
@@ -77,6 +75,7 @@ namespace MythosServer {
         }
         private static void ClientHandler(Socket handler) //Handle client communication, run in thread
         {
+            Connections.Add(handler);
             byte[] buffer = new byte[1024];
             bool loggedIn = false;
             handler.Send(Encoding.ASCII.GetBytes("rsakey\r\n" + pubKeyString));
