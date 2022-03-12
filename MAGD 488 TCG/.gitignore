@@ -55,6 +55,9 @@ sysinfo.txt
 *.apk
 *.unitypackage
 
+#ParrelSync
+MAGD 488 TCG_clone_0/
+
 # Crashlytics generated file
 crashlytics-build.properties
 
