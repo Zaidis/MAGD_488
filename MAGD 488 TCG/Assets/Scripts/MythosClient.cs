@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Security.Cryptography;
@@ -12,6 +13,10 @@ using System.Xml.Serialization;
 using UnityEngine;
 using UnityEngine.UI;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using Unity.Services.Authentication;
+using Unity.Services.Core;
+using Unity.Services.Relay;
+using Unity.Services.Relay.Models;
 
 public class MythosClient : MonoBehaviour {
     public static MythosClient instance; //Singleton
@@ -25,9 +30,6 @@ public class MythosClient : MonoBehaviour {
     [SerializeField] private Text pass;
     public List<string> deckNames { get; private set; }
     public List<int> currentDeck { get; private set; }
-    private bool start = false;
-    private string code = "";
-    private bool codeIn = false;
 
     private static RSACryptoServiceProvider csp;
     private static RSAParameters pubKey;
@@ -39,25 +41,23 @@ public class MythosClient : MonoBehaviour {
         else
             instance = this;
     }
-    void Start()
+    async void Start()
     {
+        try {
+            await UnityServices.InitializeAsync();
+            await AuthenticationService.Instance.SignInAnonymouslyAsync();
+            var playerID = AuthenticationService.Instance.PlayerId;
+        } catch (Exception e) {
+            Debug.Log(e);
+        }
         deckNames = new List<string>();
         currentDeck = new List<int>();
         Thread thread = new Thread(new ThreadStart(Client));
         thread.Start();
     }
     void Update() {
-        if (start) { //Find a better way to sync thread?
-            relay.OnHost();
-            start = false;
-        }
-        if (codeIn) {
-            Debug.Log("Received Code:" + code);
-            relay.OnJoin(code);
-            codeIn = false;
-        }
     }
-    private void Client() //Start threaded, connect to server, receive one message from server, either start as host, or connect
+    private async void Client() //Start threaded, connect to server, receive one message from server, either start as host, or connect
     {
         IPAddress ipAddress = IPAddress.Parse(k_GlobalIp);
         IPEndPoint remoteEp = new IPEndPoint(IPAddress.Parse(k_GlobalIp), k_Port);
@@ -72,7 +72,8 @@ public class MythosClient : MonoBehaviour {
             string[] messageArgArr = textReceived.Split(StringSeparators, StringSplitOptions.None);
             Debug.Log("TEXT RECEIVED: " + textReceived);
             if (messageArgArr[0].Equals("start", StringComparison.OrdinalIgnoreCase)) {
-                start = true;
+                var startHost = await AllocateRelayServerAndGetJoinCode(2);
+                connection.Send(Encoding.ASCII.GetBytes("code\r\n" + startHost.joinCode));
             } else if (messageArgArr[0].Equals("rsakey", StringComparison.OrdinalIgnoreCase)) {
                 string xmlFile = textReceived.Substring(8, textReceived.Length - 8);
                 StringReader sr = new StringReader(xmlFile);
@@ -81,8 +82,7 @@ public class MythosClient : MonoBehaviour {
                 csp = new RSACryptoServiceProvider();
                 csp.ImportParameters(pubKey);
             } else if (messageArgArr[0].Equals("connect", StringComparison.OrdinalIgnoreCase)) {
-                code = messageArgArr[1];
-                codeIn = true;
+                await JoinRelayServerFromJoinCode(messageArgArr[1]);
             } else if (messageArgArr[0].Equals("salt", StringComparison.OrdinalIgnoreCase)) {
                 byte[] bytesPlainTextData = System.Text.Encoding.Unicode.GetBytes("password\r\n" +
                     Convert.ToBase64String(KeyDerivation.Pbkdf2(pass.text, Convert.FromBase64String(messageArgArr[1]),
@@ -154,5 +154,44 @@ public class MythosClient : MonoBehaviour {
     {
         Debug.Log("Sent Outcome Message");
         connection.Send(Encoding.ASCII.GetBytes("outcome\r\n" + (outcome ? "hostvictory" : "clientvictory")));
-    } 
+    }
+    public static async Task<(string ipv4address, ushort port, byte[] allocationIdBytes, byte[] connectionData, byte[] key, string joinCode)> AllocateRelayServerAndGetJoinCode(int maxConnections, string region = null) {
+        Allocation allocation;
+        string createJoinCode;
+        try {
+            allocation = await Relay.Instance.CreateAllocationAsync(maxConnections, region);
+        } catch (Exception e) {
+            Debug.LogError($"Relay create allocation request failed {e.Message}");
+            throw;
+        }
+
+        Debug.Log($"server: {allocation.ConnectionData[0]} {allocation.ConnectionData[1]}");
+        Debug.Log($"server: {allocation.AllocationId}");
+
+        try {
+            createJoinCode = await Relay.Instance.GetJoinCodeAsync(allocation.AllocationId);
+        } catch {
+            Debug.LogError("Relay create join code request failed");
+            throw;
+        }
+
+        var dtlsEndpoint = allocation.ServerEndpoints.First(e => e.ConnectionType == "dtls");
+        return (dtlsEndpoint.Host, (ushort)dtlsEndpoint.Port, allocation.AllocationIdBytes, allocation.ConnectionData, allocation.Key, createJoinCode);
+    }
+    public static async Task<(string ipv4address, ushort port, byte[] allocationIdBytes, byte[] connectionData, byte[] hostConnectionData, byte[] key)> JoinRelayServerFromJoinCode(string joinCode) {
+        JoinAllocation allocation;
+        try {
+            allocation = await Relay.Instance.JoinAllocationAsync(joinCode);
+        } catch {
+            Debug.LogError("Relay create join code request failed");
+            throw;
+        }
+
+        Debug.Log($"client: {allocation.ConnectionData[0]} {allocation.ConnectionData[1]}");
+        Debug.Log($"host: {allocation.HostConnectionData[0]} {allocation.HostConnectionData[1]}");
+        Debug.Log($"client: {allocation.AllocationId}");
+
+        var dtlsEndpoint = allocation.ServerEndpoints.First(e => e.ConnectionType == "dtls");
+        return (dtlsEndpoint.Host, (ushort)dtlsEndpoint.Port, allocation.AllocationIdBytes, allocation.ConnectionData, allocation.HostConnectionData, allocation.Key);
+    }
 }

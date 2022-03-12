@@ -5,9 +5,6 @@ C:\Users\DJ-PC\Desktop\MythosServer\MythosServer\obj\Debug\MythosServer.csprojAs
 C:\Users\DJ-PC\Desktop\MythosServer\MythosServer\obj\Debug\MythosServer.csproj.CoreCompileInputs.cache
 C:\Users\DJ-PC\Desktop\MythosServer\MythosServer\obj\Debug\MythosServer.exe
 C:\Users\DJ-PC\Desktop\MythosServer\MythosServer\obj\Debug\MythosServer.pdb
-C:\Users\DJ-PC\Documents\MAGD_488\MythosServer\MythosServer\bin\Debug\runtimes\win-x86\native\e_sqlite3.dll
-C:\Users\DJ-PC\Documents\MAGD_488\MythosServer\MythosServer\bin\Debug\runtimes\win-x64\native\e_sqlite3.dll
-C:\Users\DJ-PC\Documents\MAGD_488\MythosServer\MythosServer\bin\Debug\runtimes\win-arm\native\e_sqlite3.dll
 C:\Users\DJ-PC\Documents\MAGD_488\MythosServer\MythosServer\bin\Debug\MythosServer.exe.config
 C:\Users\DJ-PC\Documents\MAGD_488\MythosServer\MythosServer\bin\Debug\MythosServer.exe
 C:\Users\DJ-PC\Documents\MAGD_488\MythosServer\MythosServer\bin\Debug\MythosServer.pdb
@@ -148,9 +145,12 @@ C:\Users\DJ-PC\Documents\MAGD_488\MythosServer\MythosServer\bin\Debug\System.Num
 C:\Users\DJ-PC\Documents\MAGD_488\MythosServer\MythosServer\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
 C:\Users\DJ-PC\Documents\MAGD_488\MythosServer\MythosServer\bin\Debug\System.Threading.Tasks.Extensions.xml
 C:\Users\DJ-PC\Documents\MAGD_488\MythosServer\MythosServer\bin\Debug\System.ValueTuple.xml
-C:\Users\DJ-PC\Documents\MAGD_488\MythosServer\MythosServer\obj\Debug\MythosServer.csprojAssemblyReference.cache
 C:\Users\DJ-PC\Documents\MAGD_488\MythosServer\MythosServer\obj\Debug\MythosServer.exe.config
 C:\Users\DJ-PC\Documents\MAGD_488\MythosServer\MythosServer\obj\Debug\MythosServer.csproj.CoreCompileInputs.cache
 C:\Users\DJ-PC\Documents\MAGD_488\MythosServer\MythosServer\obj\Debug\MythosServer.csproj.CopyComplete
 C:\Users\DJ-PC\Documents\MAGD_488\MythosServer\MythosServer\obj\Debug\MythosServer.exe
 C:\Users\DJ-PC\Documents\MAGD_488\MythosServer\MythosServer\obj\Debug\MythosServer.pdb
+C:\Users\DJ-PC\Documents\MAGD_488\MythosServer\MythosServer\obj\Debug\MythosServer.csprojAssemblyReference.cache
+C:\Users\DJ-PC\Documents\MAGD_488\MythosServer\MythosServer\bin\Debug\runtimes\win-x86\native\e_sqlite3.dll
+C:\Users\DJ-PC\Documents\MAGD_488\MythosServer\MythosServer\bin\Debug\runtimes\win-x64\native\e_sqlite3.dll
+C:\Users\DJ-PC\Documents\MAGD_488\MythosServer\MythosServer\bin\Debug\runtimes\win-arm\native\e_sqlite3.dll
