@@ -84,13 +84,14 @@ namespace MythosServer {
         {
             byte[] buffer = new byte[1024];
             bool loggedIn = false;
+            handler.Send(Encoding.ASCII.GetBytes("rsakey\r\n" + pubKeyString));
             for (; ; ) {
                 Thread.Sleep(1);
                 if (!_matchmaking.Contains(handler)) {
                     int numBytesReceived = handler.Receive(buffer); //data stream in
                     string textReceived = Encoding.ASCII.GetString(buffer, 0, numBytesReceived); //decode from stream to ASCII
                     string[] messageArgArr = textReceived.Split(StringSeparators, StringSplitOptions.None);
-
+                    
                     if (messageArgArr[0].Equals("matchmake", StringComparison.OrdinalIgnoreCase)) { //Adding connection to matchmaking queue
                         if (UserSocketDictionary.ContainsKey(handler)) { //checking if client is logged in
                             if (!_matchmaking.Contains(handler)) {
@@ -257,19 +258,20 @@ namespace MythosServer {
             using (SqliteDataReader reader = command.ExecuteReader())
                 while (reader.Read())
                     salt = reader.GetString(0);
-            connection.Close();
-            sqlLock.ReleaseMutex();
 
             socket.Send(Encoding.ASCII.GetBytes("salt\r\n" + salt));
             int numBytesReceived = socket.Receive(buffer); //data stream in
             string textReceived = Encoding.ASCII.GetString(buffer, 0, numBytesReceived); //decode from stream to ASCII
+            var bytesCypherText = Convert.FromBase64String(textReceived);
+            csp = new RSACryptoServiceProvider();
+            csp.ImportParameters(privKey);
+            var bytesPlainTextData = csp.Decrypt(bytesCypherText, false);
+            textReceived = System.Text.Encoding.Unicode.GetString(bytesPlainTextData);
             string[] messageArgArr = textReceived.Split(StringSeparators, StringSplitOptions.None);
             if (!messageArgArr[0].Equals("password", StringComparison.OrdinalIgnoreCase))
                 return null;
             string hashed = messageArgArr[1];
 
-            sqlLock.WaitOne();
-            connection.Open();
             command = connection.CreateCommand();
             command.CommandText = @"SELECT u.Hash FROM User u WHERE u.Username = @u";
             command.Parameters.AddWithValue("@u", username);
@@ -281,7 +283,6 @@ namespace MythosServer {
                     user = new User(username, 1500/*(int)reader["s.Skill"]*/);
                 }
             }
-            Console.WriteLine("Password Message Recieved: " + hash + " : " + hashed);
             if (hash.Equals(hashed)) {
                 connection.Close();
                 sqlLock.ReleaseMutex();

@@ -1,12 +1,14 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 using UnityEngine;
 using UnityEngine.UI;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
@@ -26,6 +28,9 @@ public class MythosClient : MonoBehaviour {
     private bool start = false;
     private string code = "";
     private bool codeIn = false;
+
+    private static RSACryptoServiceProvider csp;
+    private static RSAParameters pubKey;
 
     void Awake() {
         DontDestroyOnLoad(this);
@@ -61,29 +66,43 @@ public class MythosClient : MonoBehaviour {
         Debug.Log("Connected to " + connection.RemoteEndPoint);
 
         byte[] buffer = new byte[1024]; //buffer for incoming data
-        int numBytesReceived = connection.Receive(buffer); //data stream in
-        string textReceived = Encoding.ASCII.GetString(buffer, 0, numBytesReceived); //decode from stream to ASCII
-        string[] messageArgArr = textReceived.Split(StringSeparators, StringSplitOptions.None);
-        if (messageArgArr[0].Equals("start", StringComparison.OrdinalIgnoreCase)) {
-            start = true;
-        } else if (messageArgArr[0].Equals("connect", StringComparison.OrdinalIgnoreCase)) {
-            code = messageArgArr[1];
-            codeIn = true;
-        } else if (messageArgArr[0].Equals("salt", StringComparison.OrdinalIgnoreCase)) {
-            connection.Send(Encoding.ASCII.GetBytes("password\r\n" + Convert.ToBase64String(KeyDerivation.Pbkdf2(pass.text, Convert.FromBase64String(messageArgArr[1]), KeyDerivationPrf.HMACSHA256, 100000, 256 / 8))));
-        } else if (messageArgArr[0].Equals("loginbad", StringComparison.OrdinalIgnoreCase) || messageArgArr[0].Equals("creationbad", StringComparison.OrdinalIgnoreCase)) {
-            //Display Failed Login Message
-        } else if (messageArgArr[0].Equals("logingood", StringComparison.OrdinalIgnoreCase) || messageArgArr[0].Equals("creationgood", StringComparison.OrdinalIgnoreCase)) {
-            //Load next scene do something, good login
-        } else if (messageArgArr[0].Equals("decknames", StringComparison.OrdinalIgnoreCase)) {
-            deckNames.Clear();
-            for (int i = 1; i < messageArgArr.Length; i++)
-                deckNames.Add(messageArgArr[i]);
-        } else if (messageArgArr[0].Equals("deckcontent", StringComparison.OrdinalIgnoreCase)) {
-            currentDeck.Clear();
-            string[] splitIntsAsStrings = messageArgArr[1].Split(',');
-            foreach (string intString in splitIntsAsStrings)
-                currentDeck.Add(Convert.ToInt32(intString));
+        for (;;) {
+            int numBytesReceived = connection.Receive(buffer); //data stream in
+            string textReceived = Encoding.ASCII.GetString(buffer, 0, numBytesReceived); //decode from stream to ASCII
+            string[] messageArgArr = textReceived.Split(StringSeparators, StringSplitOptions.None);
+            if (messageArgArr[0].Equals("start", StringComparison.OrdinalIgnoreCase)) {
+                start = true;
+            } else if (messageArgArr[0].Equals("rsakey", StringComparison.OrdinalIgnoreCase)) {
+                string xmlFile = textReceived.Substring(8, textReceived.Length - 8);
+                StringReader sr = new StringReader(xmlFile);
+                XmlSerializer xs = new XmlSerializer(typeof(RSAParameters));
+                pubKey = (RSAParameters)xs.Deserialize(sr);
+                csp = new RSACryptoServiceProvider();
+                csp.ImportParameters(pubKey);
+            } else if (messageArgArr[0].Equals("connect", StringComparison.OrdinalIgnoreCase)) {
+                code = messageArgArr[1];
+                codeIn = true;
+            } else if (messageArgArr[0].Equals("salt", StringComparison.OrdinalIgnoreCase)) {
+                byte[] bytesPlainTextData = System.Text.Encoding.Unicode.GetBytes("password\r\n" +
+                    Convert.ToBase64String(KeyDerivation.Pbkdf2(pass.text, Convert.FromBase64String(messageArgArr[1]),
+                        KeyDerivationPrf.HMACSHA256, 100000, 256 / 8)));
+                byte[] bytesCypherText = csp.Encrypt(bytesPlainTextData, false);
+                string cypherText = Convert.ToBase64String(bytesCypherText);
+                connection.Send(Encoding.ASCII.GetBytes(cypherText));
+            } else if (messageArgArr[0].Equals("loginbad", StringComparison.OrdinalIgnoreCase) || messageArgArr[0].Equals("creationbad", StringComparison.OrdinalIgnoreCase)) {
+                //Display Failed Login Message
+            } else if (messageArgArr[0].Equals("logingood", StringComparison.OrdinalIgnoreCase) || messageArgArr[0].Equals("creationgood", StringComparison.OrdinalIgnoreCase)) {
+                //Load next scene do something, good login
+            } else if (messageArgArr[0].Equals("decknames", StringComparison.OrdinalIgnoreCase)) {
+                deckNames.Clear();
+                for (int i = 1; i < messageArgArr.Length; i++)
+                    deckNames.Add(messageArgArr[i]);
+            } else if (messageArgArr[0].Equals("deckcontent", StringComparison.OrdinalIgnoreCase)) {
+                currentDeck.Clear();
+                string[] splitIntsAsStrings = messageArgArr[1].Split(',');
+                foreach (string intString in splitIntsAsStrings)
+                    currentDeck.Add(Convert.ToInt32(intString));
+            }
         }
     }
     public void SendCode(string join) //Called when host is done connected to relay, sends join code to server
