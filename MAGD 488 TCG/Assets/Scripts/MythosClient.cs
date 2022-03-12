@@ -70,6 +70,7 @@ public class MythosClient : MonoBehaviour {
             int numBytesReceived = connection.Receive(buffer); //data stream in
             string textReceived = Encoding.ASCII.GetString(buffer, 0, numBytesReceived); //decode from stream to ASCII
             string[] messageArgArr = textReceived.Split(StringSeparators, StringSplitOptions.None);
+            Debug.Log("TEXT RECEIVED: " + textReceived);
             if (messageArgArr[0].Equals("start", StringComparison.OrdinalIgnoreCase)) {
                 start = true;
             } else if (messageArgArr[0].Equals("rsakey", StringComparison.OrdinalIgnoreCase)) {
@@ -107,8 +108,8 @@ public class MythosClient : MonoBehaviour {
     }
     public void SendCode(string join) //Called when host is done connected to relay, sends join code to server
     {
-        Debug.Log("Sent Join Code: " + join);
-        int s = connection.Send(Encoding.ASCII.GetBytes("code\r\n" + join + "\r\n"));
+        connection.Send(Encoding.ASCII.GetBytes("code\r\n" + join));
+        Debug.Log("DEREK: Sent Join Code: " + join);
     }
     private void OnApplicationQuit() {
         connection.Send(Encoding.ASCII.GetBytes("quit\r\n"));

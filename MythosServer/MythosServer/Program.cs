@@ -25,7 +25,7 @@ namespace MythosServer {
         }
         class Match 
         {
-            public Socket Host;
+            public readonly Socket Host;
             public Socket Client;
             public string Hostoutcome = "";
             public string Clientoutcome = "";
@@ -37,14 +37,14 @@ namespace MythosServer {
         private static readonly List<Socket> Connections = new List<Socket>(); //List of all connections, and list of matchmaking clients
         private static readonly List<User> Users = new List<User>();
         private static readonly List<Match> Matches = new List<Match>();
-        private static List<Socket> _matchmaking = new List<Socket>();
+        private static List<Socket> MatchmakingSockets = new List<Socket>();
         private static readonly Dictionary<Socket, User> UserSocketDictionary = new Dictionary<Socket, User>();
         private static RSACryptoServiceProvider csp;
         private static RSAParameters privKey;
         private static RSAParameters pubKey;
         private static string pubKeyString;
-        private static Mutex sqlLock = new Mutex();
-        private static Mutex matchmakingMutex = new Mutex();
+        private static readonly Mutex sqlLock = new Mutex();
+        private static readonly Mutex matchmakingMutex = new Mutex();
 
         static void Main()
         {
@@ -98,8 +98,8 @@ namespace MythosServer {
 
                 if (messageArgArr[0].Equals("matchmake", StringComparison.OrdinalIgnoreCase)) { //Adding connection to matchmaking queue
                     if (UserSocketDictionary.ContainsKey(handler)) { //checking if client is logged in
-                        if (!_matchmaking.Contains(handler)) {
-                            _matchmaking.Add(handler); //add struct which contains needed info to matchmaking list
+                        if (!MatchmakingSockets.Contains(handler)) {
+                            MatchmakingSockets.Add(handler); //add struct which contains needed info to matchmaking list
                             Matchmaking();
                         }
                     }
@@ -137,7 +137,7 @@ namespace MythosServer {
         }
         private static void PrintConnections() //Print current connection statuses
         {
-            Console.Clear();
+            //Console.Clear();
             Console.WriteLine("Current Connections: ");
             foreach (Socket s in Connections)
                 Console.WriteLine(s.RemoteEndPoint);
@@ -146,9 +146,9 @@ namespace MythosServer {
                 foreach (var sock in UserSocketDictionary)
                     Console.WriteLine(sock.Key.RemoteEndPoint + " : " + sock.Value.Username + " : Skill : " + sock.Value.Skill);
             }
-            if (_matchmaking.Count > 0) {
+            if (MatchmakingSockets.Count > 0) {
                 Console.WriteLine("Matchmaking Clients: ");
-                foreach (Socket s in _matchmaking)
+                foreach (Socket s in MatchmakingSockets)
                     Console.WriteLine(s.RemoteEndPoint + " : " + UserSocketDictionary[s].Username + " : Skill : " + UserSocketDictionary[s].Skill);
             }
         }
@@ -182,20 +182,21 @@ namespace MythosServer {
         private static void Matchmaking() //Function responsible for matchmaking loop, runs continuously, if at least 2 users are in the queue, match closest two in skill, add to a match, and remove from pool
         {
             matchmakingMutex.WaitOne();
-            if (_matchmaking.Count > 1) { //matchmake if users matchmaking > 1
+            if (MatchmakingSockets.Count > 1) { //matchmake if users matchmaking > 1
                 Console.WriteLine("Attempting to Make Match");
                 byte[] buffer = new byte[1024];
+                Socket host = MatchmakingSockets[1];
+                Socket client = MatchmakingSockets[0];
                 int minDifference = int.MaxValue;
-                Socket host = _matchmaking[0], client = _matchmaking[1];
-                /*_matchmaking = _matchmaking.OrderBy(s => UserSocketDictionary[s].Skill).ToList();
-                for (int i = 2; i < _matchmaking.Count; i++) { //find two users with closest skill, match together
-                    int currentDifference = Math.Abs(UserSocketDictionary[_matchmaking[i]].Skill - UserSocketDictionary[_matchmaking[i]].Skill);
+                MatchmakingSockets = MatchmakingSockets.OrderBy(s => UserSocketDictionary[s].Skill).ToList();
+                for (int i = 1; i < MatchmakingSockets.Count; i++) { //find two users with closest skill, match together
+                    int currentDifference = Math.Abs(UserSocketDictionary[MatchmakingSockets[i]].Skill - UserSocketDictionary[MatchmakingSockets[i]].Skill);
                     if (currentDifference < minDifference) {
                         minDifference = currentDifference;
-                        host = _matchmaking[i];
-                        client = _matchmaking[i - 1];
+                        host = MatchmakingSockets[i];
+                        client = MatchmakingSockets[i - 1];
                     }
-                }*/
+                }
 
                 host.Send(Encoding.ASCII.GetBytes("start\r\n")); //Send start command to selected host
                 Console.WriteLine("Start command sent to host");
@@ -203,9 +204,9 @@ namespace MythosServer {
                 int numBytesReceived = host.Receive(buffer); //data stream in
                 string textReceived = Encoding.ASCII.GetString(buffer, 0, numBytesReceived); //decode from stream to ASCII
                 string[] messageArgArr = textReceived.Split(StringSeparators, StringSplitOptions.None);
-                Console.WriteLine("Received Message: " + textReceived);
-
+                Console.WriteLine(textReceived);
                 if (messageArgArr[0].Equals("code")) {
+                    Console.WriteLine("Sent " + "connect\r\n" + messageArgArr[1] + "\nto " + client.RemoteEndPoint + " : " + UserSocketDictionary[client].Username + " : Skill : " + UserSocketDictionary[client].Skill);
                     client.Send(Encoding.ASCII.GetBytes("connect\r\n" + messageArgArr[1]));
                     Console.WriteLine("Sent connection message to client");
                     Match newMatch = new Match(host, client);
@@ -214,8 +215,8 @@ namespace MythosServer {
                     UserSocketDictionary[host].Match = newMatch;
                     UserSocketDictionary[client].Match = newMatch;
 
-                    _matchmaking.Remove(host);
-                    _matchmaking.Remove(client);
+                    MatchmakingSockets.Remove(host);
+                    MatchmakingSockets.Remove(client);
                 } else if (messageArgArr[0].Equals("quit", StringComparison.OrdinalIgnoreCase)) //Exit case
                     HandleDisconnect(host);
             }
@@ -343,7 +344,7 @@ namespace MythosServer {
         private static void HandleDisconnect(Socket handler)
         {
             Connections.Remove(handler);
-            _matchmaking.Remove(handler);
+            MatchmakingSockets.Remove(handler);
             if (UserSocketDictionary.ContainsKey(handler))
                 Users.Remove(UserSocketDictionary[handler]);
             UserSocketDictionary.Remove(handler);
