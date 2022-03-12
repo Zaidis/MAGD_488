@@ -75,8 +75,6 @@ namespace MythosServer {
 
                     Thread thread = new Thread(() => ClientHandler(handler));
                     thread.Start();
-
-                    PrintConnections();
                 } catch (Exception e) { Console.Write(e); }
             }
         }
@@ -86,53 +84,49 @@ namespace MythosServer {
             bool loggedIn = false;
             handler.Send(Encoding.ASCII.GetBytes("rsakey\r\n" + pubKeyString));
             for (; ; ) {
+                if (!Connections.Contains(handler))
+                    break;
                 Thread.Sleep(1);
-                if (!_matchmaking.Contains(handler)) {
-                    int numBytesReceived = handler.Receive(buffer); //data stream in
-                    string textReceived = Encoding.ASCII.GetString(buffer, 0, numBytesReceived); //decode from stream to ASCII
-                    string[] messageArgArr = textReceived.Split(StringSeparators, StringSplitOptions.None);
-                    
-                    if (messageArgArr[0].Equals("matchmake", StringComparison.OrdinalIgnoreCase)) { //Adding connection to matchmaking queue
-                        if (UserSocketDictionary.ContainsKey(handler)) { //checking if client is logged in
-                            if (!_matchmaking.Contains(handler)) {
-                                _matchmaking.Add(handler); //add struct which contains needed info to matchmaking list
-                                PrintConnections();
-                            }
+                PrintConnections();
+
+                int numBytesReceived = handler.Receive(buffer); //data stream in
+                string textReceived = Encoding.ASCII.GetString(buffer, 0, numBytesReceived); //decode from stream to ASCII
+                string[] messageArgArr = textReceived.Split(StringSeparators, StringSplitOptions.None);
+
+                if (messageArgArr[0].Equals("matchmake", StringComparison.OrdinalIgnoreCase)) { //Adding connection to matchmaking queue
+                    if (UserSocketDictionary.ContainsKey(handler)) { //checking if client is logged in
+                        if (!_matchmaking.Contains(handler)) {
+                            _matchmaking.Add(handler); //add struct which contains needed info to matchmaking list
+
                         }
-                    } else if (messageArgArr[0].Equals("login", StringComparison.OrdinalIgnoreCase)) {
-                        User? newUserLogin = Login(messageArgArr[1], handler);
-                        if (newUserLogin != null) {
-                            handler.Send(Encoding.ASCII.GetBytes("logingood\r\n"));
-                            Users.Add(newUserLogin);
-                            UserSocketDictionary.Add(handler, newUserLogin);
-                            loggedIn = true;
-                        } else
-                            handler.Send(Encoding.ASCII.GetBytes("loginbad\r\n"));
-                        PrintConnections();
-                    } else if (messageArgArr[0].Equals("newaccount", StringComparison.OrdinalIgnoreCase)) {
-                        handler.Send(NewUser(messageArgArr[1], messageArgArr[2], messageArgArr[3]) ? Encoding.ASCII.GetBytes("creationgood\r\n") : Encoding.ASCII.GetBytes("creationbad\r\n"));
-                        PrintConnections();
-                    } else if(messageArgArr[0].Equals("outcome", StringComparison.OrdinalIgnoreCase)) {
-                        if(loggedIn)
-                            MatchOutcome(messageArgArr[1], handler);
-                    } else if (messageArgArr[0].Equals("getdecknames", StringComparison.OrdinalIgnoreCase)) {
-                        if(loggedIn)
-                            GetDeckNames(handler);
-                    } else if (messageArgArr[0].Equals("getdeckcontent", StringComparison.OrdinalIgnoreCase)) {
-                        if (loggedIn)
-                            GetDeckContent(handler, messageArgArr[1]);
-                    } else if (messageArgArr[0].Equals("savedeck", StringComparison.OrdinalIgnoreCase)) {
-                        if (loggedIn)
-                            SaveDeckContent(handler, messageArgArr[1], messageArgArr[2]);
-                    }else if (messageArgArr[0].Equals("quit", StringComparison.OrdinalIgnoreCase)) { //Exit case
-                        Connections.Remove(handler);
-                        _matchmaking.Remove(handler);
-                        if(UserSocketDictionary.ContainsKey(handler))
-                            Users.Remove(UserSocketDictionary[handler]);
-                        UserSocketDictionary.Remove(handler);
-                        PrintConnections();
-                        break;
                     }
+                } else if (messageArgArr[0].Equals("login", StringComparison.OrdinalIgnoreCase)) {
+                    User? newUserLogin = Login(messageArgArr[1], handler);
+                    if (newUserLogin != null) {
+                        handler.Send(Encoding.ASCII.GetBytes("logingood\r\n"));
+                        Users.Add(newUserLogin);
+                        UserSocketDictionary.Add(handler, newUserLogin);
+                        loggedIn = true;
+                    } else
+                        handler.Send(Encoding.ASCII.GetBytes("loginbad\r\n"));
+
+                } else if (messageArgArr[0].Equals("newaccount", StringComparison.OrdinalIgnoreCase)) {
+                    handler.Send(NewUser(messageArgArr[1], messageArgArr[2], messageArgArr[3]) ? Encoding.ASCII.GetBytes("creationgood\r\n") : Encoding.ASCII.GetBytes("creationbad\r\n"));
+
+                } else if (messageArgArr[0].Equals("outcome", StringComparison.OrdinalIgnoreCase)) {
+                    if (loggedIn)
+                        MatchOutcome(messageArgArr[1], handler);
+                } else if (messageArgArr[0].Equals("getdecknames", StringComparison.OrdinalIgnoreCase)) {
+                    if (loggedIn)
+                        GetDeckNames(handler);
+                } else if (messageArgArr[0].Equals("getdeckcontent", StringComparison.OrdinalIgnoreCase)) {
+                    if (loggedIn)
+                        GetDeckContent(handler, messageArgArr[1]);
+                } else if (messageArgArr[0].Equals("savedeck", StringComparison.OrdinalIgnoreCase)) {
+                    if (loggedIn)
+                        SaveDeckContent(handler, messageArgArr[1], messageArgArr[2]);
+                } else if (messageArgArr[0].Equals("quit", StringComparison.OrdinalIgnoreCase)) { //Exit case
+                    HandleDisconnect(handler);
                 }
             }
             handler.Shutdown(SocketShutdown.Both);
@@ -187,6 +181,7 @@ namespace MythosServer {
             for(; ; ) {
                 Thread.Sleep(1);
                 if (_matchmaking.Count > 1) { //matchmake if users matchmaking > 1
+                    Console.WriteLine("Attempting to Make Match");
                     byte[] buffer = new byte[1024];
                     int minDifference = int.MaxValue;
                     Socket host = _matchmaking[0], client = _matchmaking[1];
@@ -211,16 +206,16 @@ namespace MythosServer {
                     if (messageArgArr[0].Equals("code")) {
                         client.Send(Encoding.ASCII.GetBytes("connect\r\n" + messageArgArr[1]));
                         Console.WriteLine("Sent connection message to client");
-                    }
+                        Match newMatch = new Match(host, client);
+                        Matches.Add(newMatch);
 
-                    Match newMatch = new Match(host, client);
-                    Matches.Add(newMatch);
+                        UserSocketDictionary[host].Match = newMatch;
+                        UserSocketDictionary[client].Match = newMatch;
 
-                    UserSocketDictionary[host].Match = newMatch;
-                    UserSocketDictionary[client].Match = newMatch;
-
-                    _matchmaking.Remove(host);
-                    _matchmaking.Remove(client);
+                        _matchmaking.Remove(host);
+                        _matchmaking.Remove(client);
+                    } else if (messageArgArr[0].Equals("quit", StringComparison.OrdinalIgnoreCase)) //Exit case
+                        HandleDisconnect(host);
                 }
             }            
         }
@@ -268,7 +263,10 @@ namespace MythosServer {
             var bytesPlainTextData = csp.Decrypt(bytesCypherText, false);
             textReceived = System.Text.Encoding.Unicode.GetString(bytesPlainTextData);
             string[] messageArgArr = textReceived.Split(StringSeparators, StringSplitOptions.None);
-            if (!messageArgArr[0].Equals("password", StringComparison.OrdinalIgnoreCase))
+
+            if (messageArgArr[0].Equals("quit", StringComparison.OrdinalIgnoreCase))//Exit case
+                HandleDisconnect(socket);
+            else if (!messageArgArr[0].Equals("password", StringComparison.OrdinalIgnoreCase))
                 return null;
             string hashed = messageArgArr[1];
 
@@ -338,6 +336,16 @@ namespace MythosServer {
             command.ExecuteNonQuery();
             connection.Close();
             sqlLock.ReleaseMutex();
+        }
+
+        private static void HandleDisconnect(Socket handler)
+        {
+            Connections.Remove(handler);
+            _matchmaking.Remove(handler);
+            if (UserSocketDictionary.ContainsKey(handler))
+                Users.Remove(UserSocketDictionary[handler]);
+            UserSocketDictionary.Remove(handler);
+            PrintConnections();
         }
     }
 }
