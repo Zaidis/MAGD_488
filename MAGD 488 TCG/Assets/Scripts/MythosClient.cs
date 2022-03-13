@@ -18,6 +18,7 @@ using Unity.Services.Authentication;
 using Unity.Services.Core;
 using Unity.Services.Relay;
 using Unity.Services.Relay.Models;
+using TMPro;
 
 public class MythosClient : MonoBehaviour {
     public static MythosClient instance; //Singleton
@@ -26,8 +27,8 @@ public class MythosClient : MonoBehaviour {
     private const string k_GlobalIp = "127.0.0.1"; //Server ip
     private const int k_Port = 2552; //port
     private Socket connection;
-    public Text user;
-    [SerializeField] private Text pass;
+    public TMP_InputField user;
+    public TMP_InputField pass;
     public List<string> deckNames { get; private set; }
     public List<int> currentDeck { get; private set; }
 
