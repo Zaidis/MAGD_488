@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -20,10 +19,11 @@ using Unity.Services.Relay.Models;
 using TMPro;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
-using Button = UnityEngine.UI.Button;
+using UnityEngine.UI;
 
 public class MythosClient : MonoBehaviour {
     public static MythosClient instance; //Singleton
+    private Queue<Action> syncFunctions;
 
     public static readonly string[] StringSeparators = { "\r\n" };
     private const string k_GlobalIp = "127.0.0.1"; //Server ip
@@ -33,13 +33,11 @@ public class MythosClient : MonoBehaviour {
     public TMP_InputField user;
     public TMP_InputField pass;
     public TMP_Text status;
-    public Button LoginButton;
-    public Button CreateButton;
+    public UnityEngine.UI.Button LoginButton;
+    public UnityEngine.UI.Button CreateButton;
     public GameObject FailureToConnectPanel;
     public GameObject LoginPanel;
-    private bool SuccessfullyConnected = false;
     public GameObject ConnectingPanel;
-    private bool ConnecionFailure = false;
     [SerializeField] private string gameScene;
     public List<string> deckNames { get; private set; }
     public List<int> currentDeck { get; private set; }
@@ -47,11 +45,6 @@ public class MythosClient : MonoBehaviour {
     private static RSACryptoServiceProvider csp;
     private static RSAParameters pubKey;
 
-    private (string ipv4address, ushort port, byte[] allocationIdBytes, byte[] connectionData, byte[] key, string joinCode) serverOutcome;
-    private bool serverStarted = false;
-    private (string ipv4address, ushort port, byte[] allocationIdBytes, byte[] connectionData, byte[] hostConnectionData, byte[] key) clientOutcome;
-    private bool clientStarted = false;
-    private bool loginGood = false, loginBad = false, creationGood = false, creationBad = false;
     void Awake() {
         DontDestroyOnLoad(this);
         if (instance != null && instance != this)
@@ -61,6 +54,7 @@ public class MythosClient : MonoBehaviour {
     }
     async void Start()
     {
+        syncFunctions = new Queue<Action>();
         try {
             await UnityServices.InitializeAsync();
             await AuthenticationService.Instance.SignInAnonymouslyAsync();
@@ -73,7 +67,10 @@ public class MythosClient : MonoBehaviour {
         new Thread(Client).Start();
     }
     void Update() {
-        SyncThread();
+        while (syncFunctions.Count > 0) {
+            Action function = syncFunctions.Dequeue();
+            function();
+        }
     }
     private async void Client() //Start threaded, connect to server, receive one message from server, either start as host, or connect
     {
@@ -84,10 +81,13 @@ public class MythosClient : MonoBehaviour {
             connection.Connect(remoteEp); //Connect to server
         } catch (Exception e) {
             Debug.Log(e);
-            ConnecionFailure = true;
+            syncFunctions.Enqueue(()=> FailureToConnectPanel.SetActive(true));
             return;
         }
-        SuccessfullyConnected = true;
+        syncFunctions.Enqueue(() => {
+            ConnectingPanel.SetActive(false);
+            LoginPanel.SetActive(true);
+        });
         Debug.Log("Connected to " + connection.RemoteEndPoint);
 
         byte[] buffer = new byte[1024]; //buffer for incoming data
@@ -97,9 +97,13 @@ public class MythosClient : MonoBehaviour {
             string[] messageArgArr = textReceived.Split(StringSeparators, StringSplitOptions.None);
             Debug.Log("TEXT RECEIVED: " + textReceived);
             if (messageArgArr[0].Equals("start", StringComparison.OrdinalIgnoreCase)) {
-                serverOutcome =  await AllocateRelayServerAndGetJoinCode(2);
+                var serverOutcome =  await AllocateRelayServerAndGetJoinCode(2);
                 connection.Send(Encoding.ASCII.GetBytes("code\r\n" + serverOutcome.joinCode));
-                serverStarted = true;
+                syncFunctions.Enqueue(() => {
+                    var (ipv4address, port, allocationIdBytes, connectionData, key, joinCode) = serverOutcome;
+                    NetworkManager.Singleton.GetComponent<UnityTransport>().SetHostRelayData(ipv4address, port, allocationIdBytes, key, connectionData, true);
+                    NetworkManager.Singleton.StartHost();
+                });
             } else if (messageArgArr[0].Equals("rsakey", StringComparison.OrdinalIgnoreCase)) {
                 string xmlFile = textReceived.Substring(8, textReceived.Length - 8);
                 StringReader sr = new StringReader(xmlFile);
@@ -108,8 +112,12 @@ public class MythosClient : MonoBehaviour {
                 csp = new RSACryptoServiceProvider();
                 csp.ImportParameters(pubKey);
             } else if (messageArgArr[0].Equals("connect", StringComparison.OrdinalIgnoreCase)) {
-                clientOutcome = await JoinRelayServerFromJoinCode(messageArgArr[1]);
-                clientStarted = true;
+                var clientOutcome = await JoinRelayServerFromJoinCode(messageArgArr[1]);
+                syncFunctions.Enqueue(() => {
+                    var (ipv4address, port, allocationIdBytes, connectionData, hostConnectionData, key) = clientOutcome;
+                    NetworkManager.Singleton.GetComponent<UnityTransport>().SetClientRelayData(ipv4address, port, allocationIdBytes, key, connectionData, hostConnectionData, true);
+                    NetworkManager.Singleton.StartClient();
+                });
             } else if (messageArgArr[0].Equals("salt", StringComparison.OrdinalIgnoreCase)) {
                 byte[] bytesPlainTextData = System.Text.Encoding.Unicode.GetBytes("password\r\n" +
                     Convert.ToBase64String(KeyDerivation.Pbkdf2(pass.text, Convert.FromBase64String(messageArgArr[1]),
@@ -117,11 +125,35 @@ public class MythosClient : MonoBehaviour {
                 byte[] bytesCypherText = csp.Encrypt(bytesPlainTextData, false);
                 string cypherText = Convert.ToBase64String(bytesCypherText);
                 connection.Send(Encoding.ASCII.GetBytes(cypherText));
+            } else if (messageArgArr[0].Equals("logingood", StringComparison.OrdinalIgnoreCase)) {
+                syncFunctions.Enqueue(() => {
+                    status.text = "Login Succeeded!";
+                    status.color = new Color(0f, 1f, 0f, 1f);
+                    SceneManager.LoadScene(gameScene);
+                });
+            } else if (messageArgArr[0].Equals("loginbad", StringComparison.OrdinalIgnoreCase)) {
+                syncFunctions.Enqueue(() => {
+                    pass.text = "";
+                    user.text = "";
+                    status.text = "Login Failed!";
+                    status.color = Color.red;
+                    status.color = new Color(1f, 0f, 0f, 1f);
+                    LoginButton.interactable = true;
+                });
+            } else if (messageArgArr[0].Equals("creationgood", StringComparison.OrdinalIgnoreCase)) {
+                syncFunctions.Enqueue(() => {
+                    status.text = "Account Creation Succeeded!";
+                    status.color = new Color(0f, 1f, 0f, 1f);
+                });
+            } else if (messageArgArr[0].Equals("creationbad", StringComparison.OrdinalIgnoreCase)) {
+                syncFunctions.Enqueue(() => {
+                    pass.text = "";
+                    user.text = "";
+                    status.text = "Creation Failed!";
+                    status.color = new Color(1f, 0f, 0f, 1f);
+                    CreateButton.interactable = true;
+                });
             } 
-            else if (messageArgArr[0].Equals("loginbad", StringComparison.OrdinalIgnoreCase)) { loginBad = true; } 
-            else if (messageArgArr[0].Equals("creationbad", StringComparison.OrdinalIgnoreCase)) { creationBad = true; } 
-            else if (messageArgArr[0].Equals("logingood", StringComparison.OrdinalIgnoreCase)) { loginGood = true; } 
-            else if (messageArgArr[0].Equals("creationgood", StringComparison.OrdinalIgnoreCase)) { creationGood = true; } 
             else if (messageArgArr[0].Equals("decknames", StringComparison.OrdinalIgnoreCase)) {
                 deckNames.Clear();
                 for (int i = 1; i < messageArgArr.Length; i++)
@@ -198,50 +230,6 @@ public class MythosClient : MonoBehaviour {
             return;
         Debug.Log("Sent Outcome Message");
         connection.Send(Encoding.ASCII.GetBytes("outcome\r\n" + (outcome ? "hostvictory" : "clientvictory")));
-    } private void SyncThread() {
-        if (ConnecionFailure) {
-            FailureToConnectPanel.SetActive(true);
-            ConnecionFailure = false;
-        } else if (SuccessfullyConnected) {
-            ConnectingPanel.SetActive(false);
-            LoginPanel.SetActive(true);
-        }
-        if (serverStarted) {
-            var (ipv4address, port, allocationIdBytes, connectionData, key, joinCode) = serverOutcome;
-            NetworkManager.Singleton.GetComponent<UnityTransport>().SetHostRelayData(ipv4address, port, allocationIdBytes, key, connectionData, true);
-            NetworkManager.Singleton.StartHost();
-            serverStarted = false;
-        } else if (clientStarted) {
-            var (ipv4address, port, allocationIdBytes, connectionData, hostConnectionData, key) = clientOutcome;
-            NetworkManager.Singleton.GetComponent<UnityTransport>().SetClientRelayData(ipv4address, port, allocationIdBytes, key, connectionData, hostConnectionData, true);
-            NetworkManager.Singleton.StartClient();
-            clientStarted = false;
-        }
-        if (loginGood) {
-            status.text = "Login Succeeded!";
-            status.color = new Color(0f, 1f, 0f, 1f);
-            loginGood = false;
-            SceneManager.LoadScene(gameScene);
-        } else if (loginBad) {
-            pass.text = "";
-            user.text = "";
-            status.text = "Login Failed!";
-            status.color = Color.red;
-            status.color = new Color(1f, 0f, 0f, 1f);
-            LoginButton.interactable = true;
-            loginBad = false;
-        } else if (creationGood) {
-            status.text = "Account Creation Succeeded!";
-            status.color = new Color(0f, 1f, 0f, 1f);
-            creationGood = false;
-        } else if (creationBad) {
-            pass.text = "";
-            user.text = "";
-            status.text = "Creation Failed!";
-            status.color = new Color(1f, 0f, 0f, 1f);
-            CreateButton.interactable = true;
-            creationBad = false;
-        }
     }
     public static async Task<(string ipv4address, ushort port, byte[] allocationIdBytes, byte[] connectionData, byte[] key, string joinCode)> AllocateRelayServerAndGetJoinCode(int maxConnections, string region = null) {
         Allocation allocation;

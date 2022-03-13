@@ -246,17 +246,22 @@ namespace MythosServer {
         {
             byte[] buffer = new byte[1024];
             string salt = "";
+            string hash = "";
+            User? user = null;
+
             Console.WriteLine("Entered User Login");
             using SqliteConnection connection = new SqliteConnection("Data Source=Mythos.db");
             lock (SQLLock) {
                 connection.Open();
                 SqliteCommand command = connection.CreateCommand();
-                command.CommandText = @"SELECT Salt From User WHERE Username=@us";
+                command.CommandText = @"SELECT Salt, Hash From User WHERE Username=@us";
                 command.Parameters.AddWithValue("@us", username);
                 
                 using (SqliteDataReader reader = command.ExecuteReader())
-                    while (reader.Read())
+                    while (reader.Read()) {
                         salt = reader.GetString(0);
+                        hash = reader.GetString(1);
+                    }
                 connection.Close();
             }
 
@@ -280,26 +285,10 @@ namespace MythosServer {
 
             }
             string hashed = messageArgArr[1];
-
-            User? user = null;
-            string hash = "";
-            lock (SQLLock) {
-                connection.Open();
-                SqliteCommand command = connection.CreateCommand();
-                command.CommandText = @"SELECT u.Hash FROM User u WHERE u.Username = @u";
-                command.Parameters.AddWithValue("@u", username);
-                using (SqliteDataReader reader = command.ExecuteReader()) {
-                    while (reader.Read()) {
-                        hash = reader.GetString(0);
-                        user = new User(username, 1500/*(int)reader["s.Skill"]*/);
-                    }
-                }
-                connection.Close();
-            }
             
             if (hash.Equals(hashed)) {
                 if (!UserSocketDictionary.ContainsKey(socket))
-                    return user;
+                    return new User(username, 1500);
                 Console.WriteLine("Already Logged In!");
             }
             return null;
