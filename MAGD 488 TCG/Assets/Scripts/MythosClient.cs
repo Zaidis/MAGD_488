@@ -19,6 +19,7 @@ using Unity.Services.Core;
 using Unity.Services.Relay;
 using Unity.Services.Relay.Models;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class MythosClient : MonoBehaviour {
     public static MythosClient instance; //Singleton
@@ -27,8 +28,13 @@ public class MythosClient : MonoBehaviour {
     private const string k_GlobalIp = "127.0.0.1"; //Server ip
     private const int k_Port = 2552; //port
     private Socket connection;
+
     public TMP_InputField user;
     public TMP_InputField pass;
+    public TMP_Text status;
+    public Button LoginButton;
+    public Button CreateButton;
+    [SerializeField] private string gameScene;
     public List<string> deckNames { get; private set; }
     public List<int> currentDeck { get; private set; }
 
@@ -39,6 +45,7 @@ public class MythosClient : MonoBehaviour {
     private bool serverStarted = false;
     private (string ipv4address, ushort port, byte[] allocationIdBytes, byte[] connectionData, byte[] hostConnectionData, byte[] key) clientOutcome;
     private bool clientStarted = false;
+    private bool loginGood = false, loginBad = false, creationGood = false, creationBad = false;
     void Awake() {
         DontDestroyOnLoad(this);
         if (instance != null && instance != this)
@@ -66,12 +73,36 @@ public class MythosClient : MonoBehaviour {
             NetworkManager.Singleton.GetComponent<UnityTransport>().SetHostRelayData(ipv4address, port, allocationIdBytes, key, connectionData, true);
             NetworkManager.Singleton.StartHost();
             serverStarted = false;
-        }
-        if (clientStarted) {
+        } else if (clientStarted) {
             var (ipv4address, port, allocationIdBytes, connectionData, hostConnectionData, key) = clientOutcome;
             NetworkManager.Singleton.GetComponent<UnityTransport>().SetClientRelayData(ipv4address, port, allocationIdBytes, key, connectionData, hostConnectionData, true);
             NetworkManager.Singleton.StartClient();
             clientStarted = false;
+        }
+        if (loginGood) {
+            status.text = "Login Succeeded!";
+            status.color = new Color(0f, 1f, 0f, 1f);
+            loginGood = false;
+            SceneManager.LoadScene(gameScene);
+        } else if (loginBad) {
+            pass.text = "";
+            user.text = "";
+            status.text = "Login Failed!";
+            status.color = Color.red;
+            status.color = new Color(1f, 0f, 0f, 1f);
+            LoginButton.interactable = true;
+            loginBad = false;
+        } else if (creationGood) {
+            status.text = "Account Creation Succeeded!";
+            status.color = new Color(0f, 1f, 0f, 1f);
+            creationGood = false;
+        } else if (creationBad) {
+            pass.text = "";
+            user.text = "";
+            status.text = "Creation Failed!";
+            status.color = new Color(1f, 0f, 0f, 1f);
+            CreateButton.interactable = true;
+            creationBad = false;
         }
     }
     private async void Client() //Start threaded, connect to server, receive one message from server, either start as host, or connect
@@ -109,11 +140,12 @@ public class MythosClient : MonoBehaviour {
                 byte[] bytesCypherText = csp.Encrypt(bytesPlainTextData, false);
                 string cypherText = Convert.ToBase64String(bytesCypherText);
                 connection.Send(Encoding.ASCII.GetBytes(cypherText));
-            } else if (messageArgArr[0].Equals("loginbad", StringComparison.OrdinalIgnoreCase) || messageArgArr[0].Equals("creationbad", StringComparison.OrdinalIgnoreCase)) {
-                //Display Failed Login Message
-            } else if (messageArgArr[0].Equals("logingood", StringComparison.OrdinalIgnoreCase) || messageArgArr[0].Equals("creationgood", StringComparison.OrdinalIgnoreCase)) {
-                //Load next scene do something, good login
-            } else if (messageArgArr[0].Equals("decknames", StringComparison.OrdinalIgnoreCase)) {
+            } 
+            else if (messageArgArr[0].Equals("loginbad", StringComparison.OrdinalIgnoreCase)) { loginBad = true; } 
+            else if (messageArgArr[0].Equals("creationbad", StringComparison.OrdinalIgnoreCase)) { creationBad = true; } 
+            else if (messageArgArr[0].Equals("logingood", StringComparison.OrdinalIgnoreCase)) { loginGood = true; } 
+            else if (messageArgArr[0].Equals("creationgood", StringComparison.OrdinalIgnoreCase)) { creationGood = true; } 
+            else if (messageArgArr[0].Equals("decknames", StringComparison.OrdinalIgnoreCase)) {
                 deckNames.Clear();
                 for (int i = 1; i < messageArgArr.Length; i++)
                     deckNames.Add(messageArgArr[i]);

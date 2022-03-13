@@ -20,14 +20,9 @@ public class TabInputField : MonoBehaviour
                 enter.onClick.Invoke();
         }
     }
-
-    public void UsingField()
-    {
+    public void UsingField(int i) {
+        InputSelected = i;
         usingFields = true;
     }
-
-    public void StoppedUsingField()
-    {
-        usingFields = false;
-    }
+    public void StoppedUsingField() { usingFields = false; }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -103,14 +104,17 @@ namespace MythosServer {
                         }
                     }
                 } else if (messageArgArr[0].Equals("login", StringComparison.OrdinalIgnoreCase)) {
-                    User? newUserLogin = Login(messageArgArr[1], handler);
-                    if (newUserLogin != null) {
-                        handler.Send(Encoding.ASCII.GetBytes("logingood\r\n"));
-                        Users.Add(newUserLogin);
-                        UserSocketDictionary.Add(handler, newUserLogin);
-                        loggedIn = true;
-                    } else
-                        handler.Send(Encoding.ASCII.GetBytes("loginbad\r\n"));
+                    if (!loggedIn) {
+                        User? newUserLogin = Login(messageArgArr[1], handler);
+                        if (newUserLogin != null) {
+                            handler.Send(Encoding.ASCII.GetBytes("logingood\r\n"));
+                            Users.Add(newUserLogin);
+                            UserSocketDictionary.Add(handler, newUserLogin);
+                            loggedIn = true;
+                        } else
+                            handler.Send(Encoding.ASCII.GetBytes("loginbad\r\n"));
+                    }
+                    
 
                 } else if (messageArgArr[0].Equals("newaccount", StringComparison.OrdinalIgnoreCase)) {
                     handler.Send(NewUser(messageArgArr[1], messageArgArr[2], messageArgArr[3]) ? Encoding.ASCII.GetBytes("creationgood\r\n") : Encoding.ASCII.GetBytes("creationbad\r\n"));
@@ -257,19 +261,27 @@ namespace MythosServer {
                     salt = reader.GetString(0);
 
             socket.Send(Encoding.ASCII.GetBytes("salt\r\n" + salt));
-            int numBytesReceived = socket.Receive(buffer); //data stream in
+            int numBytesReceived = socket.Receive(buffer); //data stream in TODO Fix, sits here if client inputs invalid password while server is expected data
             string textReceived = Encoding.ASCII.GetString(buffer, 0, numBytesReceived); //decode from stream to ASCII
-            var bytesCypherText = Convert.FromBase64String(textReceived);
-            csp = new RSACryptoServiceProvider();
-            csp.ImportParameters(privKey);
-            var bytesPlainTextData = csp.Decrypt(bytesCypherText, false);
-            textReceived = System.Text.Encoding.Unicode.GetString(bytesPlainTextData);
-            string[] messageArgArr = textReceived.Split(StringSeparators, StringSplitOptions.None);
 
-            if (messageArgArr[0].Equals("quit", StringComparison.OrdinalIgnoreCase))//Exit case
-                HandleDisconnect(socket);
-            else if (!messageArgArr[0].Equals("password", StringComparison.OrdinalIgnoreCase))
+            string[] messageArgArr;
+            try { //try catch to handle unexepected text that isn't cypertext
+                var bytesCypherText = Convert.FromBase64String(textReceived);
+                csp = new RSACryptoServiceProvider();
+                csp.ImportParameters(privKey);
+                var bytesPlainTextData = csp.Decrypt(bytesCypherText, false);
+                textReceived = System.Text.Encoding.Unicode.GetString(bytesPlainTextData);
+                messageArgArr = textReceived.Split(StringSeparators, StringSplitOptions.None);
+            } catch (Exception e){
+                Console.WriteLine(e);
+                Console.WriteLine(textReceived);
+                if(textReceived.Equals("quit\r\n"))
+                    HandleDisconnect(socket);
+                connection.Close();
+                sqlLock.ReleaseMutex();
                 return null;
+
+            }
             string hashed = messageArgArr[1];
 
             command = connection.CreateCommand();
@@ -290,6 +302,9 @@ namespace MythosServer {
                     return user;
                 Console.WriteLine("Already Logged In!");
             }
+            if(connection.State == ConnectionState.Open)
+                connection.Close();
+            try { sqlLock.ReleaseMutex(); } catch (System.Threading.SynchronizationLockException) { }
             return null;
         }
         private static void GetDeckNames(Socket sock)
