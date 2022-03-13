@@ -44,8 +44,8 @@ namespace MythosServer {
         private static RSAParameters privKey;
         private static RSAParameters pubKey;
         private static string pubKeyString;
-        private static readonly Mutex sqlLock = new Mutex();
-        private static readonly Mutex matchmakingMutex = new Mutex();
+        private static Object SQLLock = new Object();
+        private static Object MatchmakingLock = new Object();
 
         static void Main()
         {
@@ -100,7 +100,7 @@ namespace MythosServer {
                     if (UserSocketDictionary.ContainsKey(handler)) { //checking if client is logged in
                         if (!MatchmakingSockets.Contains(handler)) {
                             MatchmakingSockets.Add(handler); //add struct which contains needed info to matchmaking list
-                            Matchmaking();
+                            Matchmaking(handler);
                         }
                     }
                 } else if (messageArgArr[0].Equals("login", StringComparison.OrdinalIgnoreCase)) {
@@ -114,8 +114,6 @@ namespace MythosServer {
                         } else
                             handler.Send(Encoding.ASCII.GetBytes("loginbad\r\n"));
                     }
-                    
-
                 } else if (messageArgArr[0].Equals("newaccount", StringComparison.OrdinalIgnoreCase)) {
                     handler.Send(NewUser(messageArgArr[1], messageArgArr[2], messageArgArr[3]) ? Encoding.ASCII.GetBytes("creationgood\r\n") : Encoding.ASCII.GetBytes("creationbad\r\n"));
 
@@ -140,7 +138,7 @@ namespace MythosServer {
         }
         private static void PrintConnections() //Print current connection statuses
         {
-            //Console.Clear();
+            Console.Clear();
             Console.WriteLine("Current Connections: ");
             foreach (Socket s in Connections)
                 Console.WriteLine(s.RemoteEndPoint);
@@ -157,73 +155,72 @@ namespace MythosServer {
         }
         private static bool NewUser(string username, string salt, string hash) //Attempt to create a user based on passed username and password, return true for success, return false for failure
         {
-            sqlLock.WaitOne();
-            Console.WriteLine("Entered User Creation");
-            using SqliteConnection connection = new SqliteConnection("Data Source=Mythos.db");
-            connection.Open();
-            SqliteCommand command = connection.CreateCommand();
-            command.CommandText = @"SELECT EXISTS(SELECT 1 FROM User WHERE Username = @us) ";
-            command.Parameters.AddWithValue("@us", username);
-            using (SqliteDataReader reader = command.ExecuteReader()) {
-                while (reader.Read()) {
-                    if (reader.GetInt32(0) == 1) {
-                        connection.Close();
-                        sqlLock.ReleaseMutex();
-                        return false; //if Username exists, return false, else continue
+            lock (SQLLock) {
+                Console.WriteLine("Entered User Creation");
+                using SqliteConnection connection = new SqliteConnection("Data Source=Mythos.db");
+                connection.Open();
+                SqliteCommand command = connection.CreateCommand();
+                command.CommandText = @"SELECT EXISTS(SELECT 1 FROM User WHERE Username = @us) ";
+                command.Parameters.AddWithValue("@us", username);
+                using (SqliteDataReader reader = command.ExecuteReader()) {
+                    while (reader.Read()) {
+                        if (reader.GetInt32(0) == 1) {
+                            connection.Close();
+                            return false; //if Username exists, return false, else continue
+                        }
                     }
                 }
+                command.CommandText = @"INSERT INTO User (Username, Salt, Hash) " + "VALUES (@u, @s, @h)";
+                command.Parameters.AddWithValue("@u", username);
+                command.Parameters.AddWithValue("@s", salt);
+                command.Parameters.AddWithValue("@h", hash);
+                command.ExecuteNonQuery();
+                connection.Close();
+                return true; //after user has been created return true
             }
-            command.CommandText = @"INSERT INTO User (Username, Salt, Hash) " + "VALUES (@u, @s, @h)";
-            command.Parameters.AddWithValue("@u", username);
-            command.Parameters.AddWithValue("@s", salt);
-            command.Parameters.AddWithValue("@h", hash);
-            command.ExecuteNonQuery();
-            connection.Close();
-            sqlLock.ReleaseMutex();
-            return true; //after user has been created return true
         }
-        private static void Matchmaking() //Function responsible for matchmaking loop, runs continuously, if at least 2 users are in the queue, match closest two in skill, add to a match, and remove from pool
+        private static void Matchmaking(Socket handler) //Function responsible for matchmaking loop, runs continuously, if at least 2 users are in the queue, match closest two in skill, add to a match, and remove from pool
         {
-            matchmakingMutex.WaitOne();
-            if (MatchmakingSockets.Count > 1) { //matchmake if users matchmaking > 1
-                Console.WriteLine("Attempting to Make Match");
-                byte[] buffer = new byte[1024];
-                Socket host = MatchmakingSockets[1];
-                Socket client = MatchmakingSockets[0];
-                int minDifference = int.MaxValue;
-                MatchmakingSockets = MatchmakingSockets.OrderBy(s => UserSocketDictionary[s].Skill).ToList();
-                for (int i = 1; i < MatchmakingSockets.Count; i++) { //find two users with closest skill, match together
-                    int currentDifference = Math.Abs(UserSocketDictionary[MatchmakingSockets[i]].Skill - UserSocketDictionary[MatchmakingSockets[i]].Skill);
-                    if (currentDifference < minDifference) {
-                        minDifference = currentDifference;
-                        host = MatchmakingSockets[i];
-                        client = MatchmakingSockets[i - 1];
+            lock (MatchmakingLock) {
+                if (MatchmakingSockets.Count > 1 && UserSocketDictionary[handler].Match == null) { //matchmake if users matchmaking > 1
+                    Console.WriteLine("Attempting to Match");
+                    byte[] buffer = new byte[1024];
+                    Socket host = MatchmakingSockets[1];
+                    Socket client = MatchmakingSockets[0];
+                    int minDifference = int.MaxValue;
+                    MatchmakingSockets = MatchmakingSockets.OrderBy(s => UserSocketDictionary[s].Skill).ToList();
+                    for (int i = 1; i < MatchmakingSockets.Count; i++) { //find two users with closest skill, match together
+                        int currentDifference = Math.Abs(UserSocketDictionary[MatchmakingSockets[i]].Skill - UserSocketDictionary[MatchmakingSockets[i]].Skill);
+                        if (currentDifference < minDifference) {
+                            minDifference = currentDifference;
+                            host = MatchmakingSockets[i];
+                            client = MatchmakingSockets[i - 1];
+                        }
                     }
+
+                    host.Send(Encoding.ASCII.GetBytes("start\r\n")); //Send start command to selected host
+                    Console.WriteLine("Start command sent to host");
+
+                    int numBytesReceived = host.Receive(buffer); //data stream in
+                    string textReceived = Encoding.ASCII.GetString(buffer, 0, numBytesReceived); //decode from stream to ASCII
+                    string[] messageArgArr = textReceived.Split(StringSeparators, StringSplitOptions.None);
+                    Console.WriteLine(textReceived);
+                    if (messageArgArr[0].Equals("code")) {
+                        Console.WriteLine("Sent " + "connect\r\n" + messageArgArr[1] + "\nto " + client.RemoteEndPoint + " : " + UserSocketDictionary[client].Username + " : Skill : " + UserSocketDictionary[client].Skill);
+                        client.Send(Encoding.ASCII.GetBytes("connect\r\n" + messageArgArr[1]));
+                        Console.WriteLine("Sent connection message to client");
+                        Match newMatch = new Match(host, client);
+                        Matches.Add(newMatch);
+
+                        UserSocketDictionary[host].Match = newMatch;
+                        UserSocketDictionary[client].Match = newMatch;
+
+                        MatchmakingSockets.Remove(host);
+                        MatchmakingSockets.Remove(client);
+                    } else if (messageArgArr[0].Equals("quit", StringComparison.OrdinalIgnoreCase)) //Exit case
+                        HandleDisconnect(host);
                 }
-
-                host.Send(Encoding.ASCII.GetBytes("start\r\n")); //Send start command to selected host
-                Console.WriteLine("Start command sent to host");
-
-                int numBytesReceived = host.Receive(buffer); //data stream in
-                string textReceived = Encoding.ASCII.GetString(buffer, 0, numBytesReceived); //decode from stream to ASCII
-                string[] messageArgArr = textReceived.Split(StringSeparators, StringSplitOptions.None);
-                Console.WriteLine(textReceived);
-                if (messageArgArr[0].Equals("code")) {
-                    Console.WriteLine("Sent " + "connect\r\n" + messageArgArr[1] + "\nto " + client.RemoteEndPoint + " : " + UserSocketDictionary[client].Username + " : Skill : " + UserSocketDictionary[client].Skill);
-                    client.Send(Encoding.ASCII.GetBytes("connect\r\n" + messageArgArr[1]));
-                    Console.WriteLine("Sent connection message to client");
-                    Match newMatch = new Match(host, client);
-                    Matches.Add(newMatch);
-
-                    UserSocketDictionary[host].Match = newMatch;
-                    UserSocketDictionary[client].Match = newMatch;
-
-                    MatchmakingSockets.Remove(host);
-                    MatchmakingSockets.Remove(client);
-                } else if (messageArgArr[0].Equals("quit", StringComparison.OrdinalIgnoreCase)) //Exit case
-                    HandleDisconnect(host);
             }
-            matchmakingMutex.ReleaseMutex();
         }
         private static void MatchOutcome(string outcome, Socket comm) //set outcome of match of passed User according to if socket is host or client in match, then eval
         {
@@ -239,31 +236,33 @@ namespace MythosServer {
         private static void EvaluateOutcome(Match match)  //evaulate outcome of a match, if outcomes match change skill accordingly, if not, change nothing
         {
             if (match.Hostoutcome.Equals(match.Clientoutcome)) {
-                sqlLock.WaitOne();
-                //Code that changes skill of users based on win/loss, and stores it with sqlite
-                sqlLock.ReleaseMutex();                
+                lock (SQLLock) {
+                    //Code that changes skill of users based on win/loss, and stores it with sqlite 
+                }
             } else if (!match.Hostoutcome.Equals("") && !match.Clientoutcome.Equals(""))
                 Console.Write("u1 and u2 outcome do not match no skill will be changed!");
         }
         private static User? Login(string username, Socket socket)  //login "socket" based on passed username and password, create User and return it
         {
             byte[] buffer = new byte[1024];
-            sqlLock.WaitOne();
+            string salt = "";
             Console.WriteLine("Entered User Login");
             using SqliteConnection connection = new SqliteConnection("Data Source=Mythos.db");
-            connection.Open();
-            SqliteCommand command = connection.CreateCommand();
-            command.CommandText = @"SELECT Salt From User WHERE Username=@us";
-            command.Parameters.AddWithValue("@us", username);
-            string salt = "";
-            using (SqliteDataReader reader = command.ExecuteReader())
-                while (reader.Read())
-                    salt = reader.GetString(0);
+            lock (SQLLock) {
+                connection.Open();
+                SqliteCommand command = connection.CreateCommand();
+                command.CommandText = @"SELECT Salt From User WHERE Username=@us";
+                command.Parameters.AddWithValue("@us", username);
+                
+                using (SqliteDataReader reader = command.ExecuteReader())
+                    while (reader.Read())
+                        salt = reader.GetString(0);
+                connection.Close();
+            }
 
             socket.Send(Encoding.ASCII.GetBytes("salt\r\n" + salt));
             int numBytesReceived = socket.Receive(buffer); //data stream in TODO Fix, sits here if client inputs invalid password while server is expected data
             string textReceived = Encoding.ASCII.GetString(buffer, 0, numBytesReceived); //decode from stream to ASCII
-
             string[] messageArgArr;
             try { //try catch to handle unexepected text that isn't cypertext
                 var bytesCypherText = Convert.FromBase64String(textReceived);
@@ -277,84 +276,81 @@ namespace MythosServer {
                 Console.WriteLine(textReceived);
                 if(textReceived.Equals("quit\r\n"))
                     HandleDisconnect(socket);
-                connection.Close();
-                sqlLock.ReleaseMutex();
                 return null;
 
             }
             string hashed = messageArgArr[1];
 
-            command = connection.CreateCommand();
-            command.CommandText = @"SELECT u.Hash FROM User u WHERE u.Username = @u";
-            command.Parameters.AddWithValue("@u", username);
             User? user = null;
             string hash = "";
-            using (SqliteDataReader reader = command.ExecuteReader()) {
-                while (reader.Read()) {
-                    hash = reader.GetString(0);
-                    user = new User(username, 1500/*(int)reader["s.Skill"]*/);
+            lock (SQLLock) {
+                connection.Open();
+                SqliteCommand command = connection.CreateCommand();
+                command.CommandText = @"SELECT u.Hash FROM User u WHERE u.Username = @u";
+                command.Parameters.AddWithValue("@u", username);
+                using (SqliteDataReader reader = command.ExecuteReader()) {
+                    while (reader.Read()) {
+                        hash = reader.GetString(0);
+                        user = new User(username, 1500/*(int)reader["s.Skill"]*/);
+                    }
                 }
-            }
-            if (hash.Equals(hashed)) {
                 connection.Close();
-                sqlLock.ReleaseMutex();
+            }
+            
+            if (hash.Equals(hashed)) {
                 if (!UserSocketDictionary.ContainsKey(socket))
                     return user;
                 Console.WriteLine("Already Logged In!");
             }
-            if(connection.State == ConnectionState.Open)
-                connection.Close();
-            try { sqlLock.ReleaseMutex(); } catch (System.Threading.SynchronizationLockException) { }
             return null;
         }
         private static void GetDeckNames(Socket sock)
         {
-            sqlLock.WaitOne();
             Console.WriteLine("Entered Deck Name Retrieval");
             using SqliteConnection connection = new SqliteConnection("Data Source=Mythos.db");
-            connection.Open();
-            SqliteCommand command = connection.CreateCommand();
-            command.CommandText = @"SELECT d.Deckname FROM Deck d, User u WHERE @us = u.Username AND u.Username = d.Username";
-            command.Parameters.AddWithValue("@us", UserSocketDictionary[sock].Username);
-            String message = "decknames\r\n";
-            using (SqliteDataReader reader = command.ExecuteReader())
-                while (reader.Read())
-                    message = message + reader.GetString(0) + "\r\n";
-            sock.Send(Encoding.ASCII.GetBytes(message));
-            connection.Close();
-            sqlLock.ReleaseMutex();
+            lock (SQLLock) {
+                connection.Open();
+                SqliteCommand command = connection.CreateCommand();
+                command.CommandText = @"SELECT d.Deckname FROM Deck d, User u WHERE @us = u.Username AND u.Username = d.Username";
+                command.Parameters.AddWithValue("@us", UserSocketDictionary[sock].Username);
+                String message = "decknames\r\n";
+                using (SqliteDataReader reader = command.ExecuteReader())
+                    while (reader.Read())
+                        message = message + reader.GetString(0) + "\r\n";
+                sock.Send(Encoding.ASCII.GetBytes(message));
+                connection.Close();
+            }
         }
         private static void GetDeckContent(Socket sock, string deckname) {
-            sqlLock.WaitOne();
             Console.WriteLine("Entered Deck Content Retrieval");
             using SqliteConnection connection = new SqliteConnection("Data Source=Mythos.db");
-            connection.Open();
-            SqliteCommand command = connection.CreateCommand();
-            command.CommandText = @"SELECT d.Deck FROM Deck d, User u WHERE @us = u.Username AND u.Username = d.Username";
-            command.Parameters.AddWithValue("@us", UserSocketDictionary[sock].Username);
-            String cards = "";
-            using (SqliteDataReader reader = command.ExecuteReader())
-                while (reader.Read())
-                    cards = reader.GetString(0);
-            sock.Send(Encoding.ASCII.GetBytes("deckcontent\r\n" + cards));
-            connection.Close();
-            sqlLock.ReleaseMutex();
+            lock (SQLLock) {
+                connection.Open();
+                SqliteCommand command = connection.CreateCommand();
+                command.CommandText = @"SELECT d.Deck FROM Deck d, User u WHERE @us = u.Username AND u.Username = d.Username";
+                command.Parameters.AddWithValue("@us", UserSocketDictionary[sock].Username);
+                String cards = "";
+                using (SqliteDataReader reader = command.ExecuteReader())
+                    while (reader.Read())
+                        cards = reader.GetString(0);
+                sock.Send(Encoding.ASCII.GetBytes("deckcontent\r\n" + cards));
+                connection.Close();
+            }
         }
         private static void SaveDeckContent(Socket sock, string deckname, string deck) {
-            sqlLock.WaitOne();
             Console.WriteLine("Entered Deck Saving...");
             using SqliteConnection connection = new SqliteConnection("Data Source=Mythos.db");
-            connection.Open();
-            SqliteCommand command = connection.CreateCommand();
-            command.CommandText = @"INSERT INTO Deck (Username, Deckname, Deck) VALUES (@u, @dn, @d) ON DUPLICATE KEY UPDATE Deck=@d";
-            command.Parameters.AddWithValue("@u", UserSocketDictionary[sock].Username);
-            command.Parameters.AddWithValue("@dn", deckname);
-            command.Parameters.AddWithValue("@d", deck);
-            command.ExecuteNonQuery();
-            connection.Close();
-            sqlLock.ReleaseMutex();
+            lock (SQLLock) {
+                connection.Open();
+                SqliteCommand command = connection.CreateCommand();
+                command.CommandText = @"INSERT INTO Deck (Username, Deckname, Deck) VALUES (@u, @dn, @d) ON DUPLICATE KEY UPDATE Deck=@d";
+                command.Parameters.AddWithValue("@u", UserSocketDictionary[sock].Username);
+                command.Parameters.AddWithValue("@dn", deckname);
+                command.Parameters.AddWithValue("@d", deck);
+                command.ExecuteNonQuery();
+                connection.Close();
+            }
         }
-
         private static void HandleDisconnect(Socket handler)
         {
             Connections.Remove(handler);
