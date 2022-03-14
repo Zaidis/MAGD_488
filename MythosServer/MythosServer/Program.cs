@@ -33,7 +33,7 @@ namespace MythosServer {
             public Match(Socket h, Socket c) { Host = h; Client = c; }
         }
 
-        private const string KLocalIp = "127.0.0.1"; //Local IP
+        private const string KLocalIp = "10.0.5.245"; //Local IP
         private const int KPort = 2552; //Port selected
         private static readonly List<Socket> Connections = new List<Socket>(); //List of all connections, and list of matchmaking clients
         private static readonly List<User> Users = new List<User>();
