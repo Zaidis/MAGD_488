@@ -103,6 +103,7 @@ public class MythosClient : MonoBehaviour {
                     var (ipv4address, port, allocationIdBytes, connectionData, key, joinCode) = serverOutcome;
                     NetworkManager.Singleton.GetComponent<UnityTransport>().SetHostRelayData(ipv4address, port, allocationIdBytes, key, connectionData, true);
                     NetworkManager.Singleton.StartHost();
+                    SceneManager.LoadScene(gameScene);
                 });
             } else if (messageArgArr[0].Equals("rsakey", StringComparison.OrdinalIgnoreCase)) {
                 string xmlFile = textReceived.Substring(8, textReceived.Length - 8);
@@ -117,6 +118,7 @@ public class MythosClient : MonoBehaviour {
                     var (ipv4address, port, allocationIdBytes, connectionData, hostConnectionData, key) = clientOutcome;
                     NetworkManager.Singleton.GetComponent<UnityTransport>().SetClientRelayData(ipv4address, port, allocationIdBytes, key, connectionData, hostConnectionData, true);
                     NetworkManager.Singleton.StartClient();
+                    SceneManager.LoadScene(gameScene);
                 });
             } else if (messageArgArr[0].Equals("salt", StringComparison.OrdinalIgnoreCase)) {
                 byte[] bytesPlainTextData = System.Text.Encoding.Unicode.GetBytes("password\r\n" +
@@ -129,7 +131,6 @@ public class MythosClient : MonoBehaviour {
                 syncFunctions.Enqueue(() => {
                     status.text = "Login Succeeded!";
                     status.color = new Color(0f, 1f, 0f, 1f);
-                    SceneManager.LoadScene(gameScene);
                 });
             } else if (messageArgArr[0].Equals("loginbad", StringComparison.OrdinalIgnoreCase)) {
                 syncFunctions.Enqueue(() => {
@@ -181,18 +182,24 @@ public class MythosClient : MonoBehaviour {
     public void OnMatchMake() {
         if (!connection.Connected)
             return;
+        status.text = "Matchmaking...";
+        status.color = Color.white;
         Debug.Log("Sent Matchmaking Request");
         connection.Send(Encoding.ASCII.GetBytes("matchmake\r\n"));
     }
     public void OnLogin() {
         if (!connection.Connected)
             return;
+        status.text = "Attempting Login...";
+        status.color = Color.white;
         Debug.Log("Sent Login Request");
         connection.Send(Encoding.ASCII.GetBytes("login\r\n" + user.text));
     }
     public void OnCreateAccount() {
         if (!connection.Connected)
             return;
+        status.text = "Attempting To Create Account...";
+        status.color = Color.white;
         Debug.Log("Sent Account Creation Request");
         byte[] salt = new byte[128 / 8];
         using (var rngCsp = new RNGCryptoServiceProvider())

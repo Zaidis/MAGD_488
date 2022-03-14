@@ -3817,7 +3817,7 @@ MonoBehaviour:
   FailureToConnectPanel: {fileID: 1488143990}
   LoginPanel: {fileID: 342686215}
   ConnectingPanel: {fileID: 461855541}
-  gameScene: 
+  gameScene: AdamScene
 --- !u!1 &1901932642
 GameObject:
   m_ObjectHideFlags: 0
