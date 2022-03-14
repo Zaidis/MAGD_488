@@ -9,7 +9,7 @@ using Microsoft.Data.Sqlite;
 namespace MythosServer {    
     class Program {
         public static readonly string[] StringSeparators = { "\r\n" };  
-        private const string KLocalIp = "127.0.0.1"; //Local IP
+        private const string KLocalIp = "10.0.3.201"; //Local IP
         private const int KPort = 2552; //Port selected
 
         private static readonly List<Socket> Connections = new List<Socket>();

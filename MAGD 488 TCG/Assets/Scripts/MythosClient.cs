@@ -26,7 +26,7 @@ public class MythosClient : MonoBehaviour {
     private Queue<Action> syncFunctions;
 
     public static readonly string[] StringSeparators = { "\r\n" };
-    private const string k_GlobalIp = "127.0.0.1"; //Server ip
+    private const string k_GlobalIp = "3.81.142.105"; //Server ip
     private const int k_Port = 2552; //port
     private Socket connection;
 

@@ -346,11 +346,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\DJ-PC\\source\\repos\\MythosServerL\\MythosServerL\\MythosServerL.csproj",
+      "projectUniqueName": "C:\\Users\\DJ-PC\\Documents\\MAGD_488\\MythosServerL\\MythosServerL\\MythosServerL.csproj",
       "projectName": "MythosServerL",
-      "projectPath": "C:\\Users\\DJ-PC\\source\\repos\\MythosServerL\\MythosServerL\\MythosServerL.csproj",
+      "projectPath": "C:\\Users\\DJ-PC\\Documents\\MAGD_488\\MythosServerL\\MythosServerL\\MythosServerL.csproj",
       "packagesPath": "C:\\Users\\DJ-PC\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\DJ-PC\\source\\repos\\MythosServerL\\MythosServerL\\obj\\",
+      "outputPath": "C:\\Users\\DJ-PC\\Documents\\MAGD_488\\MythosServerL\\MythosServerL\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
