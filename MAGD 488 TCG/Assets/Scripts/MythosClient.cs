@@ -28,6 +28,8 @@ public class MythosClient : MonoBehaviour {
     public static readonly string[] StringSeparators = { "\r\n" };
     private const string k_GlobalIp = "3.81.142.105"; //Server ip
     private const int k_Port = 2552; //port
+    IPAddress ipAddress;
+    IPEndPoint remoteEp;
     private Socket connection;
 
     public TMP_InputField user;
@@ -55,6 +57,9 @@ public class MythosClient : MonoBehaviour {
     async void Start()
     {
         syncFunctions = new Queue<Action>();
+        ipAddress = IPAddress.Parse(k_GlobalIp);
+        remoteEp = new IPEndPoint(IPAddress.Parse(k_GlobalIp), k_Port);
+        connection = new Socket(ipAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp); //Create socket
         try {
             await UnityServices.InitializeAsync();
             await AuthenticationService.Instance.SignInAnonymouslyAsync();
@@ -73,10 +78,7 @@ public class MythosClient : MonoBehaviour {
         }
     }
     private async void Client() //Start threaded, connect to server, receive one message from server, either start as host, or connect
-    {
-        IPAddress ipAddress = IPAddress.Parse(k_GlobalIp);
-        IPEndPoint remoteEp = new IPEndPoint(IPAddress.Parse(k_GlobalIp), k_Port);
-        connection = new Socket(ipAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp); //Create socket
+    {        
         try {
             connection.Connect(remoteEp); //Connect to server
         } catch (Exception e) {
@@ -100,8 +102,8 @@ public class MythosClient : MonoBehaviour {
                 var serverOutcome =  await AllocateRelayServerAndGetJoinCode(2);
                 connection.Send(Encoding.ASCII.GetBytes("code\r\n" + serverOutcome.joinCode));
                 syncFunctions.Enqueue(() => {
-                    var (ipv4address, port, allocationIdBytes, connectionData, key, joinCode) = serverOutcome;
-                    NetworkManager.Singleton.GetComponent<UnityTransport>().SetHostRelayData(ipv4address, port, allocationIdBytes, key, connectionData, true);
+                    var (ipv4address, port, allocationIdBytes, connectionData, key, joinCode) = serverOutcome;                    
+                    NetworkManager.Singleton.GetComponent<UnityTransport>().SetHostRelayData(ipv4address, port, allocationIdBytes, key, connectionData, true);                    
                     NetworkManager.Singleton.StartHost();
                     SceneManager.LoadScene(gameScene);
                 });
@@ -115,10 +117,10 @@ public class MythosClient : MonoBehaviour {
             } else if (messageArgArr[0].Equals("connect", StringComparison.OrdinalIgnoreCase)) {
                 var clientOutcome = await JoinRelayServerFromJoinCode(messageArgArr[1]);
                 syncFunctions.Enqueue(() => {
-                    var (ipv4address, port, allocationIdBytes, connectionData, hostConnectionData, key) = clientOutcome;
+                    var (ipv4address, port, allocationIdBytes, connectionData, hostConnectionData, key) = clientOutcome;                    
                     NetworkManager.Singleton.GetComponent<UnityTransport>().SetClientRelayData(ipv4address, port, allocationIdBytes, key, connectionData, hostConnectionData, true);
                     NetworkManager.Singleton.StartClient();
-                    SceneManager.LoadScene(gameScene);
+                    SceneManager.LoadScene(gameScene);                    
                 });
             } else if (messageArgArr[0].Equals("salt", StringComparison.OrdinalIgnoreCase)) {
                 byte[] bytesPlainTextData = System.Text.Encoding.Unicode.GetBytes("password\r\n" +

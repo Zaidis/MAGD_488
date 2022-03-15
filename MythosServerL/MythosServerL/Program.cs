@@ -116,16 +116,16 @@ namespace MythosServer {
         {
             Console.Clear();
             Console.WriteLine("Current Connections: ");
-            foreach (Socket s in Connections)
+            foreach (Socket s in Connections.ToList())
                 Console.WriteLine(s.RemoteEndPoint);
             if (Users.Count > 0) {
                 Console.WriteLine("Logged in Clients: ");
-                foreach (var sock in UserSocketDictionary)
+                foreach (var sock in UserSocketDictionary.ToList())
                     Console.WriteLine(sock.Key.RemoteEndPoint + " : " + sock.Value.Username + " : Skill : " + sock.Value.Skill);
             }
             if (MatchmakingSockets.Count > 0) {
                 Console.WriteLine("Matchmaking Clients: ");
-                foreach (Socket s in MatchmakingSockets)
+                foreach (Socket s in MatchmakingSockets.ToList())
                     Console.WriteLine(s.RemoteEndPoint + " : " + UserSocketDictionary[s].Username + " : Skill : " + UserSocketDictionary[s].Skill);
             }
         }
