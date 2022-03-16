@@ -34,6 +34,7 @@ public class MythosClient : MonoBehaviour {
 
     public TMP_InputField user;
     public TMP_InputField pass;
+    public string userName;
     public TMP_Text status;
     public UnityEngine.UI.Button LoginButton;
     public UnityEngine.UI.Button CreateButton;
@@ -102,10 +103,9 @@ public class MythosClient : MonoBehaviour {
                 var serverOutcome =  await AllocateRelayServerAndGetJoinCode(2);
                 connection.Send(Encoding.ASCII.GetBytes("code\r\n" + serverOutcome.joinCode));
                 syncFunctions.Enqueue(() => {
-                    var (ipv4address, port, allocationIdBytes, connectionData, key, joinCode) = serverOutcome;                    
-                    NetworkManager.Singleton.GetComponent<UnityTransport>().SetHostRelayData(ipv4address, port, allocationIdBytes, key, connectionData, true);                    
-                    NetworkManager.Singleton.StartHost();
-                    SceneManager.LoadScene(gameScene);
+                    var (ipv4address, port, allocationIdBytes, connectionData, key, joinCode) = serverOutcome;
+                    NetworkManager.Singleton.GetComponent<UnityTransport>().SetHostRelayData(ipv4address, port, allocationIdBytes, key, connectionData, true);
+                    SceneManager.LoadScene(gameScene);                    
                 });
             } else if (messageArgArr[0].Equals("rsakey", StringComparison.OrdinalIgnoreCase)) {
                 string xmlFile = textReceived.Substring(8, textReceived.Length - 8);
@@ -117,10 +117,10 @@ public class MythosClient : MonoBehaviour {
             } else if (messageArgArr[0].Equals("connect", StringComparison.OrdinalIgnoreCase)) {
                 var clientOutcome = await JoinRelayServerFromJoinCode(messageArgArr[1]);
                 syncFunctions.Enqueue(() => {
-                    var (ipv4address, port, allocationIdBytes, connectionData, hostConnectionData, key) = clientOutcome;                    
+                    var (ipv4address, port, allocationIdBytes, connectionData, hostConnectionData, key) = clientOutcome;
+                    SceneManager.LoadScene(gameScene);
                     NetworkManager.Singleton.GetComponent<UnityTransport>().SetClientRelayData(ipv4address, port, allocationIdBytes, key, connectionData, hostConnectionData, true);
                     NetworkManager.Singleton.StartClient();
-                    SceneManager.LoadScene(gameScene);                    
                 });
             } else if (messageArgArr[0].Equals("salt", StringComparison.OrdinalIgnoreCase)) {
                 byte[] bytesPlainTextData = System.Text.Encoding.Unicode.GetBytes("password\r\n" +
@@ -130,12 +130,15 @@ public class MythosClient : MonoBehaviour {
                 string cypherText = Convert.ToBase64String(bytesCypherText);
                 connection.Send(Encoding.ASCII.GetBytes(cypherText));
             } else if (messageArgArr[0].Equals("logingood", StringComparison.OrdinalIgnoreCase)) {
-                syncFunctions.Enqueue(() => {
+                syncFunctions.Enqueue(() => {                    
+                    userName = user.text;
                     status.text = "Login Succeeded!";
                     status.color = new Color(0f, 1f, 0f, 1f);
                 });
             } else if (messageArgArr[0].Equals("loginbad", StringComparison.OrdinalIgnoreCase)) {
                 syncFunctions.Enqueue(() => {
+                    pass.interactable = true;
+                    user.interactable = true;
                     pass.text = "";
                     user.text = "";
                     status.text = "Login Failed!";
@@ -192,6 +195,8 @@ public class MythosClient : MonoBehaviour {
     public void OnLogin() {
         if (!connection.Connected)
             return;
+        pass.interactable = false;
+        user.interactable = false;
         status.text = "Attempting Login...";
         status.color = Color.white;
         Debug.Log("Sent Login Request");

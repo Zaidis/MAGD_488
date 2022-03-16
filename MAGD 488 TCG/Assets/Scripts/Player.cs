@@ -7,13 +7,14 @@ using TMPro;
 using System;
 
 public class Player : NetworkBehaviour {
+    [SerializeField] private GameManager _gameManagerPrefab;
     private NetworkManager _networkManager;
-    private void Awake() {
-        DontDestroyOnLoad(this);
-    }
+    private NetworkObject _networkObject;
     void Start() {
+        _networkObject = GetComponent<NetworkObject>();
         _networkManager = FindObjectOfType<NetworkManager>();
-        if (_networkManager.IsClient) {
+        if (_networkObject.IsLocalPlayer) {
+            Camera.main.transform.parent = transform;
             Debug.Log("Player Spawned!");
         }
     }
@@ -26,12 +27,9 @@ public class Player : NetworkBehaviour {
         } else {
             UpdateTurnServerRpc(isHostTurn);
         }
-
     }
-
     [ServerRpc]
     private void UpdateTurnServerRpc(bool isHostTurn) {
-        Debug.Log("Updating Turn");
         GameManager.Singleton.IsHostTurn = isHostTurn;
         if (_networkManager.IsHost) {
             if (isHostTurn) {
@@ -45,7 +43,6 @@ public class Player : NetworkBehaviour {
             }
         }
     }
-
     [ClientRpc]
     void UpdateTurnClientRpc(bool isHostTurn) {
         GameManager.Singleton.IsHostTurn = isHostTurn;

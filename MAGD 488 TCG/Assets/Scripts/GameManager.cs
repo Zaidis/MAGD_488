@@ -13,9 +13,15 @@ public class GameManager : MonoBehaviour
     public Button NextTurn;
     private NetworkManager _networkManager;
     public bool IsHostTurn = true;
+    public string yourName;
+    private string oppopnentName; //TODO IMPLEMENT
     void Start() {
-        _singleton = this;
         _networkManager = NetworkManager.Singleton;
+        if (!_networkManager.IsClient && !_networkManager.IsServer && !_networkManager.IsHost)
+            NetworkManager.Singleton.StartHost();
+        _singleton = this;        
+        TurnStatus = GameObject.Find("TurnStatus").GetComponent<TextMeshProUGUI>();
+        NextTurn = GameObject.Find("NextTurn").GetComponent<Button>();
         if (_networkManager.IsHost) {
             TurnStatus.text = "Your Turn!";
             NextTurn.interactable = true;
@@ -31,5 +37,5 @@ public class GameManager : MonoBehaviour
         IsHostTurn = IsHostTurn ? false : true;
         Player player = _networkManager.SpawnManager.GetLocalPlayerObject().GetComponent<Player>();
         player.NextTurnPressed(IsHostTurn);
-    }
+    }    
 }

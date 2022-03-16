@@ -3791,6 +3791,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   user: {fileID: 2926131}
   pass: {fileID: 1306367011}
+  userName: 
   status: {fileID: 323601493}
   LoginButton: {fileID: 949187796}
   CreateButton: {fileID: 1757894033}
