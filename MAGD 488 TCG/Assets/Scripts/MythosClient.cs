@@ -35,6 +35,7 @@ public class MythosClient : MonoBehaviour {
     public TMP_InputField user;
     public TMP_InputField pass;
     public string userName;
+    public string opponentUserName;
     public TMP_Text status;
     public UnityEngine.UI.Button LoginButton;
     public UnityEngine.UI.Button CreateButton;
@@ -102,6 +103,7 @@ public class MythosClient : MonoBehaviour {
             if (messageArgArr[0].Equals("start", StringComparison.OrdinalIgnoreCase)) {
                 var serverOutcome =  await AllocateRelayServerAndGetJoinCode(2);
                 connection.Send(Encoding.ASCII.GetBytes("code\r\n" + serverOutcome.joinCode));
+                opponentUserName = messageArgArr[1];
                 syncFunctions.Enqueue(() => {
                     var (ipv4address, port, allocationIdBytes, connectionData, key, joinCode) = serverOutcome;
                     NetworkManager.Singleton.GetComponent<UnityTransport>().SetHostRelayData(ipv4address, port, allocationIdBytes, key, connectionData, true);
@@ -116,6 +118,7 @@ public class MythosClient : MonoBehaviour {
                 csp.ImportParameters(pubKey);
             } else if (messageArgArr[0].Equals("connect", StringComparison.OrdinalIgnoreCase)) {
                 var clientOutcome = await JoinRelayServerFromJoinCode(messageArgArr[1]);
+                opponentUserName = messageArgArr[2];
                 syncFunctions.Enqueue(() => {
                     var (ipv4address, port, allocationIdBytes, connectionData, hostConnectionData, key) = clientOutcome;
                     SceneManager.LoadScene(gameScene);

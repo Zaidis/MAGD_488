@@ -174,16 +174,22 @@ namespace MythosServer {
                         }
                     }
 
-                    host.Send(Encoding.ASCII.GetBytes("start\r\n")); //Send start command to selected host
+                    host.Send(Encoding.ASCII.GetBytes("start\r\n" + UserSocketDictionary[client].Username)); //Send start command to selected host
                     Console.WriteLine("Start command sent to host");
-
-                    int numBytesReceived = host.Receive(buffer); //data stream in
+                    int numBytesReceived = 0;
+                    try {
+                        numBytesReceived = handler.Receive(buffer);
+                    } catch (SocketException e) {
+                        Console.WriteLine(e);
+                        HandleDisconnect(handler);
+                        return;
+                    }
                     string textReceived = Encoding.ASCII.GetString(buffer, 0, numBytesReceived); //decode from stream to ASCII
                     string[] messageArgArr = textReceived.Split(StringSeparators, StringSplitOptions.None);
                     Console.WriteLine(textReceived);
                     if (messageArgArr[0].Equals("code")) {
                         Console.WriteLine("Sent " + "connect\r\n" + messageArgArr[1] + "\nto " + client.RemoteEndPoint + " : " + UserSocketDictionary[client].Username + " : Skill : " + UserSocketDictionary[client].Skill);
-                        client.Send(Encoding.ASCII.GetBytes("connect\r\n" + messageArgArr[1]));
+                        client.Send(Encoding.ASCII.GetBytes("connect\r\n" + messageArgArr[1] + "\r\n" + UserSocketDictionary[host].Username));
                         Console.WriteLine("Sent connection message to client");
                         Match newMatch = new Match(host, client);
                         Matches.Add(newMatch);
@@ -243,7 +249,14 @@ namespace MythosServer {
             }
 
             socket.Send(Encoding.ASCII.GetBytes("salt\r\n" + salt));
-            int numBytesReceived = socket.Receive(buffer); //data stream in TODO Fix, sits here if client inputs invalid password while server is expected data
+            int numBytesReceived = 0;
+            try {
+                numBytesReceived = socket.Receive(buffer);
+            } catch (SocketException e) {
+                Console.WriteLine(e);
+                HandleDisconnect(socket);
+                return null;
+            }
             string textReceived = Encoding.ASCII.GetString(buffer, 0, numBytesReceived); //decode from stream to ASCII
             string[] messageArgArr;
             try { //try catch to handle unexepected text that isn't cypertext
