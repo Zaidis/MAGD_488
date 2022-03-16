@@ -34,9 +34,6 @@ public class GameManager : MonoBehaviour
         opponent.text = "Opponent: " + opponentName;
         StartCoroutine(ClearConnectingOnConnect());        
     }
-    void Update() {
-        //TODO Disallow input and show connecting screen until both clients are connected together
-    }
     public void OnNextTurnPressed() {
         TurnStatus.text = "Other User's Turn";
         IsHostTurn = IsHostTurn ? false : true;
