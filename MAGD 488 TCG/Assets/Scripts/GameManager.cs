@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Singleton { get { return _singleton; } }
     public TextMeshProUGUI TurnStatus;
     public TextMeshProUGUI opponent;
+    public GameObject Connecting;
     public Button NextTurn;
     private NetworkManager _networkManager;
     public bool IsHostTurn = true;
@@ -31,7 +32,7 @@ public class GameManager : MonoBehaviour
         }
         opponentName = MythosClient.instance.opponentUserName;
         opponent.text = "Opponent: " + opponentName;
-
+        StartCoroutine(ClearConnectingOnConnect());        
     }
     void Update() {
         //TODO Disallow input and show connecting screen until both clients are connected together
@@ -42,4 +43,14 @@ public class GameManager : MonoBehaviour
         Player player = _networkManager.SpawnManager.GetLocalPlayerObject().GetComponent<Player>();
         player.NextTurnPressed(IsHostTurn);
     }    
+    private IEnumerator ClearConnectingOnConnect() { //Gaurentees that connecting screen is shown until all users are connected and it's safe to start gameplay
+        if (_networkManager.IsServer) {
+            while (_networkManager.ConnectedClients.Count < 2)
+                yield return null;
+        } else {
+            while(!_networkManager.IsClient)
+                yield return null;
+        }
+        Connecting.SetActive(false);
+    }
 }
