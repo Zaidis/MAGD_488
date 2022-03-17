@@ -16,5 +16,5 @@ MonoBehaviour:
   type: 2
   manaCost: 2
   cardName: Roho's Rage
-  cardArt: {fileID: 21300000, guid: 30cd160909c8a1a4b8df7c0fbd97984d, type: 3}
+  cardArt: {fileID: 21300000, guid: 458da14e8aab26245bf4922940306a81, type: 3}
   description: 'Deal 4 damage to any target. '
