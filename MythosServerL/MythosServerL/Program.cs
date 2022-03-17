@@ -294,6 +294,7 @@ namespace MythosServer {
                 using (SqliteDataReader reader = command.ExecuteReader())
                     while (reader.Read())
                         message = message + reader.GetString(0) + "\r\n";
+                message = message.Substring(0, message.LastIndexOf("\r\n"));
                 sock.Send(Encoding.ASCII.GetBytes(message));
                 connection.Close();
             }
