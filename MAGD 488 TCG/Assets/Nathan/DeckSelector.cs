@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,8 +12,9 @@ public class DeckSelector : MonoBehaviour
         Resize();
         foreach (Transform child in deckList)
             Destroy(child.gameObject);
-        for (int i = 0; i < MythosClient.instance.deckNames.Count; i++)
-            AddDeck(MythosClient.instance.deckNames[i]);
+
+        MythosClient.instance.OnRetrieveDeckNames();
+        Refresh();
     }
     void Resize()
     {
@@ -31,5 +30,10 @@ public class DeckSelector : MonoBehaviour
         GameObject selector = new GameObject(name, typeof(Image), typeof(SelectDeck));
         selector.transform.parent = deckList;
         selector.GetComponent<SelectDeck>().name = name;
+    }
+    public void Refresh()
+    {
+        for (int i = 0; i < MythosClient.instance.deckNames.Count; i++)
+            AddDeck(MythosClient.instance.deckNames[i]);
     }
 }

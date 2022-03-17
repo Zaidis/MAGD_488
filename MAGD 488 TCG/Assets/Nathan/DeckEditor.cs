@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,7 +18,7 @@ public class DeckEditor : MonoBehaviour
     public new string name;
     public List<int> owned = new List<int>();
     public List<int> deckID = new List<int>();
-    public List<Card> cards = new List<Card>();
+    public Card[] cards;
 
     [SerializeField] RectTransform cardList;
     GridLayoutGroup layoutCL;
@@ -29,20 +30,21 @@ public class DeckEditor : MonoBehaviour
     [SerializeField][Range(0,99)] int padding = 20;
     [SerializeField][Range(1,2)] float aspectRation = 1.4f; // 1.4 is a 3.5 by 2.5 aspect ratio
 
-    private void Start()
+    private void OnEnable()
     {
         layoutCL = cardList.GetComponent<GridLayoutGroup>();
         layoutDL = deckList.GetComponent<GridLayoutGroup>();
         Resize();
 
-        EraseData();
-
-        // load cards
+        EraseData(); // clear table
+        cards = Resources.FindObjectsOfTypeAll(typeof(Card)) as Card[];
+        StartCoroutine(GetContent()); // 
+        
 
         // load deck first before create SelectCl and selectDl
         // Create SelectDL from the loaded deck
 
-        for (int i = 0; i < cards.Count; i++)
+        for (int i = 0; i < cards.Length; i++)
             CreateCard(cards[i]);
 
     }
@@ -83,8 +85,13 @@ public class DeckEditor : MonoBehaviour
         ResizeDL();
     }
 
-
-
+    IEnumerator GetContent()
+    {
+        MythosClient.instance.OnRetrieveDeckContent(name);
+        yield return new WaitForSecondsRealtime(1f);
+        deckID = MythosClient.instance.currentDeck;
+    }
+    
     void EraseData()
     {
         foreach (Transform child in cardList)
