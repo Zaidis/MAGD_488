@@ -9,14 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b2f79a6932d765641b47fd5ba415f7d3, type: 3}
-  m_Name: Bo's Hammer
+  m_Script: {fileID: 11500000, guid: 2db2d717dcd6e2f44a7a68b7f4c0c9a4, type: 3}
+  m_Name: blew
   m_EditorClassIdentifier: 
-  ID: 1
-  type: 1
-  manaCost: 4
-  cardName: Bo's Hammer
-  cardArt: {fileID: 21300000, guid: 8fce06a25a9ecaa4d9b683a2ff3e0269, type: 3}
-  description: You hit things with it!
-  defaultHealthAmount: 5
+  ID: 5
+  type: 0
+  manaCost: 0
+  cardName: Blue Eyes White Dragon
+  cardArt: {fileID: 21300000, guid: b2891e7db8f674643ab2c34cffbce504, type: 3}
+  description: 
+  defaultHealthAmount: 0
+  defaultPowerAmount: 0
   myAttributes: 
