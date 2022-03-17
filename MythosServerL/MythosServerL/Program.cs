@@ -226,7 +226,7 @@ namespace MythosServer {
         }
         private static User? Login(string username, Socket socket)  //login "socket" based on passed username and password, create User and return it
         {
-            if (username == "")
+            if (username == "" || Users.Any(u => u.Username == username))
                 return null;
             byte[] buffer = new byte[1024];
             string salt = "";
