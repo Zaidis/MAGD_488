@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2db2d717dcd6e2f44a7a68b7f4c0c9a4, type: 3}
+  m_Name: Morte (Phoenix)
+  m_EditorClassIdentifier: 
+  ID: 2014
+  type: 0
+  manaCost: 4
+  cardName: Morte (Phoenix)
+  cardArt: {fileID: 0}
+  description: 'needs endure
+
+    Heals 1 hp to ally anyone on the board or player
+    (3 mana cost)
+
+    applies poison to enemy directly ahead of placement and in
+    2 rounds lose 1 health (3 mana cost)'
+  defaultHealthAmount: 3
+  defaultPowerAmount: 3
+  myAttributes: 00000000
