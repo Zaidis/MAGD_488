@@ -27,6 +27,6 @@ public class SelectCL : MonoBehaviour, IPointerClickHandler
 
         selected.GetComponent<Image>().sprite = card.cardArt;
         selected.GetComponent<SelectDL>().card = this;
-        DeckEditor.instance.deck.cards.Add(card.ID);
+        DeckEditor.instance.deckID.Add(card.ID);
     }
 }

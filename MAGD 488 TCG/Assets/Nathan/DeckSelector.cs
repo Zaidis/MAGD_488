@@ -14,11 +14,8 @@ public class DeckSelector : MonoBehaviour
         Resize();
         foreach (Transform child in deckList)
             Destroy(child.gameObject);
-        for (int i = 0; i < 3; i++)
-        {
-            Debug.Log("-");
-            AddDeck("qwe");
-        }
+        for (int i = 0; i < MythosClient.instance.deckNames.Count; i++)
+            AddDeck(MythosClient.instance.deckNames[i]);
     }
     void Resize()
     {

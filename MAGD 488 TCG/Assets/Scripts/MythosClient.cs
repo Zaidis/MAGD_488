@@ -137,6 +137,7 @@ public class MythosClient : MonoBehaviour {
                     userName = user.text;
                     status.text = "Login Succeeded!";
                     status.color = new Color(0f, 1f, 0f, 1f);
+                    SceneManager.LoadScene("Menu");
                 });
             } else if (messageArgArr[0].Equals("loginbad", StringComparison.OrdinalIgnoreCase)) {
                 syncFunctions.Enqueue(() => {

@@ -14,8 +14,9 @@ public class DeckEditor : MonoBehaviour
     }
     #endregion
 
-    public _Deck deck;
+    public new string name;
     public List<int> owned = new List<int>();
+    public List<int> deckID = new List<int>();
     public List<Card> cards = new List<Card>();
 
     [SerializeField] RectTransform cardList;
@@ -32,7 +33,7 @@ public class DeckEditor : MonoBehaviour
     {
         layoutCL = cardList.GetComponent<GridLayoutGroup>();
         layoutDL = deckList.GetComponent<GridLayoutGroup>();
-        Draw();
+        Resize();
 
         EraseData();
 
@@ -44,22 +45,6 @@ public class DeckEditor : MonoBehaviour
         for (int i = 0; i < cards.Count; i++)
             CreateCard(cards[i]);
 
-    }
-
-    private void Update()
-    {
-        if (Input.mouseScrollDelta.y < 0)
-        {
-            columnCount--;
-            if (columnCount < 2) columnCount = 1;
-            Draw();
-        }
-        if (Input.mouseScrollDelta.y > 0)
-        {
-            columnCount++;
-            if (columnCount > 10) columnCount = 10;
-            Draw();
-        }
     }
 
     void ResizeCL()
@@ -92,8 +77,7 @@ public class DeckEditor : MonoBehaviour
         layoutDL.spacing = new Vector2(0,padding);
         layoutDL.cellSize = new Vector2(width, height);
     }
-
-    void Draw()
+    void Resize()
     {
         ResizeCL();
         ResizeDL();
@@ -108,7 +92,6 @@ public class DeckEditor : MonoBehaviour
 
         foreach (Transform child in deckList)
             Destroy(child.gameObject);
-
     }
 
     SelectCL CreateCard(Card card)
@@ -123,8 +106,8 @@ public class DeckEditor : MonoBehaviour
         int count = 0; 
         for (int i = 0; i < owned.Count; i++) // go through players owned cards
             if (card.ID == owned[i]) count++; // add count if it is the same
-        for (int i = 0; i < deck.cards.Count; i++) // go through deck
-            if (deck.cards[i] == card.ID) // remove count if card is in deck
+        for (int i = 0; i < deckID.Count; i++) // go through deck
+            if (deckID[i] == card.ID) // remove count if card is in deck
                 count--;
         selectCL.owned = count;
 
