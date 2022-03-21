@@ -9,7 +9,7 @@ using Microsoft.Data.Sqlite;
 namespace MythosServer {    
     class Program {
         public static readonly string[] StringSeparators = { "\r\n" };  
-        private const string KLocalIp = "10.0.3.201"; //Local IP
+        private static string KLocalIp = "10.0.3.201"; //Local IP
         private const int KPort = 2552; //Port selected
 
         private static readonly List<Socket> Connections = new List<Socket>();
@@ -26,21 +26,23 @@ namespace MythosServer {
         private static Object SQLLock = new Object();
         private static Object MatchmakingLock = new Object();
         static void Main() {
-            privKey = csp.ExportParameters(true);
+            IPAddress? ip = Dns.GetHostEntry(Dns.GetHostName()).AddressList[0]; //Set KLocalIp to detected localip
+            if (ip.AddressFamily == AddressFamily.InterNetwork)
+                KLocalIp = ip.ToString();
+
+            IPAddress ipAddress = IPAddress.Parse(KLocalIp); //create ip, EP, and listener socket
+            IPEndPoint localEp = new IPEndPoint(ipAddress, KPort);
+            Socket listener = new Socket(ipAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+
+            privKey = csp.ExportParameters(true); //generate RSA Keypair, and generate xml including public key
             pubKey = csp.ExportParameters(false);
             StringWriter sw = new System.IO.StringWriter();
             XmlSerializer xs = new System.Xml.Serialization.XmlSerializer(typeof(RSAParameters));
             xs.Serialize(sw, pubKey);
-            pubKeyString = sw.ToString();
+            pubKeyString = sw.ToString();                       
 
-            IPAddress ipAddress = IPAddress.Parse(KLocalIp);
-            IPEndPoint localEp = new IPEndPoint(ipAddress, KPort);
-
-            Socket listener = new Socket(ipAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-
-            listener.Bind(localEp); //Bind to local ip and port
+            listener.Bind(localEp); //Bind to local ip and port, listen, and then handle new connections
             listener.Listen(1);
-
             Console.WriteLine("Server Started!");
             for (; ; ) { //Welcome loop
                 try {
