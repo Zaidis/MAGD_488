@@ -23,7 +23,7 @@ using UnityEngine.UI;
 
 public class MythosClient : MonoBehaviour {
     public static MythosClient instance; //Singleton
-    private Queue<Action> syncFunctions;
+    private Queue<Action> syncFunctions;    
 
     public static readonly string[] StringSeparators = { "\r\n" };
     private const string k_GlobalIp = "3.81.142.105"; //Server ip
@@ -42,9 +42,12 @@ public class MythosClient : MonoBehaviour {
     public GameObject FailureToConnectPanel;
     public GameObject LoginPanel;
     public GameObject ConnectingPanel;
-    [SerializeField] private string gameScene;
-    public List<string> deckNames { get; private set; }
-    public List<int> currentDeck { get; private set; }
+    [SerializeField] private string menuScene;
+
+    public static event Action<List<string>> OnDecknamesLoaded;
+    public static event Action<List<int>> OnDeckContentLoaded;
+    private List<string> deckNames;
+    private List<int> currentDeck;
 
     private static RSACryptoServiceProvider csp;
     private static RSAParameters pubKey;
@@ -107,7 +110,7 @@ public class MythosClient : MonoBehaviour {
                 syncFunctions.Enqueue(() => {
                     var (ipv4address, port, allocationIdBytes, connectionData, key, joinCode) = serverOutcome;
                     NetworkManager.Singleton.GetComponent<UnityTransport>().SetHostRelayData(ipv4address, port, allocationIdBytes, key, connectionData, true);
-                    SceneManager.LoadScene(gameScene);                    
+                    SceneManager.LoadScene(menuScene);                    
                 });
             } else if (messageArgArr[0].Equals("rsakey", StringComparison.OrdinalIgnoreCase)) {
                 string xmlFile = textReceived.Substring(8, textReceived.Length - 8);
@@ -121,7 +124,7 @@ public class MythosClient : MonoBehaviour {
                 opponentUserName = messageArgArr[2];
                 syncFunctions.Enqueue(() => {
                     var (ipv4address, port, allocationIdBytes, connectionData, hostConnectionData, key) = clientOutcome;
-                    SceneManager.LoadScene(gameScene);
+                    SceneManager.LoadScene(menuScene);
                     NetworkManager.Singleton.GetComponent<UnityTransport>().SetClientRelayData(ipv4address, port, allocationIdBytes, key, connectionData, hostConnectionData, true);
                     NetworkManager.Singleton.StartClient();
                 });
@@ -137,7 +140,7 @@ public class MythosClient : MonoBehaviour {
                     userName = user.text;
                     status.text = "Login Succeeded!";
                     status.color = new Color(0f, 1f, 0f, 1f);
-                    SceneManager.LoadScene("Menu");
+                    SceneManager.LoadScene(menuScene);
                 });
             } else if (messageArgArr[0].Equals("loginbad", StringComparison.OrdinalIgnoreCase)) {
                 syncFunctions.Enqueue(() => {
@@ -168,11 +171,19 @@ public class MythosClient : MonoBehaviour {
                 deckNames.Clear();
                 for (int i = 1; i < messageArgArr.Length; i++)
                     deckNames.Add(messageArgArr[i]);
+                syncFunctions.Enqueue(() => {
+                    if (OnDecknamesLoaded != null)
+                        OnDecknamesLoaded(deckNames);
+                });                
             } else if (messageArgArr[0].Equals("deckcontent", StringComparison.OrdinalIgnoreCase)) {
                 currentDeck.Clear();
                 string[] splitIntsAsStrings = messageArgArr[1].Split(',');
                 foreach (string intString in splitIntsAsStrings)
                     currentDeck.Add(Convert.ToInt32(intString));
+                syncFunctions.Enqueue(() => {
+                    if (OnDeckContentLoaded != null)
+                        OnDeckContentLoaded(currentDeck);
+                });                
             }
         }
     }
@@ -218,13 +229,13 @@ public class MythosClient : MonoBehaviour {
         string hash = Convert.ToBase64String(KeyDerivation.Pbkdf2(pass.text, salt, KeyDerivationPrf.HMACSHA256, 100000, 256 / 8));
         connection.Send(Encoding.ASCII.GetBytes("newaccount\r\n" + user.text + "\r\n" + Convert.ToBase64String(salt) + "\r\n" + hash));
     }
-    public void OnRetrieveDeckNames() {
+    public void OnRetrieveDeckNames() { //subscribe to OnDecknamesLoaded to get List<string> back
         if (!connection.Connected)
             return;
         Debug.Log("Sent Deck Names Request");
         connection.Send(Encoding.ASCII.GetBytes("getdecknames\r\n"));
     }
-    public void OnRetrieveDeckContent(string name) {
+    public void OnRetrieveDeckContent(string name) { //subscribe to OnDeckContentLoaded to get List<int> back
         if (!connection.Connected)
             return;
         Debug.Log("Sent Deck Content Request");

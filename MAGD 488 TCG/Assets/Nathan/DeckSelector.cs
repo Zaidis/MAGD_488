@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,9 +15,18 @@ public class DeckSelector : MonoBehaviour
         foreach (Transform child in deckList)
             Destroy(child.gameObject);
 
+        MythosClient.OnDecknamesLoaded += DeckNameLoadedEvent;
         MythosClient.instance.OnRetrieveDeckNames();
-        Refresh();
     }
+
+    private void DeckNameLoadedEvent(List<string> deckNames) {
+        foreach(string DeckName in deckNames) {
+            GameObject selector = new GameObject(DeckName, typeof(Image), typeof(SelectDeck));
+            selector.transform.parent = deckList;
+            selector.GetComponent<SelectDeck>().name = DeckName;
+        }
+    }
+
     void Resize()
     {
         layout.constraintCount = 1;
@@ -24,16 +35,5 @@ public class DeckSelector : MonoBehaviour
         layout.padding.top = padding;
         layout.spacing = new Vector2(padding, padding);
         layout.cellSize = new Vector2(deckList.rect.width - (padding * 2), 100);
-    }
-    void AddDeck(string name)
-    {
-        GameObject selector = new GameObject(name, typeof(Image), typeof(SelectDeck));
-        selector.transform.parent = deckList;
-        selector.GetComponent<SelectDeck>().name = name;
-    }
-    public void Refresh()
-    {
-        for (int i = 0; i < MythosClient.instance.deckNames.Count; i++)
-            AddDeck(MythosClient.instance.deckNames[i]);
     }
 }

@@ -38,8 +38,8 @@ public class DeckEditor : MonoBehaviour
 
         EraseData(); // clear table
         cards = Resources.FindObjectsOfTypeAll(typeof(Card)) as Card[];
-        StartCoroutine(GetContent()); // 
-        
+        MythosClient.OnDeckContentLoaded += LoadDeckContentHandler;
+        MythosClient.instance.OnRetrieveDeckContent(name);     
 
         // load deck first before create SelectCl and selectDl
         // Create SelectDL from the loaded deck
@@ -85,11 +85,8 @@ public class DeckEditor : MonoBehaviour
         ResizeDL();
     }
 
-    IEnumerator GetContent()
-    {
-        MythosClient.instance.OnRetrieveDeckContent(name);
-        yield return new WaitForSecondsRealtime(1f);
-        deckID = MythosClient.instance.currentDeck;
+    private void LoadDeckContentHandler(List<int> deck) {
+        deckID = deck;
     }
     
     void EraseData()
