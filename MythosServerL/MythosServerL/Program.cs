@@ -59,8 +59,13 @@ namespace MythosServer {
             bool loggedIn = false;
             handler.Send(Encoding.ASCII.GetBytes("rsakey\r\n" + pubKeyString));
             for (; ; ) {
-                if (!Connections.Contains(handler) || !handler.Connected)
+                if (!Connections.Contains(handler))
                     break;
+                if (!handler.Connected) {
+                    Console.WriteLine("Unexpected Disconnect Occured!");
+                    HandleDisconnect(handler);
+                    break;
+                }
                 Thread.Sleep(1);
                 PrintConnections();
                 int numBytesReceived;
