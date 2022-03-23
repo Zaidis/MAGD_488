@@ -12,8 +12,7 @@ namespace MythosServer {
         private static string KLocalIp = "10.0.3.201"; //Local IP
         private const int KPort = 2552; //Port selected
 
-        private static readonly List<User> Users = new List<User>();
-        private static readonly List<Match> Matches = new List<Match>();
+        private static List<User> Users = new List<User>();
         private static List<User> MatchmakingUsers = new List<User>();
 
         private static RSACryptoServiceProvider csp = new RSACryptoServiceProvider(2048);
@@ -53,10 +52,12 @@ namespace MythosServer {
         private static void ClientHandler(Socket handler) //Handle client communication, run in thread
         {
             byte[] buffer = new byte[1024];
+            int numBytesReceived = 0;
             bool loggedIn = false;
             handler.Send(Encoding.ASCII.GetBytes("rsakey\r\n" + pubKeyString));
             User? user = null;
             for (; ; ) {
+                Thread.Sleep(1);                
                 if (!Users.Any(u => u.socket == handler) && user != null) //Exits loop if user exists but is not in Users, or starts exit if handler is not connected
                     break;
                 if (!handler.Connected) {
@@ -64,10 +65,8 @@ namespace MythosServer {
                     HandleDisconnect(user);
                     break;
                 }
-
-                Thread.Sleep(1);
                 PrintConnections();
-                int numBytesReceived;
+                
                 try {
                     numBytesReceived = handler.Receive(buffer);
                 } catch (SocketException e) {
@@ -77,7 +76,6 @@ namespace MythosServer {
                 }
                 string textReceived = Encoding.ASCII.GetString(buffer, 0, numBytesReceived); //decode from stream to ASCII
                 string[] messageArgArr = textReceived.Split(StringSeparators, StringSplitOptions.None);
-
                 if (messageArgArr[0].Equals("matchmake", StringComparison.OrdinalIgnoreCase)) { //Adding connection to matchmaking queue
                     if (loggedIn) {
                         if (!MatchmakingUsers.Contains(user!)) {
@@ -196,7 +194,6 @@ namespace MythosServer {
                         Console.WriteLine("Sent connection message to client");
 
                         Match newMatch = new Match(host, client);
-                        Matches.Add(newMatch);
                         host.Match = newMatch;
                         client.Match = newMatch;
 
