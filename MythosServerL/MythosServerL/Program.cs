@@ -59,13 +59,14 @@ namespace MythosServer {
             bool loggedIn = false;
             handler.Send(Encoding.ASCII.GetBytes("rsakey\r\n" + pubKeyString));
             for (; ; ) {
-                if (!Connections.Contains(handler))
+                if (!Connections.Contains(handler)) //Exits loop if connections no longer contains this handler, or if handler becomes disconnected, it is removed from all lists and then exits loop
                     break;
                 if (!handler.Connected) {
                     Console.WriteLine("Unexpected Disconnect Occured!");
                     HandleDisconnect(handler);
                     break;
                 }
+
                 Thread.Sleep(1);
                 PrintConnections();
                 int numBytesReceived;
@@ -170,9 +171,10 @@ namespace MythosServer {
                     byte[] buffer = new byte[1024];
                     Socket host = MatchmakingSockets[1];
                     Socket client = MatchmakingSockets[0];
-                    int minDifference = int.MaxValue;
+
+                    int minDifference = int.MaxValue; //find two users with closest skill, match together
                     MatchmakingSockets = MatchmakingSockets.OrderBy(s => UserSocketDictionary[s].Skill).ToList();
-                    for (int i = 1; i < MatchmakingSockets.Count; i++) { //find two users with closest skill, match together
+                    for (int i = 1; i < MatchmakingSockets.Count; i++) { 
                         int currentDifference = Math.Abs(UserSocketDictionary[MatchmakingSockets[i]].Skill - UserSocketDictionary[MatchmakingSockets[i]].Skill);
                         if (currentDifference < minDifference) {
                             minDifference = currentDifference;
@@ -266,7 +268,7 @@ namespace MythosServer {
             }
             string textReceived = Encoding.ASCII.GetString(buffer, 0, numBytesReceived); //decode from stream to ASCII
             string[] messageArgArr;
-            try { //try catch to handle unexepected text that isn't cypertext
+            try { //try catch to handle unexepected text that isn't cyphertext
                 var bytesCypherText = Convert.FromBase64String(textReceived);
                 csp.ImportParameters(privKey);
                 var bytesPlainTextData = csp.Decrypt(bytesCypherText, false);
@@ -274,7 +276,6 @@ namespace MythosServer {
                 messageArgArr = textReceived.Split(StringSeparators, StringSplitOptions.None);
             } catch (Exception e) {
                 Console.WriteLine(e);
-                Console.WriteLine(textReceived);
                 if (textReceived.Equals("quit\r\n"))
                     HandleDisconnect(socket);
                 return null;
