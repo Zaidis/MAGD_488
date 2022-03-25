@@ -51,6 +51,7 @@ public class MythosClient : MonoBehaviour {
 
     private static RSACryptoServiceProvider csp;
     private static RSAParameters pubKey;
+    private static Aes aes;
 
     void Awake() {
         DontDestroyOnLoad(this);
@@ -62,6 +63,9 @@ public class MythosClient : MonoBehaviour {
     async void Start()
     {
         syncFunctions = new Queue<Action>();
+
+        aes = Aes.Create();
+
         ipAddress = IPAddress.Parse(k_GlobalIp);
         remoteEp = new IPEndPoint(IPAddress.Parse(k_GlobalIp), k_Port);
         connection = new Socket(ipAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp); //Create socket
@@ -98,27 +102,37 @@ public class MythosClient : MonoBehaviour {
         Debug.Log("Connected to " + connection.RemoteEndPoint);
 
         byte[] buffer = new byte[1024]; //buffer for incoming data
+        int numBytesReceived = connection.Receive(buffer);
+        string textReceived = Encoding.ASCII.GetString(buffer, 0, numBytesReceived); //decode from stream to ASCII
+        string[] messageArgArr = textReceived.Split(StringSeparators, StringSplitOptions.None);
+        if (messageArgArr[0].Equals("rsakey", StringComparison.OrdinalIgnoreCase)) { //if the server doesn't greet with an rsa key, disconnect
+            string xmlFile = textReceived.Substring(8, textReceived.Length - 8);
+            StringReader sr = new StringReader(xmlFile);
+            XmlSerializer xs = new XmlSerializer(typeof(RSAParameters));
+            pubKey = (RSAParameters)xs.Deserialize(sr);
+            csp = new RSACryptoServiceProvider();
+            csp.ImportParameters(pubKey);
+            byte[] bytesPlainTextData = Encoding.Unicode.GetBytes("aes\r\n" + Convert.ToBase64String(aes.Key) + "\r\n" + Convert.ToBase64String(aes.IV));
+            byte[] bytesCypherText = csp.Encrypt(bytesPlainTextData, false);
+            string cypherText = Convert.ToBase64String(bytesCypherText);
+            connection.Send(Encoding.ASCII.GetBytes(cypherText));
+        } else
+            return;
         for (;;) {
-            int numBytesReceived = connection.Receive(buffer); //data stream in
-            string textReceived = Encoding.ASCII.GetString(buffer, 0, numBytesReceived); //decode from stream to ASCII
-            string[] messageArgArr = textReceived.Split(StringSeparators, StringSplitOptions.None);
+            numBytesReceived = connection.Receive(buffer); //data stream in
+            textReceived = Encoding.ASCII.GetString(buffer, 0, numBytesReceived); //decode from stream to ASCII
+            textReceived = DecrpytBase64ToString(textReceived);
+            messageArgArr = textReceived.Split(StringSeparators, StringSplitOptions.None);
             Debug.Log("TEXT RECEIVED: " + textReceived);
             if (messageArgArr[0].Equals("start", StringComparison.OrdinalIgnoreCase)) {
                 var serverOutcome =  await AllocateRelayServerAndGetJoinCode(2);
-                connection.Send(Encoding.ASCII.GetBytes("code\r\n" + serverOutcome.joinCode));
+                connection.Send(EncryptStringToBase64Bytes("code\r\n" + serverOutcome.joinCode));
                 opponentUserName = messageArgArr[1];
                 syncFunctions.Enqueue(() => {
                     var (ipv4address, port, allocationIdBytes, connectionData, key, joinCode) = serverOutcome;
                     NetworkManager.Singleton.GetComponent<UnityTransport>().SetHostRelayData(ipv4address, port, allocationIdBytes, key, connectionData, true);
                     SceneManager.LoadScene(menuScene);                    
                 });
-            } else if (messageArgArr[0].Equals("rsakey", StringComparison.OrdinalIgnoreCase)) {
-                string xmlFile = textReceived.Substring(8, textReceived.Length - 8);
-                StringReader sr = new StringReader(xmlFile);
-                XmlSerializer xs = new XmlSerializer(typeof(RSAParameters));
-                pubKey = (RSAParameters)xs.Deserialize(sr);
-                csp = new RSACryptoServiceProvider();
-                csp.ImportParameters(pubKey);
             } else if (messageArgArr[0].Equals("connect", StringComparison.OrdinalIgnoreCase)) {
                 var clientOutcome = await JoinRelayServerFromJoinCode(messageArgArr[1]);
                 opponentUserName = messageArgArr[2];
@@ -129,12 +143,7 @@ public class MythosClient : MonoBehaviour {
                     NetworkManager.Singleton.StartClient();
                 });
             } else if (messageArgArr[0].Equals("salt", StringComparison.OrdinalIgnoreCase)) {
-                byte[] bytesPlainTextData = System.Text.Encoding.Unicode.GetBytes("password\r\n" +
-                    Convert.ToBase64String(KeyDerivation.Pbkdf2(pass.text, Convert.FromBase64String(messageArgArr[1]),
-                        KeyDerivationPrf.HMACSHA256, 100000, 256 / 8)));
-                byte[] bytesCypherText = csp.Encrypt(bytesPlainTextData, false);
-                string cypherText = Convert.ToBase64String(bytesCypherText);
-                connection.Send(Encoding.ASCII.GetBytes(cypherText));
+                connection.Send(EncryptStringToBase64Bytes("password\r\n" + Convert.ToBase64String(KeyDerivation.Pbkdf2(pass.text, Convert.FromBase64String(messageArgArr[1]), KeyDerivationPrf.HMACSHA256, 100000, 256 / 8))));
             } else if (messageArgArr[0].Equals("logingood", StringComparison.OrdinalIgnoreCase)) {
                 syncFunctions.Enqueue(() => {                    
                     userName = user.text;
@@ -195,7 +204,7 @@ public class MythosClient : MonoBehaviour {
     private void OnApplicationQuit() {
         if (!connection.Connected)
             return;
-        connection.Send(Encoding.ASCII.GetBytes("quit\r\n"));
+        connection.Send(EncryptStringToBase64Bytes("quit\r\n"));
         connection.Shutdown(SocketShutdown.Both);
         connection.Close();
     }
@@ -205,7 +214,7 @@ public class MythosClient : MonoBehaviour {
         status.text = "Matchmaking...";
         status.color = Color.white;
         Debug.Log("Sent Matchmaking Request");
-        connection.Send(Encoding.ASCII.GetBytes("matchmake\r\n"));
+        connection.Send(EncryptStringToBase64Bytes("matchmake\r\n"));
     }
     public void OnLogin() {
         if (!connection.Connected)
@@ -215,7 +224,7 @@ public class MythosClient : MonoBehaviour {
         status.text = "Attempting Login...";
         status.color = Color.white;
         Debug.Log("Sent Login Request");
-        connection.Send(Encoding.ASCII.GetBytes("login\r\n" + user.text));
+        connection.Send(EncryptStringToBase64Bytes("login\r\n" + user.text));
     }
     public void OnCreateAccount() {
         if (!connection.Connected)
@@ -227,19 +236,19 @@ public class MythosClient : MonoBehaviour {
         using (var rngCsp = new RNGCryptoServiceProvider())
             rngCsp.GetNonZeroBytes(salt);
         string hash = Convert.ToBase64String(KeyDerivation.Pbkdf2(pass.text, salt, KeyDerivationPrf.HMACSHA256, 100000, 256 / 8));
-        connection.Send(Encoding.ASCII.GetBytes("newaccount\r\n" + user.text + "\r\n" + Convert.ToBase64String(salt) + "\r\n" + hash));
+        connection.Send(EncryptStringToBase64Bytes("newaccount\r\n" + user.text + "\r\n" + Convert.ToBase64String(salt) + "\r\n" + hash));
     }
     public void OnRetrieveDeckNames() { //subscribe to OnDecknamesLoaded to get List<string> back
         if (!connection.Connected)
             return;
         Debug.Log("Sent Deck Names Request");
-        connection.Send(Encoding.ASCII.GetBytes("getdecknames\r\n"));
+        connection.Send(EncryptStringToBase64Bytes("getdecknames\r\n"));
     }
     public void OnRetrieveDeckContent(string name) { //subscribe to OnDeckContentLoaded to get List<int> back
         if (!connection.Connected)
             return;
         Debug.Log("Sent Deck Content Request");
-        connection.Send(Encoding.ASCII.GetBytes("getdeckcontent\r\n" + name));
+        connection.Send(EncryptStringToBase64Bytes("getdeckcontent\r\n" + name));
     }
 
     public void OnSaveDeck(string name, int[] cards)
@@ -250,7 +259,7 @@ public class MythosClient : MonoBehaviour {
         foreach (int i in cards)
             message += i + ",";
         message = message.TrimEnd(',');
-        connection.Send(Encoding.ASCII.GetBytes(message));
+        connection.Send(EncryptStringToBase64Bytes(message));
     }
 
     public void OnOutcome(bool outcome) //takes in bool, true for hostvictory, false for clientvictory
@@ -258,7 +267,7 @@ public class MythosClient : MonoBehaviour {
         if (!connection.Connected)
             return;
         Debug.Log("Sent Outcome Message");
-        connection.Send(Encoding.ASCII.GetBytes("outcome\r\n" + (outcome ? "hostvictory" : "clientvictory")));
+        connection.Send(EncryptStringToBase64Bytes("outcome\r\n" + (outcome ? "hostvictory" : "clientvictory")));
     }
     public static async Task<(string ipv4address, ushort port, byte[] allocationIdBytes, byte[] connectionData, byte[] key, string joinCode)> AllocateRelayServerAndGetJoinCode(int maxConnections, string region = null) {
         Allocation allocation;
@@ -300,5 +309,37 @@ public class MythosClient : MonoBehaviour {
         var dtlsEndpoint = allocation.ServerEndpoints.First(e => e.ConnectionType == "dtls");
 
         return (dtlsEndpoint.Host, (ushort)dtlsEndpoint.Port, allocation.AllocationIdBytes, allocation.ConnectionData, allocation.HostConnectionData, allocation.Key);
+    }
+    private static byte[] EncryptStringToBase64Bytes(string plainText) {
+        if (plainText == null || plainText.Length <= 0)
+            throw new ArgumentNullException("plainText");
+        byte[] encrypted;
+
+        ICryptoTransform encryptor = aes.CreateEncryptor(aes.Key, aes.IV);
+        using (MemoryStream msEncrypt = new MemoryStream()) {
+            using (CryptoStream csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write)) {
+                using (StreamWriter swEncrypt = new StreamWriter(csEncrypt)) {
+                    swEncrypt.Write(plainText);
+                }
+                encrypted = msEncrypt.ToArray();
+            }
+        }
+        return Encoding.ASCII.GetBytes(Convert.ToBase64String(encrypted));
+    }
+    private static string DecrpytBase64ToString(string cipherText) {
+        if (cipherText == null || cipherText.Length <= 0)
+            throw new ArgumentNullException("cipherText");
+        byte[] cipherBytes = Convert.FromBase64String(cipherText);       
+
+        string plaintext = null;
+        ICryptoTransform decryptor = aes.CreateDecryptor(aes.Key, aes.IV);
+        using (MemoryStream msDecrypt = new MemoryStream(cipherBytes)) {
+            using (CryptoStream csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read)) {
+                using (StreamReader srDecrypt = new StreamReader(csDecrypt)) {
+                    plaintext = srDecrypt.ReadToEnd();
+                }
+            }
+        }
+        return plaintext;
     }
 }
