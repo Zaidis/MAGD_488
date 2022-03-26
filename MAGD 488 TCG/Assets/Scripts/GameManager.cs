@@ -22,7 +22,10 @@ public class GameManager : MonoBehaviour
 
     public Hand myHand;
     public List<Card> deck;
-    void Start() {
+
+    public Tile[][] hostBoard;
+    public Tile[][] clientBoard;
+    private void Start() {
         _networkManager = NetworkManager.Singleton;
         if (!_networkManager.IsClient && !_networkManager.IsServer && !_networkManager.IsHost)
             _networkManager.StartHost();
@@ -41,6 +44,7 @@ public class GameManager : MonoBehaviour
         StartCoroutine(ClearConnectingOnConnect());        
     }
 
+    
     private void BeginGame() {
         /*
          * The player who goes first will draw 3 cards. 
@@ -88,7 +92,54 @@ public class GameManager : MonoBehaviour
         deck.RemoveAt(rand);
     }
 
+    public Token NewToken(Card card) {
+        Token token = new Token();
+        if(card.type == cardType.creature) {
+            Creature c = (Creature)card;
+            token.currentHealth = c.defaultHealthAmount;
+            token.currentAttack = c.defaultPowerAmount;
+        } else if(card.type == cardType.artifact) {
+            Artifact a = (Artifact)card;
+            token.currentHealth = a.defaultHealthAmount;
+        }
 
+        return token;
+    }
+    public void PlaceCard(bool isHost, Card card, int x, int y) {
+        //make a token
+        Token token = NewToken(card);
+        
+        if (isHost) {
+            hostBoard[x][y].token = token;
+            
+        } else {
+            clientBoard[x][y].token = token;
+        }
+    }
+
+    public void Attack(int x1, int y1, int x2, int y2) {
+
+        if (_networkManager.IsHost) {
+
+            Token t_one = hostBoard[x1][y1].token;
+            Token t_two = clientBoard[x2][y2].token;
+
+            t_one.currentHealth -= t_two.currentAttack;
+            t_two.currentHealth -= t_one.currentAttack;
+
+            if (t_one.currentHealth <= 0) DeleteToken(hostBoard[x1][y1]);
+            if (t_two.currentHealth <= 0) DeleteToken(clientBoard[x2][y2]);
+
+        }
+
+    }
+
+    /// <summary>
+    /// Called when a token has died / ran out of health.
+    /// </summary>
+    public void DeleteToken(Tile tile) {
+        tile.token = null;
+    }
 
     public void OnNextTurnPressed() {
         TurnStatus.text = "Other User's Turn";
