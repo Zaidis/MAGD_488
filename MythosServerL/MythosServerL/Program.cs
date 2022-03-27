@@ -55,7 +55,6 @@ namespace MythosServer {
             int numBytesReceived = 0;
             bool loggedIn = false;
             byte[] key;
-            byte[] iv;
             handler.Send(Encoding.ASCII.GetBytes("rsakey\r\n" + pubKeyString));
             try {
                 numBytesReceived = handler.Receive(buffer);
@@ -69,21 +68,24 @@ namespace MythosServer {
                 var bytesCypherText = Convert.FromBase64String(textReceived);
                 csp.ImportParameters(privKey);
                 var bytesPlainTextData = csp.Decrypt(bytesCypherText, false);
-                textReceived = Encoding.Unicode.GetString(bytesPlainTextData);
+                textReceived = Encoding.ASCII.GetString(bytesPlainTextData);
                 messageArgArr = textReceived.Split(StringSeparators, StringSplitOptions.None);
             } catch (Exception e) {
                 Console.WriteLine(e);
                 return;
             }
+            foreach (string s in messageArgArr) {
+                Console.WriteLine(s);
+            }
             if (!messageArgArr[0].Equals("aes", StringComparison.OrdinalIgnoreCase))
-                return;
+                return; //TODO Message command type not matching
             try {
                 key = Convert.FromBase64String(messageArgArr[1]);
-                iv = Convert.FromBase64String(messageArgArr[2]);
             } catch (Exception e) {
                 Console.WriteLine(e);
                 return;
             }
+            Console.WriteLine("AES Key retried and decoded successfully!");
             User? user = null;
             for (; ; ) {
                 Thread.Sleep(1);                
@@ -103,7 +105,9 @@ namespace MythosServer {
                     break;
                 }
                 textReceived = Encoding.ASCII.GetString(buffer, 0, numBytesReceived); //decode from stream to ASCII
-                textReceived = DecrpytBase64ToString(textReceived, key, iv);
+                Console.WriteLine("Text Received:\n" + textReceived);
+                messageArgArr = textReceived.Split(StringSeparators, StringSplitOptions.None);
+                textReceived = DecrpytBase64ToString(messageArgArr[1], key, Convert.FromBase64String(messageArgArr[0])); 
                 messageArgArr = textReceived.Split(StringSeparators, StringSplitOptions.None);
                 if (messageArgArr[0].Equals("matchmake", StringComparison.OrdinalIgnoreCase)) { //Adding connection to matchmaking queue
                     if (loggedIn) {
@@ -114,16 +118,16 @@ namespace MythosServer {
                     }
                 } else if (messageArgArr[0].Equals("login", StringComparison.OrdinalIgnoreCase)) {
                     if (!loggedIn) {
-                        user = Login(messageArgArr[1], handler, key, iv);
+                        user = Login(messageArgArr[1], handler, key);
                         if (user != null) {
-                            handler.Send(EncryptStringToBase64Bytes("logingood\r\n", key, iv));
+                            handler.Send(EncryptStringToBase64Bytes("logingood\r\n", key));
                             Users.Add(user);
                             loggedIn = true;
                         } else
-                            handler.Send(EncryptStringToBase64Bytes("loginbad\r\n", key, iv));
+                            handler.Send(EncryptStringToBase64Bytes("loginbad\r\n", key));
                     }
                 } else if (messageArgArr[0].Equals("newaccount", StringComparison.OrdinalIgnoreCase)) {
-                    handler.Send(NewUser(messageArgArr[1], messageArgArr[2], messageArgArr[3]) ? EncryptStringToBase64Bytes("creationgood\r\n", key, iv) : EncryptStringToBase64Bytes("creationbad\r\n", key, iv));
+                    handler.Send(NewUser(messageArgArr[1], messageArgArr[2], messageArgArr[3]) ? EncryptStringToBase64Bytes("creationgood\r\n", key) : EncryptStringToBase64Bytes("creationbad\r\n", key));
 
                 } else if (messageArgArr[0].Equals("outcome", StringComparison.OrdinalIgnoreCase)) {
                     if (loggedIn)
@@ -146,7 +150,7 @@ namespace MythosServer {
         }
         private static void PrintConnections() //Print current connection statuses
         {
-            Console.Clear();
+            //Console.Clear();
             if (Users.Count > 0) {
                 Console.WriteLine("Logged in Clients: ");
                 foreach (User user in Users)
@@ -204,7 +208,7 @@ namespace MythosServer {
                         }
                     }
 
-                    host.socket.Send(EncryptStringToBase64Bytes("start\r\n" + client.Username, host.key, host.iv)); //Send start command to selected host
+                    host.socket.Send(EncryptStringToBase64Bytes("start\r\n" + client.Username, host.key)); //Send start command to selected host
                     Console.WriteLine("Start command sent to host");
                     int numBytesReceived = 0;
                     try {
@@ -215,12 +219,13 @@ namespace MythosServer {
                         return;
                     }
                     string textReceived = Encoding.ASCII.GetString(buffer, 0, numBytesReceived); //decode from stream to ASCII
-                    textReceived = DecrpytBase64ToString(textReceived, user.key, user.iv);
                     string[] messageArgArr = textReceived.Split(StringSeparators, StringSplitOptions.None);
+                    textReceived = DecrpytBase64ToString(messageArgArr[1], user.key, Convert.FromBase64String(messageArgArr[0]));
+                    messageArgArr = textReceived.Split(StringSeparators, StringSplitOptions.None);
                     Console.WriteLine(textReceived);
                     if (messageArgArr[0].Equals("code")) {
                         Console.WriteLine("Sent " + "connect\r\n" + messageArgArr[1] + "\nto " + client.socket.RemoteEndPoint + " : " + client.Username + " : Skill : " + client.Skill);
-                        client.socket.Send(EncryptStringToBase64Bytes("connect\r\n" + messageArgArr[1] + "\r\n" + host.Username, client.key, client.iv));
+                        client.socket.Send(EncryptStringToBase64Bytes("connect\r\n" + messageArgArr[1] + "\r\n" + host.Username, client.key));
                         Console.WriteLine("Sent connection message to client");
 
                         Match newMatch = new Match(host, client);
@@ -254,7 +259,7 @@ namespace MythosServer {
             } else if (!match.Hostoutcome.Equals("") && !match.Clientoutcome.Equals(""))
                 Console.Write("u1 and u2 outcome do not match no skill will be changed!");
         }
-        private static User? Login(string username, Socket socket, byte[] key, byte[] iv)  //login "socket" based on passed username and password, create User and return it
+        private static User? Login(string username, Socket socket, byte[] key)  //login "socket" based on passed username and password, create User and return it
         {
             if (username == "" || Users.Any(u => u.Username == username))
                 return null;
@@ -278,7 +283,7 @@ namespace MythosServer {
                 connection.Close();
             }
 
-            socket.Send(EncryptStringToBase64Bytes("salt\r\n" + salt, key, iv));
+            socket.Send(EncryptStringToBase64Bytes("salt\r\n" + salt, key));
             int numBytesReceived = 0;
             try {
                 numBytesReceived = socket.Receive(buffer);
@@ -287,14 +292,15 @@ namespace MythosServer {
                 return null;
             }
             string textReceived = Encoding.ASCII.GetString(buffer, 0, numBytesReceived); //decode from stream to ASCII
-            textReceived = DecrpytBase64ToString(textReceived, key, iv);
             string[] messageArgArr = textReceived.Split(StringSeparators, StringSplitOptions.None);
+            textReceived = DecrpytBase64ToString(messageArgArr[1], key, Convert.FromBase64String(messageArgArr[0]));
+            messageArgArr = textReceived.Split(StringSeparators, StringSplitOptions.None);
             if (!messageArgArr[0].Equals("password", StringComparison.OrdinalIgnoreCase))
                 return null;
             string hashed = messageArgArr[1];
             if (hash.Equals(hashed)) {
                 if (!Users.Any(u => u.socket == socket))
-                    return new User(username, 1500, socket, key, iv);
+                    return new User(username, 1500, socket, key);
                 Console.WriteLine("Already Logged In!");
             }
             return null;
@@ -312,7 +318,7 @@ namespace MythosServer {
                     while (reader.Read())
                         message = message + reader.GetString(0) + "\r\n";
                 message = message.Substring(0, message.LastIndexOf("\r\n"));
-                user.socket.Send(EncryptStringToBase64Bytes(message, user.key, user.iv));
+                user.socket.Send(EncryptStringToBase64Bytes(message, user.key));
                 connection.Close();
             }
         }
@@ -328,7 +334,7 @@ namespace MythosServer {
                 using (SqliteDataReader reader = command.ExecuteReader())
                     while (reader.Read())
                         cards = reader.GetString(0);
-                user.socket.Send(EncryptStringToBase64Bytes("deckcontent\r\n" + cards, user.key, user.iv));
+                user.socket.Send(EncryptStringToBase64Bytes("deckcontent\r\n" + cards, user.key));
                 connection.Close();
             }
         }
@@ -353,13 +359,14 @@ namespace MythosServer {
             }
             PrintConnections();
         }
-        private static byte[] EncryptStringToBase64Bytes(string plainText, byte[] key, byte[] IV) {
+        private static byte[] EncryptStringToBase64Bytes(string plainText, byte[] key) {
             if (plainText == null || plainText.Length <= 0)
                 throw new ArgumentNullException("plainText");
             byte[] encrypted;
+            string Base64IV;
             using (Aes aes = Aes.Create()) {
                 aes.Key = key;
-                aes.IV = IV;
+                Base64IV = Convert.ToBase64String(aes.IV) + "\r\n";
                 ICryptoTransform encryptor = aes.CreateEncryptor(aes.Key, aes.IV);
                 using (MemoryStream msEncrypt = new MemoryStream()) {
                     using (CryptoStream csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write)) {
@@ -370,14 +377,14 @@ namespace MythosServer {
                     }
                 }
             }
-            return Encoding.ASCII.GetBytes(Convert.ToBase64String(encrypted));
+            return Encoding.ASCII.GetBytes(Base64IV + Convert.ToBase64String(encrypted));
         }
         private static string DecrpytBase64ToString(string cipherText, byte[] key, byte[] IV) {
             byte[] cipherBytes = Convert.FromBase64String(cipherText);
             if (cipherText == null || cipherText.Length <= 0)
                 throw new ArgumentNullException("cipherText");
 
-            string plaintext = null;
+            string? plaintext = null;
             using (Aes aes = Aes.Create()) {
                 aes.Key = key;
                 aes.IV = IV;
@@ -396,11 +403,10 @@ namespace MythosServer {
     class User {
         public Socket socket;
         public byte[] key;
-        public byte[] iv;
         public readonly string Username;
         public readonly int Skill;
         public Match? Match = null;
-        public User(string u, int sk, Socket s, byte[] k, byte[] i) { Username = u; Skill = sk; socket = s; key = k; iv = i; }
+        public User(string u, int sk, Socket s, byte[] k) { Username = u; Skill = sk; socket = s; key = k; }
     }
     class Match {
         public User Host;

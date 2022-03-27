@@ -41,10 +41,10 @@ public class Player : NetworkBehaviour {
     public void PlaceCard(Card card, int x, int y) { //<----- NEEDS TO CALL THIS
         if (_networkManager.IsHost) {
             GameManager.Singleton.PlaceCard(true, card, x, y);
-            UpdatePlaceCardClientRpc(x, y, card);
+            //UpdatePlaceCardClientRpc(x, y, card);
         } else {
             GameManager.Singleton.PlaceCard(false, card, x, y);
-            UpdatePlaceCardServerRpc(x, y, card);
+            //UpdatePlaceCardServerRpc(x, y, card);
         }
     }
    
@@ -53,7 +53,7 @@ public class Player : NetworkBehaviour {
      * We need to know the empty token prefab to add in the info
      * WE need to know the location of where the card is placed. <---- Do this first
      */
-    [ServerRpc]
+    /*[ServerRpc]
     private void UpdatePlaceCardServerRpc(int x, int y, Card card) {
         GameManager.Singleton.PlaceCard(false, card, x, y);
     }
@@ -72,9 +72,9 @@ public class Player : NetworkBehaviour {
     }
 
     [ClientRpc]
-    private void UpdateClientServerRpc(bool isHostTurn) {
+    private void UpdateClientClientRpc(bool isHostTurn) {
 
-    }
+    }*/
     #endregion
     #region Turns
 

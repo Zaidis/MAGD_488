@@ -51,7 +51,7 @@ public class MythosClient : MonoBehaviour {
 
     private static RSACryptoServiceProvider csp;
     private static RSAParameters pubKey;
-    private static Aes aes;
+    private static byte[] aesKey;
 
     void Awake() {
         DontDestroyOnLoad(this);
@@ -64,7 +64,9 @@ public class MythosClient : MonoBehaviour {
     {
         syncFunctions = new Queue<Action>();
 
-        aes = Aes.Create();
+        using(Aes InitAes = Aes.Create()) {
+            aesKey = InitAes.Key;
+        }
 
         ipAddress = IPAddress.Parse(k_GlobalIp);
         remoteEp = new IPEndPoint(IPAddress.Parse(k_GlobalIp), k_Port);
@@ -106,13 +108,14 @@ public class MythosClient : MonoBehaviour {
         string textReceived = Encoding.ASCII.GetString(buffer, 0, numBytesReceived); //decode from stream to ASCII
         string[] messageArgArr = textReceived.Split(StringSeparators, StringSplitOptions.None);
         if (messageArgArr[0].Equals("rsakey", StringComparison.OrdinalIgnoreCase)) { //if the server doesn't greet with an rsa key, disconnect
+            Debug.Log("RSA KEY: " + messageArgArr[1]);
             string xmlFile = textReceived.Substring(8, textReceived.Length - 8);
             StringReader sr = new StringReader(xmlFile);
             XmlSerializer xs = new XmlSerializer(typeof(RSAParameters));
             pubKey = (RSAParameters)xs.Deserialize(sr);
             csp = new RSACryptoServiceProvider();
             csp.ImportParameters(pubKey);
-            byte[] bytesPlainTextData = Encoding.Unicode.GetBytes("aes\r\n" + Convert.ToBase64String(aes.Key) + "\r\n" + Convert.ToBase64String(aes.IV));
+            byte[] bytesPlainTextData = Encoding.ASCII.GetBytes("aes\r\n" + Convert.ToBase64String(aesKey));
             byte[] bytesCypherText = csp.Encrypt(bytesPlainTextData, false);
             string cypherText = Convert.ToBase64String(bytesCypherText);
             connection.Send(Encoding.ASCII.GetBytes(cypherText));
@@ -121,7 +124,8 @@ public class MythosClient : MonoBehaviour {
         for (;;) {
             numBytesReceived = connection.Receive(buffer); //data stream in
             textReceived = Encoding.ASCII.GetString(buffer, 0, numBytesReceived); //decode from stream to ASCII
-            textReceived = DecrpytBase64ToString(textReceived);
+            messageArgArr = textReceived.Split(StringSeparators, StringSplitOptions.None);
+            textReceived = DecrpytBase64ToString(messageArgArr[1], Convert.FromBase64String(messageArgArr[0]));
             messageArgArr = textReceived.Split(StringSeparators, StringSplitOptions.None);
             Debug.Log("TEXT RECEIVED: " + textReceived);
             if (messageArgArr[0].Equals("start", StringComparison.OrdinalIgnoreCase)) {
@@ -314,29 +318,37 @@ public class MythosClient : MonoBehaviour {
         if (plainText == null || plainText.Length <= 0)
             throw new ArgumentNullException("plainText");
         byte[] encrypted;
-
-        ICryptoTransform encryptor = aes.CreateEncryptor(aes.Key, aes.IV);
-        using (MemoryStream msEncrypt = new MemoryStream()) {
-            using (CryptoStream csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write)) {
-                using (StreamWriter swEncrypt = new StreamWriter(csEncrypt)) {
-                    swEncrypt.Write(plainText);
+        string Base64IV;
+        using (Aes aes = Aes.Create()) {
+            aes.Key = aesKey;
+            Base64IV = Convert.ToBase64String(aes.IV) + "\r\n";
+            ICryptoTransform encryptor = aes.CreateEncryptor(aes.Key, aes.IV);
+            using (MemoryStream msEncrypt = new MemoryStream()) {
+                using (CryptoStream csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write)) {
+                    using (StreamWriter swEncrypt = new StreamWriter(csEncrypt)) {
+                        swEncrypt.Write(plainText);
+                    }
+                    encrypted = msEncrypt.ToArray();
                 }
-                encrypted = msEncrypt.ToArray();
             }
         }
-        return Encoding.ASCII.GetBytes(Convert.ToBase64String(encrypted));
+        return Encoding.ASCII.GetBytes(Base64IV + Convert.ToBase64String(encrypted));
     }
-    private static string DecrpytBase64ToString(string cipherText) {
+    private static string DecrpytBase64ToString(string cipherText, byte[] IV) {
         if (cipherText == null || cipherText.Length <= 0)
             throw new ArgumentNullException("cipherText");
         byte[] cipherBytes = Convert.FromBase64String(cipherText);       
 
         string plaintext = null;
-        ICryptoTransform decryptor = aes.CreateDecryptor(aes.Key, aes.IV);
-        using (MemoryStream msDecrypt = new MemoryStream(cipherBytes)) {
-            using (CryptoStream csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read)) {
-                using (StreamReader srDecrypt = new StreamReader(csDecrypt)) {
-                    plaintext = srDecrypt.ReadToEnd();
+        using (Aes aes = Aes.Create()) {
+            aes.Key = aesKey;
+            aes.IV = IV;
+            ICryptoTransform decryptor = aes.CreateDecryptor(aes.Key, aes.IV);
+            using (MemoryStream msDecrypt = new MemoryStream(cipherBytes)) {
+                using (CryptoStream csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read)) {
+                    using (StreamReader srDecrypt = new StreamReader(csDecrypt)) {
+                        plaintext = srDecrypt.ReadToEnd();
+                    }
                 }
             }
         }
