@@ -281,7 +281,7 @@ namespace MythosServer {
             lock (SQLLock) {
                 connection.Open();
                 SqliteCommand command = connection.CreateCommand();
-                command.CommandText = @"SELECT Salt, Hash From User WHERE Username=@us";
+                command.CommandText = @"SELECT Salt, Hash FROM User WHERE EXISTS(SELECT * FROM User WHERE Username=@us)";
                 command.Parameters.AddWithValue("@us", username);
 
                 using (SqliteDataReader reader = command.ExecuteReader())
@@ -291,7 +291,8 @@ namespace MythosServer {
                     }
                 connection.Close();
             }
-
+            if (salt == "" || hash == "")
+                return null;
             socket.Send(EncryptStringToBase64Bytes("salt\r\n" + salt, key));
             int numBytesReceived = 0;
             try {
