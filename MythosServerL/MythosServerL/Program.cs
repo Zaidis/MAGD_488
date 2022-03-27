@@ -33,8 +33,8 @@ namespace MythosServer {
 
             privKey = csp.ExportParameters(true); //generate RSA Keypair, and generate xml including public key
             pubKey = csp.ExportParameters(false);
-            StringWriter sw = new System.IO.StringWriter();
-            XmlSerializer xs = new System.Xml.Serialization.XmlSerializer(typeof(RSAParameters));
+            StringWriter sw = new StringWriter();
+            XmlSerializer xs = new XmlSerializer(typeof(RSAParameters));
             xs.Serialize(sw, pubKey);
             pubKeyString = sw.ToString();                       
 
@@ -55,6 +55,9 @@ namespace MythosServer {
             int numBytesReceived = 0;
             bool loggedIn = false;
             byte[] key;
+            User? user = null;
+
+            #region handshake
             handler.Send(Encoding.ASCII.GetBytes("rsakey\r\n" + pubKeyString));
             try {
                 numBytesReceived = handler.Receive(buffer);
@@ -78,21 +81,20 @@ namespace MythosServer {
                 Console.WriteLine(s);
             }
             if (!messageArgArr[0].Equals("aes", StringComparison.OrdinalIgnoreCase))
-                return; //TODO Message command type not matching
+                return;
             try {
-                key = Convert.FromBase64String(messageArgArr[1]);
+                key = Convert.FromBase64String(messageArgArr[1]); //end handshake by recieving AES key and storing it
             } catch (Exception e) {
                 Console.WriteLine(e);
                 return;
             }
-            Console.WriteLine("AES Key retried and decoded successfully!");
-            User? user = null;
+            #endregion
             for (; ; ) {
+                #region check connection & recieve input
                 Thread.Sleep(1);                
                 if (!Users.Any(u => u.socket == handler) && user != null) //Exits loop if user exists but is not in Users, or starts exit if handler is not connected
                     break;
                 if (!handler.Connected) {
-                    Console.WriteLine("Unexpected Disconnect Occured!");
                     HandleDisconnect(user);
                     break;
                 }
@@ -107,17 +109,16 @@ namespace MythosServer {
                 textReceived = Encoding.ASCII.GetString(buffer, 0, numBytesReceived); //decode from stream to ASCII
                 Console.WriteLine("Text Received:\n" + textReceived);
                 messageArgArr = textReceived.Split(StringSeparators, StringSplitOptions.None);
-                textReceived = DecrpytBase64ToString(messageArgArr[1], key, Convert.FromBase64String(messageArgArr[0])); 
+                try {
+                    textReceived = DecrpytBase64ToString(messageArgArr[1], key, Convert.FromBase64String(messageArgArr[0]));
+                } catch (Exception e) {
+                    Console.Write(e);
+                    break;
+                }                
                 messageArgArr = textReceived.Split(StringSeparators, StringSplitOptions.None);
-                if (messageArgArr[0].Equals("matchmake", StringComparison.OrdinalIgnoreCase)) { //Adding connection to matchmaking queue
-                    if (loggedIn) {
-                        if (!MatchmakingUsers.Contains(user!)) {
-                            MatchmakingUsers.Add(user!); //add struct which contains needed info to matchmaking list
-                            Matchmaking(user!);
-                        }
-                    }
-                } else if (messageArgArr[0].Equals("login", StringComparison.OrdinalIgnoreCase)) {
-                    if (!loggedIn) {
+                #endregion
+                if (!loggedIn) {
+                    if (messageArgArr[0].Equals("login", StringComparison.OrdinalIgnoreCase)) {
                         user = Login(messageArgArr[1], handler, key);
                         if (user != null) {
                             handler.Send(EncryptStringToBase64Bytes("logingood\r\n", key));
@@ -125,24 +126,25 @@ namespace MythosServer {
                             loggedIn = true;
                         } else
                             handler.Send(EncryptStringToBase64Bytes("loginbad\r\n", key));
-                    }
-                } else if (messageArgArr[0].Equals("newaccount", StringComparison.OrdinalIgnoreCase)) {
-                    handler.Send(NewUser(messageArgArr[1], messageArgArr[2], messageArgArr[3]) ? EncryptStringToBase64Bytes("creationgood\r\n", key) : EncryptStringToBase64Bytes("creationbad\r\n", key));
-
-                } else if (messageArgArr[0].Equals("outcome", StringComparison.OrdinalIgnoreCase)) {
-                    if (loggedIn)
+                    } else if (messageArgArr[0].Equals("newaccount", StringComparison.OrdinalIgnoreCase))
+                        handler.Send(NewUser(messageArgArr[1], messageArgArr[2], messageArgArr[3]) ? EncryptStringToBase64Bytes("creationgood\r\n", key) : EncryptStringToBase64Bytes("creationbad\r\n", key));
+                } else {
+                    if (messageArgArr[0].Equals("matchmake", StringComparison.OrdinalIgnoreCase)) { //Adding connection to matchmaking queue
+                        lock (MatchmakingLock)
+                            if (!MatchmakingUsers.Contains(user!)) {
+                                MatchmakingUsers.Add(user!); //add struct which contains needed info to matchmaking list
+                                Matchmaking(user!);
+                            }
+                    } else if (messageArgArr[0].Equals("outcome", StringComparison.OrdinalIgnoreCase))
                         MatchOutcome(messageArgArr[1], user!);
-                } else if (messageArgArr[0].Equals("getdecknames", StringComparison.OrdinalIgnoreCase)) {
-                    if (loggedIn)
+                    else if (messageArgArr[0].Equals("getdecknames", StringComparison.OrdinalIgnoreCase))
                         GetDeckNames(user!);
-                } else if (messageArgArr[0].Equals("getdeckcontent", StringComparison.OrdinalIgnoreCase)) {
-                    if (loggedIn)
+                    else if (messageArgArr[0].Equals("getdeckcontent", StringComparison.OrdinalIgnoreCase))
                         GetDeckContent(user!, messageArgArr[1]);
-                } else if (messageArgArr[0].Equals("savedeck", StringComparison.OrdinalIgnoreCase)) {
-                    if (loggedIn)
+                    else if (messageArgArr[0].Equals("savedeck", StringComparison.OrdinalIgnoreCase))
                         SaveDeckContent(user!, messageArgArr[1], messageArgArr[2]);
-                } else if (messageArgArr[0].Equals("quit", StringComparison.OrdinalIgnoreCase)) { //Exit case
-                    HandleDisconnect(user!);
+                    else if (messageArgArr[0].Equals("quit", StringComparison.OrdinalIgnoreCase)) //Exit case
+                        HandleDisconnect(user!);
                 }
             }
             handler.Shutdown(SocketShutdown.Both);
@@ -150,17 +152,19 @@ namespace MythosServer {
         }
         private static void PrintConnections() //Print current connection statuses
         {
-            //Console.Clear();
+            Console.Clear();
             if (Users.Count > 0) {
                 Console.WriteLine("Logged in Clients: ");
                 foreach (User user in Users)
                     Console.WriteLine(user.socket.RemoteEndPoint + " : " + user.Username + " : Skill : " + user.Skill);
             }
-            if (MatchmakingUsers.Count > 0) {
-                Console.WriteLine("Matchmaking Clients: ");
-                foreach (User user in MatchmakingUsers)
-                    Console.WriteLine(user.socket.RemoteEndPoint + " : " + user.Username + " : Skill : " + user.Skill);
-            }
+            lock (MatchmakingLock) {
+                if (MatchmakingUsers.Count > 0) {
+                    Console.WriteLine("Matchmaking Clients: ");
+                    foreach (User user in MatchmakingUsers)
+                        Console.WriteLine(user.socket.RemoteEndPoint + " : " + user.Username + " : Skill : " + user.Skill);
+                }
+            }            
         }
         private static bool NewUser(string username, string salt, string hash) //Attempt to create a user based on passed username and password, return true for success, return false for failure
         {
@@ -220,7 +224,12 @@ namespace MythosServer {
                     }
                     string textReceived = Encoding.ASCII.GetString(buffer, 0, numBytesReceived); //decode from stream to ASCII
                     string[] messageArgArr = textReceived.Split(StringSeparators, StringSplitOptions.None);
-                    textReceived = DecrpytBase64ToString(messageArgArr[1], user.key, Convert.FromBase64String(messageArgArr[0]));
+                    try {
+                        textReceived = DecrpytBase64ToString(messageArgArr[1], user.key, Convert.FromBase64String(messageArgArr[0]));
+                    } catch (Exception e) {
+                        Console.Write(e);
+                        return;
+                    }
                     messageArgArr = textReceived.Split(StringSeparators, StringSplitOptions.None);
                     Console.WriteLine(textReceived);
                     if (messageArgArr[0].Equals("code")) {
@@ -293,7 +302,12 @@ namespace MythosServer {
             }
             string textReceived = Encoding.ASCII.GetString(buffer, 0, numBytesReceived); //decode from stream to ASCII
             string[] messageArgArr = textReceived.Split(StringSeparators, StringSplitOptions.None);
-            textReceived = DecrpytBase64ToString(messageArgArr[1], key, Convert.FromBase64String(messageArgArr[0]));
+            try {
+                textReceived = DecrpytBase64ToString(messageArgArr[1], key, Convert.FromBase64String(messageArgArr[0]));
+            } catch (Exception e) {
+                Console.Write(e);
+                return null;
+            }
             messageArgArr = textReceived.Split(StringSeparators, StringSplitOptions.None);
             if (!messageArgArr[0].Equals("password", StringComparison.OrdinalIgnoreCase))
                 return null;
@@ -305,7 +319,8 @@ namespace MythosServer {
             }
             return null;
         }
-        private static void GetDeckNames(User user) {
+        private static void GetDeckNames(User user) //returns list of all decks belonging to a user, in format <deckname>\r\n...
+        { 
             Console.WriteLine("Entered Deck Name Retrieval");
             using SqliteConnection connection = new SqliteConnection("Data Source=Mythos.db");
             lock (SQLLock) {
@@ -322,15 +337,17 @@ namespace MythosServer {
                 connection.Close();
             }
         }
-        private static void GetDeckContent(User user, string deckname) {
+        private static void GetDeckContent(User user, string deckname) //takes user and deckname, and retrieves deck content, returns as csv of ints
+        {
             Console.WriteLine("Entered Deck Content Retrieval");
             using SqliteConnection connection = new SqliteConnection("Data Source=Mythos.db");
             lock (SQLLock) {
                 connection.Open();
                 SqliteCommand command = connection.CreateCommand();
-                command.CommandText = @"SELECT d.Deck FROM Deck d, User u WHERE @us = u.Username AND u.Username = d.Username";
+                command.CommandText = @"SELECT d.Deck FROM Deck d, User u WHERE @us = u.Username AND u.Username = d.Username AND @dn = d.Deckname";
                 command.Parameters.AddWithValue("@us", user.Username);
-                String cards = "";
+                command.Parameters.AddWithValue("@dn", deckname);
+                string cards = "";
                 using (SqliteDataReader reader = command.ExecuteReader())
                     while (reader.Read())
                         cards = reader.GetString(0);
@@ -338,7 +355,8 @@ namespace MythosServer {
                 connection.Close();
             }
         }
-        private static void SaveDeckContent(User user, string deckname, string deck) {
+        private static void SaveDeckContent(User user, string deckname, string deck) //takes user, deckname, and deck (formatted as csv ints) and stores them in the database
+        {
             Console.WriteLine("Entered Deck Saving...");
             using SqliteConnection connection = new SqliteConnection("Data Source=Mythos.db");
             lock (SQLLock) {
@@ -352,55 +370,56 @@ namespace MythosServer {
                 connection.Close();
             }
         }
-        private static void HandleDisconnect(User? user) {
+        private static void HandleDisconnect(User? user)  //Takes in a user, removes from matchmaking and user list, prints status
+        {
             if (user != null) {
-                MatchmakingUsers.Remove(user);
+                lock (MatchmakingLock)
+                    MatchmakingUsers.Remove(user);
                 Users.Remove(user);
             }
             PrintConnections();
         }
-        private static byte[] EncryptStringToBase64Bytes(string plainText, byte[] key) {
-            if (plainText == null || plainText.Length <= 0)
-                throw new ArgumentNullException("plainText");
+        private static byte[] EncryptStringToBase64Bytes(string plainText, byte[] key) //takes in plaintext and AES key, return string formatted as <IV>\r\n<Base64 Encoded Encrypted message>
+        {
             byte[] encrypted;
             string Base64IV;
             using (Aes aes = Aes.Create()) {
                 aes.Key = key;
                 Base64IV = Convert.ToBase64String(aes.IV) + "\r\n";
                 ICryptoTransform encryptor = aes.CreateEncryptor(aes.Key, aes.IV);
-                using (MemoryStream msEncrypt = new MemoryStream()) {
+                using (MemoryStream msEncrypt = new MemoryStream())
                     using (CryptoStream csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write)) {
-                        using (StreamWriter swEncrypt = new StreamWriter(csEncrypt)) {
+                        using (StreamWriter swEncrypt = new StreamWriter(csEncrypt))
                             swEncrypt.Write(plainText);
-                        }
                         encrypted = msEncrypt.ToArray();
                     }
-                }
             }
             return Encoding.ASCII.GetBytes(Base64IV + Convert.ToBase64String(encrypted));
         }
-        private static string DecrpytBase64ToString(string cipherText, byte[] key, byte[] IV) {
-            byte[] cipherBytes = Convert.FromBase64String(cipherText);
-            if (cipherText == null || cipherText.Length <= 0)
-                throw new ArgumentNullException("cipherText");
-
+        private static string DecrpytBase64ToString(string cipherText, byte[] key, byte[] IV) //Takes in encrypted text in Base64, decrypts it to a string using a provided key and IV
+        {
+            byte[] cipherBytes;
+            try {
+               cipherBytes = Convert.FromBase64String(cipherText);
+            } catch (Exception e) {
+                Console.Write(e);
+                return "";
+            }
             string? plaintext = null;
             using (Aes aes = Aes.Create()) {
                 aes.Key = key;
                 aes.IV = IV;
                 ICryptoTransform decryptor = aes.CreateDecryptor(aes.Key, aes.IV);
-                using (MemoryStream msDecrypt = new MemoryStream(cipherBytes)) {
-                    using (CryptoStream csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read)) {
-                        using (StreamReader srDecrypt = new StreamReader(csDecrypt)) {
+                using (MemoryStream msDecrypt = new MemoryStream(cipherBytes))
+                    using (CryptoStream csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
+                        using (StreamReader srDecrypt = new StreamReader(csDecrypt))
                             plaintext = srDecrypt.ReadToEnd();
-                        }
-                    }
-                }
             }
             return plaintext;
         }
     }
-    class User {
+    class User 
+    {
         public Socket socket;
         public byte[] key;
         public readonly string Username;
@@ -408,7 +427,8 @@ namespace MythosServer {
         public Match? Match = null;
         public User(string u, int sk, Socket s, byte[] k) { Username = u; Skill = sk; socket = s; key = k; }
     }
-    class Match {
+    class Match 
+    {
         public User Host;
         public User Client;
         public string Hostoutcome = "";
