@@ -16,7 +16,6 @@ public class DeckEditor : MonoBehaviour
     #endregion
 
     public new string name;
-    public List<int> owned = new List<int>();
     public List<int> deckID = new List<int>();
     public Card[] cards;
 
@@ -37,16 +36,25 @@ public class DeckEditor : MonoBehaviour
         Resize();
 
         EraseData(); // clear table
+<<<<<<< Updated upstream
         cards = Resources.FindObjectsOfTypeAll(typeof(Card)) as Card[];
         MythosClient.OnDeckContentLoaded += LoadDeckContentHandler;
         MythosClient.instance.OnRetrieveDeckContent(name);     
-
-        // load deck first before create SelectCl and selectDl
-        // Create SelectDL from the loaded deck
+=======
+        cards = Resources.LoadAll<Card>("/");
+        StartCoroutine(GetContent()); // 
+        
+>>>>>>> Stashed changes
 
         for (int i = 0; i < cards.Length; i++)
             CreateCard(cards[i]);
 
+    }
+    private void Update()
+    {
+        Resize();
+        if (Input.GetKeyDown(KeyCode.S))
+            ButtonSave();
     }
 
     void ResizeCL()
@@ -101,20 +109,16 @@ public class DeckEditor : MonoBehaviour
     SelectCL CreateCard(Card card)
     {
         GameObject selector = new GameObject("Card " + card.name, typeof(Image), typeof(SelectCL));
-        selector.transform.parent = cardList;
+        selector.transform.SetParent(cardList);
 
         SelectCL selectCL = selector.GetComponent<SelectCL>();
         selector.GetComponent<Image>().sprite = card.cardArt; // setup art
         selectCL.card = card; // cash selectCL
 
-        int count = 0; 
-        for (int i = 0; i < owned.Count; i++) // go through players owned cards
-            if (card.ID == owned[i]) count++; // add count if it is the same
-        for (int i = 0; i < deckID.Count; i++) // go through deck
-            if (deckID[i] == card.ID) // remove count if card is in deck
-                count--;
-        selectCL.owned = count;
-
         return selectCL;
+    }
+    public void ButtonSave()
+    {
+        MythosClient.instance.OnSaveDeck(name, deckID.ToArray());
     }
 }

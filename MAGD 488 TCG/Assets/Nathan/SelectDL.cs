@@ -9,9 +9,13 @@ public class SelectDL : MonoBehaviour, IPointerClickHandler
     {
         if (eventData.button == PointerEventData.InputButton.Left)
         {
-            card.owned++;
-            DeckEditor.instance.deckID.Remove(card.card.ID);
-            Destroy(gameObject);
+            card.count--;
+
+            if (card.count == 0)
+            {
+                DeckEditor.instance.deckID.Remove(card.card.ID);
+                Destroy(gameObject);
+            }
         }
     }
 }
