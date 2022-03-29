@@ -36,15 +36,10 @@ public class DeckEditor : MonoBehaviour
         Resize();
 
         EraseData(); // clear table
-<<<<<<< Updated upstream
+
         cards = Resources.FindObjectsOfTypeAll(typeof(Card)) as Card[];
         MythosClient.OnDeckContentLoaded += LoadDeckContentHandler;
         MythosClient.instance.OnRetrieveDeckContent(name);     
-=======
-        cards = Resources.LoadAll<Card>("/");
-        StartCoroutine(GetContent()); // 
-        
->>>>>>> Stashed changes
 
         for (int i = 0; i < cards.Length; i++)
             CreateCard(cards[i]);
