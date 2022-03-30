@@ -4,20 +4,5 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes:
-  - enabled: 1
-    path: Assets/Scenes/Login.unity
-    guid: a0ee9211f9c1ef64182f86af8c587556
-  - enabled: 1
-    path: Assets/Scenes/Menu.unity
-    guid: e96f90c0e15119543be2d3785da9ebde
-  - enabled: 1
-    path: Assets/Scenes/Game.unity
-    guid: 2fd280fb8e4470643b46fad57c9a0c17
-<<<<<<< Updated upstream
-=======
-  - enabled: 1
-    path: Assets/Scenes/Menu.unity
-    guid: e96f90c0e15119543be2d3785da9ebde
->>>>>>> Stashed changes
+  m_Scenes: []
   m_configObjects: {}

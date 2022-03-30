@@ -77,23 +77,19 @@ public class GameManager : MonoBehaviour
     }
 
     public void DrawTopCard(List<Card> deck) {
-
-        //draw bottom card == list[0]
-
         myHand.myCards.Add(deck[0]);
         deck.RemoveAt(0);
     }
 
     public void DrawRandomCard(List<Card> deck) {
-        //draw random card
         int rand = rng.Next(deck.Count);
-
         myHand.myCards.Add(deck[rand]);
         deck.RemoveAt(rand);
     }
 
-    public Token NewToken(Card card) {
+    public Token NewToken(int cardID) {
         Token token = new Token();
+        Card card = deck.Find(c => c.ID == cardID);
         if(card.type == cardType.creature) {
             Creature c = (Creature)card;
             token.currentHealth = c.defaultHealthAmount;
@@ -105,9 +101,9 @@ public class GameManager : MonoBehaviour
 
         return token;
     }
-    public void PlaceCard(bool isHost, Card card, int x, int y) {
+    public void PlaceCard(bool isHost, int cardID, int x, int y) {
         //make a token
-        Token token = NewToken(card);
+        Token token = NewToken(cardID);
         
         if (isHost) {
             hostBoard[x][y].token = token;
@@ -139,6 +135,8 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void DeleteToken(Tile tile) {
         tile.token = null;
+        //token SHOULD be gameObject?
+        //tile.token.Destroy();
     }
 
     public void OnNextTurnPressed() {
