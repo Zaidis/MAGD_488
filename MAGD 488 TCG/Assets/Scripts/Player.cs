@@ -41,10 +41,10 @@ public class Player : NetworkBehaviour {
     public void PlaceCard(int cardID, int x, int y) { //<----- NEEDS TO CALL THIS
         if (_networkManager.IsHost) {
             GameManager.Singleton.PlaceCard(true, cardID, x, y);
-            //UpdatePlaceCardClientRpc(x, y, card);
+            UpdatePlaceCardClientRpc(x, y, cardID);
         } else {
             GameManager.Singleton.PlaceCard(false, cardID, x, y);
-            //UpdatePlaceCardServerRpc(x, y, card);
+            UpdatePlaceCardServerRpc(x, y, cardID);
         }
     }
    
@@ -62,7 +62,8 @@ public class Player : NetworkBehaviour {
     private void UpdatePlaceCardClientRpc(int x, int y, int cardID) {
         GameManager.Singleton.PlaceCard(true, cardID, x, y);
     }
-    #endregion
+    #endregion*/
+    
     #region Attacking
     [ServerRpc]
     private void UpdateAttackServerRpc(bool isHostTurn) {

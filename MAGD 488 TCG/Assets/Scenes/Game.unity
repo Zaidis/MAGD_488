@@ -1610,6 +1610,10 @@ MonoBehaviour:
   NextTurn: {fileID: 1366161666}
   IsHostTurn: 1
   yourName: 
+  myHand:
+    myCards: []
+  deck: []
+  TokenPrefab: {fileID: 1263412054170208604, guid: d1a577df298e8e44697c7d48b3e1907e, type: 3}
 --- !u!1 &7259119635421666369
 GameObject:
   m_ObjectHideFlags: 0

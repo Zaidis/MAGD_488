@@ -23,6 +23,8 @@ public class GameManager : MonoBehaviour
     public Hand myHand;
     public List<Card> deck;
 
+    [SerializeField] private GameObject TokenPrefab;
+
     public Tile[][] hostBoard;
     public Tile[][] clientBoard;
     private void Start() {
@@ -64,8 +66,7 @@ public class GameManager : MonoBehaviour
     /// Shuffles the deck. 
     /// </summary>
     /// <param name="deck"></param>
-    public void ShuffleDeck(List<Card> deck) { 
-        
+    public void ShuffleDeck(List<Card> deck) {         
         int n = deck.Count;
         while (n > 1) {
             n--;
@@ -102,17 +103,13 @@ public class GameManager : MonoBehaviour
         return token;
     }
     public void PlaceCard(bool isHost, int cardID, int x, int y) {
-        //make a token
-        Token token = NewToken(cardID);
-        
+        Token token = NewToken(cardID);        
         if (isHost) {
-            hostBoard[x][y].token = token;
-            
+            hostBoard[x][y].token = token;            
         } else {
             clientBoard[x][y].token = token;
         }
     }
-
     public void Attack(int x1, int y1, int x2, int y2) {
 
         if (_networkManager.IsHost) {
@@ -134,9 +131,8 @@ public class GameManager : MonoBehaviour
     /// Called when a token has died / ran out of health.
     /// </summary>
     public void DeleteToken(Tile tile) {
+        Destroy(tile.token.gameObject);
         tile.token = null;
-        //token SHOULD be gameObject?
-        //tile.token.Destroy();
     }
 
     public void OnNextTurnPressed() {
