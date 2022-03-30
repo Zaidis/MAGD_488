@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2db2d717dcd6e2f44a7a68b7f4c0c9a4, type: 3}
+  m_Name: Leandro (Half-Pegasus)
+  m_EditorClassIdentifier: 
+  ID: 4001
+  type: 0
+  manaCost: 7
+  cardName: Leandro (Half-Pegasus)
+  cardArt: {fileID: 0}
+  description: "4 Mana:Perm Buff Self or Ally: +1/+2\n need Parry"
+  defaultHealthAmount: 5
+  defaultPowerAmount: 7
+  myAttributes: 00000000
