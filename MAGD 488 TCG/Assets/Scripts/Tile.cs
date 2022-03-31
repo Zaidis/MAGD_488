@@ -4,5 +4,5 @@ using UnityEngine;
 
 
 public class Tile : MonoBehaviour {
-    public Token token;
+    public GameObject token;
 }

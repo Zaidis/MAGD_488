@@ -43,6 +43,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb66a9f523a05e5459a5defee2d7dfa0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  card: {fileID: 0}
   currentHealth: 0
   currentAttack: 0
   currentManaCost: 0

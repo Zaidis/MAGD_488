@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour
 
     public Hand myHand;
     public List<Card> deck;
+    private List<Card> cards;
 
     [SerializeField] private GameObject TokenPrefab;
 
@@ -31,7 +32,10 @@ public class GameManager : MonoBehaviour
         _networkManager = NetworkManager.Singleton;
         if (!_networkManager.IsClient && !_networkManager.IsServer && !_networkManager.IsHost)
             _networkManager.StartHost();
-        _singleton = this;        
+        _singleton = this;
+
+        cards = new List<Card>(Resources.FindObjectsOfTypeAll(typeof(Card)) as Card[]);
+
         TurnStatus = GameObject.Find("TurnStatus").GetComponent<TextMeshProUGUI>();
         NextTurn = GameObject.Find("NextTurn").GetComponent<Button>();
         if (_networkManager.IsHost) {
@@ -88,22 +92,16 @@ public class GameManager : MonoBehaviour
         deck.RemoveAt(rand);
     }
 
-    public Token NewToken(int cardID) {
-        Token token = new Token();
-        Card card = deck.Find(c => c.ID == cardID);
-        if(card.type == cardType.creature) {
-            Creature c = (Creature)card;
-            token.currentHealth = c.defaultHealthAmount;
-            token.currentAttack = c.defaultPowerAmount;
-        } else if(card.type == cardType.artifact) {
-            Artifact a = (Artifact)card;
-            token.currentHealth = a.defaultHealthAmount;
-        }
-
-        return token;
+    public GameObject NewToken(int cardID) {        
+        Card card = cards.Find(c => c.ID == cardID);
+        GameObject tokenObject = Instantiate(TokenPrefab);
+        Token token = tokenObject.GetComponent<Token>();
+        token.card = card;
+        token.ApplyCard();
+        return tokenObject;
     }
     public void PlaceCard(bool isHost, int cardID, int x, int y) {
-        Token token = NewToken(cardID);        
+        GameObject token = NewToken(cardID);        
         if (isHost) {
             hostBoard[x][y].token = token;            
         } else {
@@ -111,28 +109,16 @@ public class GameManager : MonoBehaviour
         }
     }
     public void Attack(int x1, int y1, int x2, int y2) {
-
         if (_networkManager.IsHost) {
-
-            Token t_one = hostBoard[x1][y1].token;
-            Token t_two = clientBoard[x2][y2].token;
+            Token t_one = hostBoard[x1][y1].token.GetComponent<Token>();
+            Token t_two = clientBoard[x2][y2].token.GetComponent<Token>();
 
             t_one.currentHealth -= t_two.currentAttack;
             t_two.currentHealth -= t_one.currentAttack;
 
-            if (t_one.currentHealth <= 0) DeleteToken(hostBoard[x1][y1]);
-            if (t_two.currentHealth <= 0) DeleteToken(clientBoard[x2][y2]);
-
+            if (t_one.currentHealth <= 0) Destroy(hostBoard[x1][y1].token);
+            if (t_two.currentHealth <= 0) Destroy(clientBoard[x2][y2].token);
         }
-
-    }
-
-    /// <summary>
-    /// Called when a token has died / ran out of health.
-    /// </summary>
-    public void DeleteToken(Tile tile) {
-        Destroy(tile.token.gameObject);
-        tile.token = null;
     }
 
     public void OnNextTurnPressed() {
