@@ -43,6 +43,7 @@ public class MythosClient : MonoBehaviour {
     public GameObject LoginPanel;
     public GameObject ConnectingPanel;
     [SerializeField] private string menuScene;
+    [SerializeField] private string gameScene;
 
     public static event Action<List<string>> OnDecknamesLoaded;
     public static event Action<List<int>> OnDeckContentLoaded;
@@ -135,14 +136,14 @@ public class MythosClient : MonoBehaviour {
                 syncFunctions.Enqueue(() => {
                     var (ipv4address, port, allocationIdBytes, connectionData, key, joinCode) = serverOutcome;
                     NetworkManager.Singleton.GetComponent<UnityTransport>().SetHostRelayData(ipv4address, port, allocationIdBytes, key, connectionData, true);
-                    SceneManager.LoadScene(menuScene);                    
+                    SceneManager.LoadScene(gameScene);                    
                 });
             } else if (messageArgArr[0].Equals("connect", StringComparison.OrdinalIgnoreCase)) {
                 var clientOutcome = await JoinRelayServerFromJoinCode(messageArgArr[1]);
                 opponentUserName = messageArgArr[2];
                 syncFunctions.Enqueue(() => {
                     var (ipv4address, port, allocationIdBytes, connectionData, hostConnectionData, key) = clientOutcome;
-                    SceneManager.LoadScene(menuScene);
+                    SceneManager.LoadScene(gameScene);
                     NetworkManager.Singleton.GetComponent<UnityTransport>().SetClientRelayData(ipv4address, port, allocationIdBytes, key, connectionData, hostConnectionData, true);
                     NetworkManager.Singleton.StartClient();
                 });
