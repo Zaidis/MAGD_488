@@ -94,10 +94,10 @@ public class GameManager : MonoBehaviour
 
     public GameObject NewToken(int cardID) {        
         Card card = cards.Find(c => c.ID == cardID);
-        GameObject tokenObject = Instantiate(TokenPrefab);
-        Token token = tokenObject.GetComponent<Token>();
+        GameObject tokenObject = Instantiate(TokenPrefab); //TODO Implement type detection and instantiation of proper class, indi. sub prefabs
+        /*Token token = tokenObject.GetComponent<Token>();
         token.card = card;
-        token.ApplyCard();
+        token.ApplyCard();*/
         return tokenObject;
     }
     public void PlaceCard(bool isHost, int cardID, int x, int y) {
@@ -110,8 +110,8 @@ public class GameManager : MonoBehaviour
     }
     public void Attack(int x1, int y1, int x2, int y2) {
         if (_networkManager.IsHost) {
-            Token t_one = hostBoard[x1 + y1 * 5].token.GetComponent<Token>();
-            Token t_two = clientBoard[x2 + y2 * 5].token.GetComponent<Token>();
+            CreatureToken t_one = hostBoard[x1 + y1 * 5].token.GetComponent<CreatureToken>();
+            CreatureToken t_two = clientBoard[x2 + y2 * 5].token.GetComponent<CreatureToken>();
 
             t_one.currentHealth -= t_two.currentAttack;
             t_two.currentHealth -= t_one.currentAttack;
