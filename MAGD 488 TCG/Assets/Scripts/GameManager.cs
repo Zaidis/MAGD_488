@@ -26,8 +26,8 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private GameObject TokenPrefab;
 
-    public Tile[][] hostBoard;
-    public Tile[][] clientBoard;
+    public Tile[] hostBoard = new Tile[2*5];
+    public Tile[] clientBoard = new Tile[2*5];
     private void Start() {
         _networkManager = NetworkManager.Singleton;
         if (!_networkManager.IsClient && !_networkManager.IsServer && !_networkManager.IsHost)
@@ -103,21 +103,21 @@ public class GameManager : MonoBehaviour
     public void PlaceCard(bool isHost, int cardID, int x, int y) {
         GameObject token = NewToken(cardID);        
         if (isHost) {
-            hostBoard[x][y].token = token;            
+            hostBoard[x + y * 5].SetToken(token);         
         } else {
-            clientBoard[x][y].token = token;
+            clientBoard[x + y * 5].SetToken(token);
         }
     }
     public void Attack(int x1, int y1, int x2, int y2) {
         if (_networkManager.IsHost) {
-            Token t_one = hostBoard[x1][y1].token.GetComponent<Token>();
-            Token t_two = clientBoard[x2][y2].token.GetComponent<Token>();
+            Token t_one = hostBoard[x1 + y1 * 5].token.GetComponent<Token>();
+            Token t_two = clientBoard[x2 + y2 * 5].token.GetComponent<Token>();
 
             t_one.currentHealth -= t_two.currentAttack;
             t_two.currentHealth -= t_one.currentAttack;
 
-            if (t_one.currentHealth <= 0) Destroy(hostBoard[x1][y1].token);
-            if (t_two.currentHealth <= 0) Destroy(clientBoard[x2][y2].token);
+            if (t_one.currentHealth <= 0) Destroy(hostBoard[x1 + y1 * 5].token);
+            if (t_two.currentHealth <= 0) Destroy(clientBoard[x2 + y2 * 5].token);
         }
     }
 
