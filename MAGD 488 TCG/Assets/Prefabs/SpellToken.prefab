@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1263412054170208603}
-  - component: {fileID: 2716682689601953178}
+  - component: {fileID: 8963149844197397757}
   m_Layer: 0
-  m_Name: Token
+  m_Name: SpellToken
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32,7 +32,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2716682689601953178
+--- !u!114 &8963149844197397757
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,17 +41,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 1263412054170208604}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fb66a9f523a05e5459a5defee2d7dfa0, type: 3}
+  m_Script: {fileID: 11500000, guid: a86e1909c4c0c1f4eb2633bfc3556f58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   currentHealth: 0
-  currentAttack: 0
-  card: {fileID: 0}
   Name: {fileID: 0}
   Description: {fileID: 0}
-  Attack: {fileID: 0}
   Mana: {fileID: 0}
   Art: {fileID: 0}
+  spell: {fileID: 0}
 --- !u!1 &8603571540700058598
 GameObject:
   m_ObjectHideFlags: 0

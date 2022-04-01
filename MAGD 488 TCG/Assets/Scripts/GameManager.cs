@@ -24,7 +24,9 @@ public class GameManager : MonoBehaviour
     public List<Card> deck;
     private List<Card> cards;
 
-    [SerializeField] private GameObject TokenPrefab;
+    [SerializeField] private GameObject CreatureTokenPrefab;
+    [SerializeField] private GameObject SpellTokenPrefab;
+    [SerializeField] private GameObject ArtifactTokenPrefab;
 
     public Tile[] hostBoard = new Tile[2*5];
     public Tile[] clientBoard = new Tile[2*5];
@@ -92,12 +94,26 @@ public class GameManager : MonoBehaviour
         deck.RemoveAt(rand);
     }
 
-    public GameObject NewToken(int cardID) {        
+    public GameObject NewToken(int cardID) //Creates Token based on card type and return gameObject
+    {        
         Card card = cards.Find(c => c.ID == cardID);
-        GameObject tokenObject = Instantiate(TokenPrefab); //TODO Implement type detection and instantiation of proper class, indi. sub prefabs
-        /*Token token = tokenObject.GetComponent<Token>();
-        token.card = card;
-        token.ApplyCard();*/
+        GameObject tokenObject = null;
+        if (card.GetType() == typeof(Creature)) {
+            tokenObject = Instantiate(CreatureTokenPrefab);
+            CreatureToken creatureToken = tokenObject.GetComponent<CreatureToken>();
+            creatureToken.creature = (Creature)card;
+            creatureToken.ApplyCard();
+        } else if (card.GetType() == typeof(Spell)) {
+            tokenObject = Instantiate(SpellTokenPrefab);
+            SpellToken spellToken = tokenObject.GetComponent<SpellToken>();
+            spellToken.spell = (Spell)card;
+            spellToken.ApplyCard();
+        } else if (card.GetType() == typeof(Artifact)) {
+            tokenObject = Instantiate(ArtifactTokenPrefab);
+            ArtifactToken artifactToken = tokenObject.GetComponent<ArtifactToken>();
+            artifactToken.artifact = (Artifact)card;
+            artifactToken.ApplyCard();
+        }
         return tokenObject;
     }
     public void PlaceCard(bool isHost, int cardID, int x, int y) {

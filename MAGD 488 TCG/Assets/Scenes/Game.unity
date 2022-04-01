@@ -3155,7 +3155,9 @@ MonoBehaviour:
   myHand:
     myCards: []
   deck: []
-  TokenPrefab: {fileID: 1263412054170208604, guid: d1a577df298e8e44697c7d48b3e1907e, type: 3}
+  CreatureTokenPrefab: {fileID: 1263412054170208604, guid: d1a577df298e8e44697c7d48b3e1907e, type: 3}
+  SpellTokenPrefab: {fileID: 1263412054170208604, guid: 7e77b64bfaaea4647b204e79eaf2cf95, type: 3}
+  ArtifactTokenPrefab: {fileID: 1263412054170208604, guid: 1998d7a45e48ccd4f8868492be46c807, type: 3}
   hostBoard:
   - {fileID: 5745541205987007207}
   - {fileID: 2018490810}
