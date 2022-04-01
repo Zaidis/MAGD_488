@@ -127,6 +127,7 @@ public class GameManager : MonoBehaviour
     public void Attack(int x1, int y1, int x2, int y2) {
         if (_networkManager.IsHost) {
             CreatureToken t_one = hostBoard[x1 + y1 * 5].token.GetComponent<CreatureToken>();
+            t_one.OnAttack(hostBoard, clientBoard, new Vector2Int(x1, y1), new Vector2Int(x2, y2), true);
             CreatureToken t_two = clientBoard[x2 + y2 * 5].token.GetComponent<CreatureToken>();
 
             t_one.currentHealth -= t_two.currentAttack;
