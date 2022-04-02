@@ -9,5 +9,9 @@ public class Creature : Card
     public int defaultHealthAmount;
     public int defaultPowerAmount; //attack damage
     public List<attributes> myAttributes;
-    public ScripableAction OnAttack;
+
+    public virtual void OnAttack(Tile[] hostBoard, Tile[] clientBoard, Vector2Int attacker, Vector2Int attacked, bool isHost)
+    {
+
+    }
 }

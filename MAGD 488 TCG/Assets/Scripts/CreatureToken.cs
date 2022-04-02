@@ -15,8 +15,5 @@ public class CreatureToken : Token
         Description.text = creature.description;
         Mana.text = creature.manaCost.ToString();
         Art = creature.cardArt;
-    }
-    public void OnAttack(Tile[] hostBoard, Tile[] clientBoard, Vector2Int attacker, Vector2Int attacked, bool isHost) {
-        creature.OnAttack.Action(hostBoard, clientBoard, attacker, attacked, isHost);
-    }
+    }    
 }

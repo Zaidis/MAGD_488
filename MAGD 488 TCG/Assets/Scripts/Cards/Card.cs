@@ -12,5 +12,5 @@ public abstract class Card : ScriptableObject
     public Sprite cardArt;
 
     [TextArea()]
-    public string description;
+    public string description;    
 }

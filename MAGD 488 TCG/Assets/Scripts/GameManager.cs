@@ -98,20 +98,20 @@ public class GameManager : MonoBehaviour
     {        
         Card card = cards.Find(c => c.ID == cardID);
         GameObject tokenObject = null;
-        if (card.GetType() == typeof(Creature)) {
+        if (card is Creature creature) {
             tokenObject = Instantiate(CreatureTokenPrefab);
             CreatureToken creatureToken = tokenObject.GetComponent<CreatureToken>();
-            creatureToken.creature = (Creature)card;
+            creatureToken.creature = creature;
             creatureToken.ApplyCard();
-        } else if (card.GetType() == typeof(Spell)) {
+        } else if (card is Spell spell) {
             tokenObject = Instantiate(SpellTokenPrefab);
             SpellToken spellToken = tokenObject.GetComponent<SpellToken>();
-            spellToken.spell = (Spell)card;
+            spellToken.spell = spell;
             spellToken.ApplyCard();
-        } else if (card.GetType() == typeof(Artifact)) {
+        } else if (card is Artifact artifact) {
             tokenObject = Instantiate(ArtifactTokenPrefab);
             ArtifactToken artifactToken = tokenObject.GetComponent<ArtifactToken>();
-            artifactToken.artifact = (Artifact)card;
+            artifactToken.artifact = artifact;
             artifactToken.ApplyCard();
         }
         return tokenObject;
@@ -127,7 +127,7 @@ public class GameManager : MonoBehaviour
     public void Attack(int x1, int y1, int x2, int y2) {
         if (_networkManager.IsHost) {
             CreatureToken t_one = hostBoard[x1 + y1 * 5].token.GetComponent<CreatureToken>();
-            t_one.OnAttack(hostBoard, clientBoard, new Vector2Int(x1, y1), new Vector2Int(x2, y2), true);
+            t_one.creature.OnAttack(hostBoard, clientBoard, new Vector2Int(x1, y1), new Vector2Int(x2, y2), true);
             CreatureToken t_two = clientBoard[x2 + y2 * 5].token.GetComponent<CreatureToken>();
 
             t_one.currentHealth -= t_two.currentAttack;
