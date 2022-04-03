@@ -1,10 +1,9 @@
 using UnityEngine;
-
-[CreateAssetMenu(fileName = "Card", menuName = "New Creature/Witch")]
-public class Witch : Creature
+[CreateAssetMenu(menuName = "New Creature/Svanhvit", fileName = "Card")]
+public class Svanhvit : Creature
 {
     public override void OnAbility(Tile[] hostBoard, Tile[] clientBoard, Vector2Int attacker, Vector2Int attacked, bool isHost)
     {
-        //buff/big buff if hunger creature - 3 mana cost
+        //Rage +1/-1 perm - 3mana
     }
 }

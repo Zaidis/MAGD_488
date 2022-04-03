@@ -4,6 +4,6 @@ public class NightmareDemon : Creature
 {
     public override void OnAbility(Tile[] hostBoard, Tile[] clientBoard, Vector2Int attacker, Vector2Int attacked, bool isHost)
     {
-        //self-buff add thorns for the next 2 turns
+        //self-buff add thorns for the next 2 turns + -2/0 - 2 mana cost
     }
 }
