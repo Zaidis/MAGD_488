@@ -6,5 +6,4 @@ public enum attributes {
     melee, 
     ranged, 
     passive,
-
 }

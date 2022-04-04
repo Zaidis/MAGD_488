@@ -29,6 +29,7 @@ public class Menu : MonoBehaviour
 
     public void ButtonPlay()
     {
+        MythosClient.instance.OnMatchMake();
         SetFalse();
         play.SetActive(true);
     }

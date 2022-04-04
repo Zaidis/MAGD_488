@@ -90,15 +90,14 @@ namespace MythosServer {
             }
             #endregion
             for (; ; ) {
-                #region check connection & recieve input
-                Thread.Sleep(1);                
+                PrintConnections();
+                #region check connection & recieve input             
                 if (!Users.Any(u => u.socket == handler) && user != null) //Exits loop if user exists but is not in Users, or starts exit if handler is not connected
                     break;
                 if (!handler.Connected) {
                     HandleDisconnect(user);
                     break;
-                }
-                PrintConnections();                
+                }       
                 try {
                     numBytesReceived = handler.Receive(buffer);
                 } catch (SocketException e) {
@@ -130,11 +129,10 @@ namespace MythosServer {
                         handler.Send(NewUser(messageArgArr[1], messageArgArr[2], messageArgArr[3]) ? EncryptStringToBase64Bytes("creationgood\r\n", key) : EncryptStringToBase64Bytes("creationbad\r\n", key));
                 } else {
                     if (messageArgArr[0].Equals("matchmake", StringComparison.OrdinalIgnoreCase)) { //Adding connection to matchmaking queue
-                        lock (MatchmakingLock)
-                            if (!MatchmakingUsers.Contains(user!)) {
-                                MatchmakingUsers.Add(user!); //add struct which contains needed info to matchmaking list
-                                Matchmaking(user!);
-                            }
+                        if (!MatchmakingUsers.Contains(user!)) {
+                            MatchmakingUsers.Add(user!); //add struct which contains needed info to matchmaking list
+                            Matchmaking(user!);
+                        }
                     } else if (messageArgArr[0].Equals("outcome", StringComparison.OrdinalIgnoreCase))
                         MatchOutcome(messageArgArr[1], user!);
                     else if (messageArgArr[0].Equals("getdecknames", StringComparison.OrdinalIgnoreCase))

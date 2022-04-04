@@ -3500,6 +3500,7 @@ MonoBehaviour:
   LoginPanel: {fileID: 342686215}
   ConnectingPanel: {fileID: 461855541}
   menuScene: Menu
+  gameScene: Game
 --- !u!1 &1901932642
 GameObject:
   m_ObjectHideFlags: 0
