@@ -163,4 +163,10 @@ public class GameManager : MonoBehaviour
         public List<Card> myCards = new List<Card>();
 
     }
+
+    public void TestCardPlace(int x) {
+        System.Random rand = new System.Random();
+        Player player = _networkManager.SpawnManager.GetLocalPlayerObject().GetComponent<Player>();
+        player.PlaceCard(x, rand.Next(5), rand.Next(2));
+    }
 }
