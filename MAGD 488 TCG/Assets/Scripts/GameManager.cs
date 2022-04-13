@@ -88,9 +88,12 @@ public class GameManager : MonoBehaviour
         deck.RemoveAt(0);
     }
 
+
+
     public void DrawRandomCard(List<Card> deck) {
         int rand = rng.Next(deck.Count);
-        myHand.myCards.Add(deck[rand]);
+        //myHand.myCards.Add(deck[rand]);
+        myHand.AddCardToHand(deck[rand]);
         deck.RemoveAt(rand);
     }
 
@@ -156,17 +159,14 @@ public class GameManager : MonoBehaviour
         BeginGame();
     }
 
-
-    [System.Serializable]
-    public class Hand {
-
-        public List<Card> myCards = new List<Card>();
-
-    }
-
     public void TestCardPlace(int x) {
         System.Random rand = new System.Random();
         Player player = _networkManager.SpawnManager.GetLocalPlayerObject().GetComponent<Player>();
         player.PlaceCard(x, rand.Next(5), rand.Next(2));
     }
+
+    public void TestDrawCard(Card card) {
+        myHand.AddCardToHand(card);
+    }
+
 }
