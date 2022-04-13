@@ -1664,7 +1664,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &868277111
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1699,15 +1699,69 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cce5c56b4618ead40bf6885326d22d1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+<<<<<<< Updated upstream:MAGD 488 TCG/Assets/Nathan/Menu.unity
   deck:
     name: 0
     cards: 
   owned: 
   cards: []
+=======
+  name: 
+  deckID: 
+  cards:
+  - {fileID: 11400000, guid: dee0ffa23f606004291300b0bead9145, type: 2}
+  - {fileID: 11400000, guid: ad783c8f869550646adcbdf38386b482, type: 2}
+  - {fileID: 11400000, guid: 4237954620b4a3f4dbcc3548939549c7, type: 2}
+  - {fileID: 11400000, guid: 0c48bf90a4fccb243965675ecad0f31e, type: 2}
+  - {fileID: 11400000, guid: 184494aa2bfe788438b7c77504df8aec, type: 2}
+  - {fileID: 11400000, guid: 823ad697c96000340a4e8b035e8439b5, type: 2}
+  - {fileID: 11400000, guid: ca735471e53427c449cebd111698d28a, type: 2}
+  - {fileID: 11400000, guid: fab5adeae34a584419a1d285f728bfa3, type: 2}
+  - {fileID: 11400000, guid: 410db3d33b622ff44bdaa4f5eced08d3, type: 2}
+  - {fileID: 11400000, guid: d180b4925b74f134bb299608e86e92bf, type: 2}
+  - {fileID: 11400000, guid: 412376aad6d96c94b8ccc725a7f2af0d, type: 2}
+  - {fileID: 11400000, guid: c4306703a1105364094aaa4993ee6929, type: 2}
+  - {fileID: 11400000, guid: 939e87da29afacb4ea1c2f1a7c3c8b61, type: 2}
+  - {fileID: 11400000, guid: 39322187f1499dd41ad9d5b8ef732669, type: 2}
+  - {fileID: 11400000, guid: b7baae643b987324a9eafe544dacd050, type: 2}
+  - {fileID: 11400000, guid: 8234d7fb3be16a748b3b72b0214e87f8, type: 2}
+  - {fileID: 11400000, guid: 66c4ab0dcb63ac4488dbb8d9fb53b722, type: 2}
+  - {fileID: 11400000, guid: e77000a332a32544889bddcefd036fcb, type: 2}
+  - {fileID: 11400000, guid: 11c946102fac85249aa866d65039a8c8, type: 2}
+  - {fileID: 11400000, guid: 34c11dd0484770f4dbc7af55f5f74f02, type: 2}
+  - {fileID: 11400000, guid: 4c77b0f9de70f1c4087f056f95795f09, type: 2}
+  - {fileID: 11400000, guid: bb740359b4cee8e43bad2a6f8ea58fed, type: 2}
+  - {fileID: 11400000, guid: 0f899a12e443d674d8946739b13fbda8, type: 2}
+  - {fileID: 11400000, guid: 70d02cd2048839c4ea42f2b6c582e48f, type: 2}
+  - {fileID: 11400000, guid: 384e6e8dc4653fb4394b5cfe95ca8210, type: 2}
+  - {fileID: 11400000, guid: 1201bc0b7f13048429f4551f3e7e647c, type: 2}
+  - {fileID: 11400000, guid: 5a575f8b0f4eb5044a7d92a6f3c7d3de, type: 2}
+  - {fileID: 11400000, guid: 28ae0dce2e4be3c44b057e344074e4d8, type: 2}
+  - {fileID: 11400000, guid: 121250d1ec627ce4a8219d4f84ff8b26, type: 2}
+  - {fileID: 11400000, guid: f2c12f2e25bed9444888cec927dfc491, type: 2}
+  - {fileID: 11400000, guid: 9248c87438ac1d747a5489582dd98683, type: 2}
+  - {fileID: 11400000, guid: 75527105fab74094b8d7798cd8271124, type: 2}
+  - {fileID: 11400000, guid: 5cfbcaccc2ffb0a4e809a05b4ef41675, type: 2}
+  - {fileID: 11400000, guid: c0e4ee0d1ea404144b42ea7489801218, type: 2}
+  - {fileID: 11400000, guid: f0be8cc90003b8c47a3bbaa2520641ef, type: 2}
+  - {fileID: 11400000, guid: 31d1407a537ebed4f8d562a15b2fe5a4, type: 2}
+  - {fileID: 11400000, guid: 0f31c289ffea97c459e80083e5d550d8, type: 2}
+  - {fileID: 11400000, guid: 3c416f8b11f5ed34b9177bd019e28e8a, type: 2}
+  - {fileID: 11400000, guid: c511bfb13aa82f14ea84ed1851b04087, type: 2}
+  - {fileID: 11400000, guid: 38c757beebd34844a95d5e069e35e571, type: 2}
+  - {fileID: 11400000, guid: d49411c33da116c47a7111c7a2460450, type: 2}
+  - {fileID: 11400000, guid: 6b24cb383f7bfd24082c5b31b01355aa, type: 2}
+  - {fileID: 11400000, guid: 875ca823ad26bbd47a9a2c9da2b08b54, type: 2}
+  - {fileID: 11400000, guid: e0b0442256f5b2e408ce7a7cac31de3a, type: 2}
+  - {fileID: 11400000, guid: 9230186b2b0539b4c870b2d11604e0b2, type: 2}
+  - {fileID: 11400000, guid: 2ffed6c497df6c244b1cb7efa37d30a5, type: 2}
+  - {fileID: 11400000, guid: 4fc47315409da364288f4deeb9b5c7d7, type: 2}
+  - {fileID: 11400000, guid: 65ffd39d347619d498aab6df5af5efa3, type: 2}
+>>>>>>> Stashed changes:MAGD 488 TCG/Assets/Scenes/Menu.unity
   cardList: {fileID: 1674652385}
   deckList: {fileID: 2004786595}
-  columnCount: 3
-  padding: 20
+  columnCount: 5
+  padding: 10
   aspectRation: 1.4
 --- !u!222 &868277113
 CanvasRenderer:
@@ -2659,6 +2713,7 @@ GameObject:
   - component: {fileID: 1338535355}
   - component: {fileID: 1338535354}
   - component: {fileID: 1338535353}
+  - component: {fileID: 1338535356}
   m_Layer: 5
   m_Name: Scroll
   m_TagString: Untagged
@@ -2705,7 +2760,7 @@ MonoBehaviour:
   m_Elasticity: 0.1
   m_Inertia: 1
   m_DecelerationRate: 0.135
-  m_ScrollSensitivity: 1
+  m_ScrollSensitivity: 25
   m_Viewport: {fileID: 0}
   m_HorizontalScrollbar: {fileID: 0}
   m_VerticalScrollbar: {fileID: 0}
@@ -2754,6 +2809,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1338535351}
   m_CullTransparentMesh: 1
+--- !u!114 &1338535356
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1338535351}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ShowMaskGraphic: 1
 --- !u!1 &1356563083
 GameObject:
   m_ObjectHideFlags: 0
@@ -3012,7 +3080,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1468100636
 RectTransform:
   m_ObjectHideFlags: 0

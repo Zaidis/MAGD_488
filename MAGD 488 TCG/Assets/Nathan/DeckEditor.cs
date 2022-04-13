@@ -36,14 +36,22 @@ public class DeckEditor : MonoBehaviour
 
         EraseData();
 
+<<<<<<< Updated upstream
         // load cards
 
         // load deck first before create SelectCl and selectDl
         // Create SelectDL from the loaded deck
 
         for (int i = 0; i < cards.Count; i++)
+=======
+        Debug.Log("-");
+        cards = Resources.FindObjectsOfTypeAll(typeof(Card)) as Card[];
+        for (int i = 0; i < cards.Length; i++)
+>>>>>>> Stashed changes
             CreateCard(cards[i]);
 
+        MythosClient.OnDeckContentLoaded += LoadDeckContentHandler;
+        MythosClient.instance.OnRetrieveDeckContent(name);     
     }
 
     private void Update()
