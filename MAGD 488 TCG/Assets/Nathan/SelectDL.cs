@@ -17,5 +17,9 @@ public class SelectDL : MonoBehaviour, IPointerClickHandler
                 Destroy(gameObject);
             }
         }
+        if (eventData.button == PointerEventData.InputButton.Right)
+        {
+
+        }
     }
 }
