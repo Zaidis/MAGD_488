@@ -27,6 +27,7 @@ public class Hand : MonoBehaviour
         GameObject newCard = Instantiate(emptyCard, transform.position, Quaternion.identity);
 
         UICard c = newCard.GetComponent<UICard>();
+        c.ConjureCard(card);
         newCard.transform.parent = this.transform;
         newCard.GetComponent<Canvas>().sortingOrder = uiCards.Count;
         c.sortingOrder = uiCards.Count;

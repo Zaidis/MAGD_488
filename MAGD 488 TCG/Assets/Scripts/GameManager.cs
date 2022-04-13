@@ -26,17 +26,31 @@ public class GameManager : MonoBehaviour
     public List<Card> deck;
     private List<Card> cards;
 
-    [SerializeField] private GameObject CreatureTokenPrefab;
-    [SerializeField] private GameObject SpellTokenPrefab;
-    [SerializeField] private GameObject ArtifactTokenPrefab;
+    public GameObject CreatureTokenPrefab;
+    public GameObject SpellTokenPrefab;
+    public GameObject ArtifactTokenPrefab;
 
     public Tile[] hostBoard = new Tile[2*5];
     public Tile[] clientBoard = new Tile[2*5];
+
+    public int maxMana;
+    public int currentMana = 10;
+
+    public bool needsToSelectTile;
+    public Card selectedCard; //for placement and making a token
+
+    private void Awake() {
+        if(_singleton == null) {
+            _singleton = this;
+        } else {
+            Destroy(this);
+        }
+    }
+
     private void Start() {
         _networkManager = NetworkManager.Singleton;
         if (!_networkManager.IsClient && !_networkManager.IsServer && !_networkManager.IsHost)
             _networkManager.StartHost();
-        _singleton = this;
 
         cards = new List<Card>(Resources.LoadAll("", typeof(Card)).Cast<Card>().ToArray());
 
