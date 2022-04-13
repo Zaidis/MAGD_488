@@ -18,6 +18,10 @@ public class SelectCL : MonoBehaviour, IPointerClickHandler
                 count++;
             }
         }
+        if (eventData.button == PointerEventData.InputButton.Right)
+        {
+
+        }
     }
 
     void AddToDeck()

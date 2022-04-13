@@ -148,18 +148,22 @@ namespace MythosServer {
         private static void PrintConnections() //Print current connection statuses
         {
             Console.Clear();
-            if (Users.Count > 0) {
-                Console.WriteLine("Logged in Clients: ");
-                foreach (User user in Users)
-                    Console.WriteLine(user.socket.RemoteEndPoint + " : " + user.Username + " : Skill : " + user.Skill);
-            }
-            lock (MatchmakingLock) {
-                if (MatchmakingUsers.Count > 0) {
-                    Console.WriteLine("Matchmaking Clients: ");
-                    foreach (User user in MatchmakingUsers)
+            try {
+                if (Users.Count > 0) {
+                    Console.WriteLine("Logged in Clients: ");
+                    foreach (User user in Users)
                         Console.WriteLine(user.socket.RemoteEndPoint + " : " + user.Username + " : Skill : " + user.Skill);
                 }
-            }            
+                lock (MatchmakingLock) {
+                    if (MatchmakingUsers.Count > 0) {
+                        Console.WriteLine("Matchmaking Clients: ");
+                        foreach (User user in MatchmakingUsers)
+                            Console.WriteLine(user.socket.RemoteEndPoint + " : " + user.Username + " : Skill : " + user.Skill);
+                    }
+                }
+            } catch {
+                Console.WriteLine("User has been removed while printing!");
+            }                     
         }
         private static bool NewUser(string username, string salt, string hash) //Attempt to create a user based on passed username and password, return true for success, return false for failure
         {

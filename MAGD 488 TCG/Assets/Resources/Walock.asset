@@ -13,9 +13,8 @@ MonoBehaviour:
   m_Name: Walock
   m_EditorClassIdentifier: 
   ID: 1007
-  type: 0
   manaCost: 4
-  cardName: 
+  cardName: Walock
   cardArt: {fileID: 0}
   description: 
   defaultHealthAmount: 4

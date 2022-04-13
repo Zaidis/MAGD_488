@@ -12,13 +12,13 @@ public class Menu : MonoBehaviour
     [SerializeField] GameObject settings;
     [SerializeField] GameObject Editor;
 
-    private void Start() => SetFalse();
+    private void Start() => ButtonSetFalse();
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
-            SetFalse();
+            ButtonSetFalse();
     }
-    void SetFalse()
+    public void ButtonSetFalse()
     {
         play.SetActive(false);
         deck.SetActive(false);
@@ -30,22 +30,22 @@ public class Menu : MonoBehaviour
     public void ButtonPlay()
     {
         MythosClient.instance.OnMatchMake();
-        SetFalse();
+        ButtonSetFalse();
         play.SetActive(true);
     }
     public void ButtonDeck()
     {
-        SetFalse();
+        ButtonSetFalse();
         deck.SetActive(true);
     }
     public void ButtonSettings()
     {
-        SetFalse();
+        ButtonSetFalse();
         settings.SetActive(true);
     }
     public void OpenEditor()
     {
-        SetFalse();
+        ButtonSetFalse();
         Editor.SetActive(true);
     }
     public void ButtonExit()

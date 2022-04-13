@@ -5,6 +5,8 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using System.Linq;
+
 public class GameManager : MonoBehaviour
 {
     private static System.Random rng = new System.Random();
@@ -36,7 +38,7 @@ public class GameManager : MonoBehaviour
             _networkManager.StartHost();
         _singleton = this;
 
-        cards = new List<Card>(Resources.FindObjectsOfTypeAll(typeof(Card)) as Card[]);
+        cards = new List<Card>(Resources.LoadAll("", typeof(Card)).Cast<Card>().ToArray());
 
         TurnStatus = GameObject.Find("TurnStatus").GetComponent<TextMeshProUGUI>();
         NextTurn = GameObject.Find("NextTurn").GetComponent<Button>();
