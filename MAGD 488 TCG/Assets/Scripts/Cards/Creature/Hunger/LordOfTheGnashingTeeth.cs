@@ -1,6 +1,6 @@
 using UnityEngine;
-[CreateAssetMenu(menuName = "New Creature/Nightmare Demon", fileName = "Card")]
-public class NightmareDemon : Creature
+[CreateAssetMenu(menuName = "New Creature/LordOfTheGnashingTeeth", fileName = "Card")]
+public class LordOfTheGnashingTeeth : Creature
 {
     public override void OnAbility(Tile[] hostBoard, Tile[] clientBoard, Vector2Int attacker, Vector2Int attacked, bool isHost)
     {

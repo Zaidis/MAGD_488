@@ -2,8 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "New Creature/thicc", fileName = "Card")]
-public class thicc : Creature
+[CreateAssetMenu(menuName = "New Creature/BlackKnight", fileName = "Card")]
+public class BlackKnight : Creature
 {
     public override void OnAbility(Tile[] hostBoard, Tile[] clientBoard, Vector2Int attacker, Vector2Int attacked, bool isHost)
     {

@@ -110,10 +110,7 @@ namespace MythosServer {
                 messageArgArr = textReceived.Split(StringSeparators, StringSplitOptions.None);
                 try {
                     textReceived = DecrpytBase64ToString(messageArgArr[1], key, Convert.FromBase64String(messageArgArr[0]));
-                } catch (Exception e) {
-                    Console.Write(e);
-                    break;
-                }                
+                } catch { break; }                
                 messageArgArr = textReceived.Split(StringSeparators, StringSplitOptions.None);
                 #endregion
                 if (!loggedIn) {
@@ -279,7 +276,7 @@ namespace MythosServer {
             lock (SQLLock) {
                 connection.Open();
                 SqliteCommand command = connection.CreateCommand();
-                command.CommandText = @"SELECT Salt, Hash FROM User WHERE EXISTS(SELECT * FROM User WHERE Username=@us)";
+                command.CommandText = @"SELECT Salt, Hash FROM User WHERE Username=@us";
                 command.Parameters.AddWithValue("@us", username);
 
                 using (SqliteDataReader reader = command.ExecuteReader())
