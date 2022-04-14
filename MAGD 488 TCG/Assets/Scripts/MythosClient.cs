@@ -27,11 +27,11 @@ public class MythosClient : MonoBehaviour {
 
     public static readonly string[] StringSeparators = { "\r\n" };
     private const string k_GlobalIp = "3.81.142.105"; //Server ip
+    //private static string k_GlobalIp = "127.0.0.1"; //server IP
     private const int k_Port = 2552; //port
     IPAddress ipAddress;
     IPEndPoint remoteEp;
     private Socket connection;
-
     public TMP_InputField user;
     public TMP_InputField pass;
     public string userName;
