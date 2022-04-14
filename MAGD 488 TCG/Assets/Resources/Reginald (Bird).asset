@@ -16,7 +16,7 @@ MonoBehaviour:
   type: 0
   manaCost: 1
   cardName: Reginald (Bird)
-  cardArt: {fileID: 0}
+  cardArt: {fileID: 21300000, guid: 5abe4b1037d04f148a80959615907f33, type: 3}
   description: 
   defaultHealthAmount: 1
   defaultPowerAmount: 1
