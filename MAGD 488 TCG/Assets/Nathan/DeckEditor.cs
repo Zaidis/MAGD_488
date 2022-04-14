@@ -138,6 +138,14 @@ public class DeckEditor : MonoBehaviour
     }
     public void ButtonSave()
     {
+        Debug.Log("Saving Deck");
+
+        if (deckID.Count == 0)
+        {
+            Debug.Log("cannot be empty");
+            return;
+        }
+
         MythosClient.instance.OnSaveDeck(deckName, deckID.ToArray());
     }
     public void DisplayCard(Card card)
