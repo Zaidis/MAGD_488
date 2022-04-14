@@ -2,12 +2,16 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+using TMPro;
+ 
 public class DeckSelector : MonoBehaviour
 {
     [SerializeField] RectTransform deckList;
     [SerializeField] GridLayoutGroup layout;
     [SerializeField] int padding = 0;
+
+    [Space(30)]
+    [SerializeField] TMP_InputField deckName;
 
     private void OnEnable()
     {
@@ -35,5 +39,14 @@ public class DeckSelector : MonoBehaviour
         layout.padding.top = padding;
         layout.spacing = new Vector2(padding, padding);
         layout.cellSize = new Vector2(deckList.rect.width - (padding * 2), 100);
+    }
+
+    public void ButtonNewDeck()
+    {
+        if (deckName.text.Equals(""))
+            return;
+
+        Menu.instance.OpenEditor();
+        DeckEditor.instance.SetDeckName(deckName.text);
     }
 }

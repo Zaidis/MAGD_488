@@ -8,9 +8,9 @@ public class Menu : MonoBehaviour
     private void Awake() => instance = this;
 
     [SerializeField] GameObject play;
-    [SerializeField] GameObject deck;
+    [SerializeField] GameObject deckSelect;
     [SerializeField] GameObject settings;
-    [SerializeField] GameObject Editor;
+    [SerializeField] GameObject deckEditor;
 
     private void Start() => ButtonSetFalse();
     private void Update()
@@ -21,8 +21,8 @@ public class Menu : MonoBehaviour
     public void ButtonSetFalse()
     {
         play.SetActive(false);
-        deck.SetActive(false);
-        Editor.SetActive(false);
+        deckSelect.SetActive(false);
+        deckEditor.SetActive(false);
         settings.SetActive(false);
     }
 
@@ -36,7 +36,7 @@ public class Menu : MonoBehaviour
     public void ButtonDeck()
     {
         ButtonSetFalse();
-        deck.SetActive(true);
+        deckSelect.SetActive(true);
     }
     public void ButtonSettings()
     {
@@ -46,7 +46,7 @@ public class Menu : MonoBehaviour
     public void OpenEditor()
     {
         ButtonSetFalse();
-        Editor.SetActive(true);
+        deckEditor.SetActive(true);
     }
     public void ButtonExit()
     {

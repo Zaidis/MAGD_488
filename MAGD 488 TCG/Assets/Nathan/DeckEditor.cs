@@ -17,7 +17,7 @@ public class DeckEditor : MonoBehaviour
     }
     #endregion
 
-    public new string name;
+    public new string deckName;
     public List<int> deckID = new List<int>();
     public Card[] cards;
 
@@ -33,11 +33,13 @@ public class DeckEditor : MonoBehaviour
 
     [Header("UI")]
     [SerializeField] TMP_InputField IFsearch;
+    [SerializeField] TextMeshProUGUI Text_name;
 
     [Header("DisplayCard")]
+    [SerializeField] GameObject GOcard;
     [SerializeField] TextMeshProUGUI cardName;
     [SerializeField] TextMeshProUGUI description;
-    [SerializeField] int manaCost;
+    [SerializeField] TextMeshProUGUI manaCost;
     [SerializeField] Image cardArt;
 
     private void OnEnable()
@@ -51,7 +53,12 @@ public class DeckEditor : MonoBehaviour
             Destroy(child.gameObject);
 
         MythosClient.OnDeckContentLoaded += LoadDeckContentHandler;
-        MythosClient.instance.OnRetrieveDeckContent(name);
+        MythosClient.instance.OnRetrieveDeckContent(deckName);
+    }
+    public void SetDeckName(string str)
+    {
+        deckName = str;
+        Text_name.text = deckName;
     }
     private void Update()
     {
@@ -131,10 +138,14 @@ public class DeckEditor : MonoBehaviour
     }
     public void ButtonSave()
     {
-        MythosClient.instance.OnSaveDeck(name, deckID.ToArray());
+        MythosClient.instance.OnSaveDeck(deckName, deckID.ToArray());
     }
-    public void DisplayCard()
+    public void DisplayCard(Card card)
     {
-
+        GOcard.SetActive(true);
+        cardName.text = card.cardName;
+        description.text = card.description;
+        manaCost.text = card.manaCost.ToString();
+        cardArt.sprite = card.cardArt;
     }
 }
