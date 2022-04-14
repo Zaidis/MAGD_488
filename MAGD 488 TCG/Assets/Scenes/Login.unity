@@ -859,10 +859,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inputFields:
-  - {fileID: 0}
-  - {fileID: 0}
-  enter: {fileID: 156263748}
-  create: {fileID: 0}
+  - {fileID: 2926131}
+  - {fileID: 1306367011}
+  enter: {fileID: 949187796}
+  create: {fileID: 156263748}
   InputSelected: 0
 --- !u!114 &156263748
 MonoBehaviour:

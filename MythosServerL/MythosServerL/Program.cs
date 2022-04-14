@@ -52,6 +52,7 @@ namespace MythosServer {
         }
         private static void ClientHandler(Socket handler) //Handle client communication, run in thread
         {
+            Console.WriteLine(handler.RemoteEndPoint + " Connected");
             byte[] buffer = new byte[1024];
             int numBytesReceived = 0;
             bool loggedIn = false;
@@ -91,7 +92,6 @@ namespace MythosServer {
             }
             #endregion
             for (; ; ) {
-                PrintConnections();
                 #region check connection & recieve input             
                 if (!Users.Any(u => u.socket == handler) && user != null) //Exits loop if user exists but is not in Users, or starts exit if handler is not connected
                     break;
@@ -121,6 +121,7 @@ namespace MythosServer {
                             handler.Send(EncryptStringToBase64Bytes("logingood\r\n", key));
                             Users.Add(user);
                             loggedIn = true;
+                            Console.WriteLine("User " + user.Username + " Logged in from " + user.socket.RemoteEndPoint);
                         } else
                             handler.Send(EncryptStringToBase64Bytes("loginbad\r\n", key));
                     } else if (messageArgArr[0].Equals("newaccount", StringComparison.OrdinalIgnoreCase))
@@ -149,26 +150,6 @@ namespace MythosServer {
             }
             handler.Shutdown(SocketShutdown.Both);
             handler.Close();
-        }        
-        private static void PrintConnections() //Print current connection statuses
-        {
-            Console.Clear();
-            try {
-                if (Users.Count > 0) {
-                    Console.WriteLine("Logged in Clients: ");
-                    foreach (User user in Users)
-                        Console.WriteLine(user.socket.RemoteEndPoint + " : " + user.Username + " : Skill : " + user.Skill);
-                }
-                lock (MatchmakingLock) {
-                    if (MatchmakingUsers.Count > 0) {
-                        Console.WriteLine("Matchmaking Clients: ");
-                        foreach (User user in MatchmakingUsers)
-                            Console.WriteLine(user.socket.RemoteEndPoint + " : " + user.Username + " : Skill : " + user.Skill);
-                    }
-                }
-            } catch {
-                Console.WriteLine("User has been removed while printing!");
-            }                     
         }
         private static bool NewUser(string username, string salt, string hash) //Attempt to create a user based on passed username and password, return true for success, return false for failure
         {
@@ -367,7 +348,12 @@ namespace MythosServer {
             lock (SQLLock) {
                 connection.Open();
                 SqliteCommand command = connection.CreateCommand();
-                command.CommandText = @"INSERT INTO Deck (Username, Deckname, Deck) VALUES (@u, @dn, @d) ON CONFLICT(Deckname) DO UPDATE SET Deck = @d";
+                command.CommandText = @"DELETE FROM Deck WHERE Username = @u and Deckname = @dn";
+                command.Parameters.AddWithValue("@u", user.Username);
+                command.Parameters.AddWithValue("@dn", deckname);
+                command.ExecuteNonQuery();
+                command = connection.CreateCommand();
+                command.CommandText = @"INSERT INTO Deck (Username, Deckname, Deck) VALUES (@u, @dn, @d)";
                 command.Parameters.AddWithValue("@u", user.Username);
                 command.Parameters.AddWithValue("@dn", deckname);
                 command.Parameters.AddWithValue("@d", deck);
@@ -405,11 +391,11 @@ namespace MythosServer {
         private static void HandleDisconnect(User? user)  //Takes in a user, removes from matchmaking and user list, prints status
         {
             if (user != null) {
+                Console.WriteLine(user.Username + " At " + user.socket.RemoteEndPoint + " Disconnected");
                 lock (MatchmakingLock)
                     MatchmakingUsers.Remove(user);
                 Users.Remove(user);
             }
-            PrintConnections();
         }
         private static byte[] EncryptStringToBase64Bytes(string plainText, byte[] key) //takes in plaintext and AES key, return string formatted as <IV>\r\n<Base64 Encoded Encrypted message>
         {

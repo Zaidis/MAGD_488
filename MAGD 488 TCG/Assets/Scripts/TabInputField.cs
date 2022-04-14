@@ -18,9 +18,9 @@ public class TabInputField : MonoBehaviour
                 inputFields[InputSelected].Select();
             }
             if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter)) {
-                if (create.gameObject.activeSelf)
+                if (create.gameObject.activeInHierarchy)
                     create.onClick.Invoke();
-                else if (enter.gameObject.activeSelf)
+                else if (enter.gameObject.activeInHierarchy)
                     enter.onClick.Invoke();
             }                
         }
