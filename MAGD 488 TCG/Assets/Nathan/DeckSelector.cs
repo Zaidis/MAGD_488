@@ -12,6 +12,7 @@ public class DeckSelector : MonoBehaviour
 
     [Space(30)]
     [SerializeField] TMP_InputField deckName;
+    [SerializeField] GameObject PrefabDeck;
 
     private void OnEnable()
     {
@@ -25,9 +26,10 @@ public class DeckSelector : MonoBehaviour
 
     private void DeckNameLoadedEvent(List<string> deckNames) {
         foreach(string DeckName in deckNames) {
-            GameObject selector = new GameObject(DeckName, typeof(Image), typeof(SelectDeck));
+            GameObject selector = new GameObject(DeckName, typeof(Image));
             selector.transform.parent = deckList;
-            selector.GetComponent<SelectDeck>().name = DeckName;
+            GameObject temp = Instantiate(PrefabDeck, selector.transform);
+            temp.GetComponent<SelectDeck>().name = DeckName;
         }
     }
 
