@@ -51,7 +51,7 @@ public class UICard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
                     //we need to select a place to put the card. 
                     GameManager.Singleton.needsToSelectTile = true;
                     GameManager.Singleton.selectedCard = myCard;
-
+                    GameManager.Singleton.selectedCardNumber = sortingOrder;
                 }
             }
         } else if (eventData.button == PointerEventData.InputButton.Right) {

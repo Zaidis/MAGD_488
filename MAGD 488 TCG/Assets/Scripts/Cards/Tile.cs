@@ -25,6 +25,9 @@ public class Tile : MonoBehaviour, IPointerClickHandler {
                 t.GetComponent<CreatureToken>().creature = c;
                 t.GetComponent<CreatureToken>().ApplyCard();
                 SetToken(t);
+
+                Hand.instance.RemoveCardFromHand();
+
             }
         }
     }

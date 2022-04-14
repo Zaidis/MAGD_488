@@ -4,6 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 public class Hand : MonoBehaviour
 {
+
+    public static Hand instance;
+
     private GridLayoutGroup cardGroup;
     private RectTransform myTransform;
     //holds scriptable objects
@@ -15,6 +18,15 @@ public class Hand : MonoBehaviour
     public GameObject emptyCard;
     public float handCenteringAmount;
     public float rotateCardAmount;
+
+    public void Awake() {
+        if(instance == null) {
+            instance = this;
+        } else {
+            Destroy(this.gameObject);
+        }
+    }
+
     private void Start() {
         cardGroup = GetComponent<GridLayoutGroup>();
         myTransform = GetComponent<RectTransform>();
@@ -44,6 +56,27 @@ public class Hand : MonoBehaviour
         Invoke("DisableGridLayoutGroup", 0.2f);
         
     }
+
+    public void RemoveCardFromHand() {
+        Debug.Log("I removed a card");
+        cardGroup.enabled = true;
+
+        GameObject c = uiCards[GameManager.Singleton.selectedCardNumber];
+
+        myCards.RemoveAt(GameManager.Singleton.selectedCardNumber);
+        uiCards.RemoveAt(GameManager.Singleton.selectedCardNumber);
+
+        Destroy(c);
+
+        for(int i = 0; i < uiCards.Count; i++) {
+            uiCards[i].GetComponent<UICard>().sortingOrder = i + 1;
+        }
+        myTransform.anchoredPosition = new Vector2(myTransform.anchoredPosition.x + handCenteringAmount, myTransform.anchoredPosition.y);
+        RotateCards();
+
+        Invoke("DisableGridLayoutGroup", 0.2f);
+    }
+
 
     private void RotateCards() {
         int left = 0, right = uiCards.Count - 1;
