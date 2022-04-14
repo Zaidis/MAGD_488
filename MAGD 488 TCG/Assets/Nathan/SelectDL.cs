@@ -1,9 +1,11 @@
 using UnityEngine.EventSystems;
 using UnityEngine;
+using TMPro;
 
 public class SelectDL : MonoBehaviour, IPointerClickHandler
 {
     public SelectCL card;
+    [SerializeField] TextMeshProUGUI info;
 
     public void OnPointerClick(PointerEventData eventData)
     {
@@ -19,5 +21,10 @@ public class SelectDL : MonoBehaviour, IPointerClickHandler
         }
         if (eventData.button == PointerEventData.InputButton.Right)
             DeckEditor.instance.DisplayCard(card.card);
+    }
+    private void Update()
+    {
+        if (card != null && info != null)
+            info.text = card.count + " | " + card.card.cardName;
     }
 }

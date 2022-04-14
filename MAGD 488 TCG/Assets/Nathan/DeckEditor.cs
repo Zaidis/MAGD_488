@@ -34,6 +34,7 @@ public class DeckEditor : MonoBehaviour
     [Header("UI")]
     [SerializeField] TMP_InputField IFsearch;
     [SerializeField] TextMeshProUGUI Text_name;
+    [SerializeField] Button Button_save;
 
     [Header("DisplayCard")]
     [SerializeField] GameObject GOcard;
@@ -41,6 +42,9 @@ public class DeckEditor : MonoBehaviour
     [SerializeField] TextMeshProUGUI description;
     [SerializeField] TextMeshProUGUI manaCost;
     [SerializeField] Image cardArt;
+
+    [Header("Prefabs")]
+    public GameObject PrefabDL;
 
     private void OnEnable()
     {
@@ -63,6 +67,7 @@ public class DeckEditor : MonoBehaviour
     private void Update()
     {
         Resize();
+        Button_save.interactable = (deckID.Count > 0);
     }
     public void Search() => FillDeckEditorPannel();
     public void Sort(int sortType)
@@ -138,6 +143,14 @@ public class DeckEditor : MonoBehaviour
     }
     public void ButtonSave()
     {
+        Debug.Log("Saving Deck");
+
+        if (deckID.Count == 0)
+        {
+            Debug.Log("cannot be empty");
+            return;
+        }
+
         MythosClient.instance.OnSaveDeck(deckName, deckID.ToArray());
     }
     public void DisplayCard(Card card)

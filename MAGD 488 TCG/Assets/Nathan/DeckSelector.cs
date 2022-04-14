@@ -12,22 +12,27 @@ public class DeckSelector : MonoBehaviour
 
     [Space(30)]
     [SerializeField] TMP_InputField deckName;
+    [SerializeField] GameObject PrefabDeck;
 
+    private void Start()
+    {
+        MythosClient.OnDecknamesLoaded += DeckNameLoadedEvent;
+    }
     private void OnEnable()
     {
         Resize();
         foreach (Transform child in deckList)
             Destroy(child.gameObject);
 
-        MythosClient.OnDecknamesLoaded += DeckNameLoadedEvent;
         MythosClient.instance.OnRetrieveDeckNames();
     }
 
     private void DeckNameLoadedEvent(List<string> deckNames) {
         foreach(string DeckName in deckNames) {
-            GameObject selector = new GameObject(DeckName, typeof(Image), typeof(SelectDeck));
+            GameObject selector = new GameObject(DeckName, typeof(Image));
             selector.transform.parent = deckList;
-            selector.GetComponent<SelectDeck>().name = DeckName;
+            GameObject temp = Instantiate(PrefabDeck, selector.transform);
+            temp.GetComponent<SelectDeck>().name = DeckName;
         }
     }
 
