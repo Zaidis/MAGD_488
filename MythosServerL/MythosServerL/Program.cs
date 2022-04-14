@@ -381,7 +381,7 @@ namespace MythosServer {
             lock (SQLLock) {
                 connection.Open();
                 SqliteCommand command = connection.CreateCommand();
-                command.CommandText = @"DELETE FROM Deck WHERE User = @u AND Deckname = @dn";
+                command.CommandText = @"DELETE FROM Deck WHERE Username = @u AND Deckname = @dn";
                 command.Parameters.AddWithValue("@u", user.Username);
                 command.Parameters.AddWithValue("@dn", deckname);
                 command.ExecuteNonQuery();
@@ -394,7 +394,7 @@ namespace MythosServer {
             lock (SQLLock) {
                 connection.Open();
                 SqliteCommand command = connection.CreateCommand();
-                command.CommandText = @"UPDATE Deck SET Deckname = @ndn WHERE User = @u AND Deckname = @dn";
+                command.CommandText = @"UPDATE Deck SET Deckname = @ndn WHERE Username = @u AND Deckname = @dn";
                 command.Parameters.AddWithValue("@u", user.Username);
                 command.Parameters.AddWithValue("@dn", deckname);
                 command.Parameters.AddWithValue("@ndn", newDeckname);
