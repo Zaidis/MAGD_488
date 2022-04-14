@@ -16,7 +16,7 @@ MonoBehaviour:
   type: 0
   manaCost: 3
   cardName: Lumine (Phoenix)
-  cardArt: {fileID: 0}
+  cardArt: {fileID: 21300000, guid: adb90d9146b4d5c4fa91008babd23ad7, type: 3}
   description: 'needs endure
 
     Heals 1 hp to target area (6 targets max) (4 mana

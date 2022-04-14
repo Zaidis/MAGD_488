@@ -27,11 +27,11 @@ public class MythosClient : MonoBehaviour {
 
     public static readonly string[] StringSeparators = { "\r\n" };
     private const string k_GlobalIp = "3.81.142.105"; //Server ip
+    //private static string k_GlobalIp = "127.0.0.1"; //server IP
     private const int k_Port = 2552; //port
     IPAddress ipAddress;
     IPEndPoint remoteEp;
     private Socket connection;
-
     public TMP_InputField user;
     public TMP_InputField pass;
     public string userName;
@@ -266,7 +266,20 @@ public class MythosClient : MonoBehaviour {
         message = message.TrimEnd(',');
         connection.Send(EncryptStringToBase64Bytes(message));
     }
+    public void OnDeleteDeck(string name) 
+    {
+        if (!connection.Connected)
+            return;
+        Debug.Log("Sent Deck Delete Request");
+        connection.Send(EncryptStringToBase64Bytes("deletedeck\r\n" + name));
+    }
+    public void OnChangeDeckName(string name, string newName) {
 
+        if (!connection.Connected)
+            return;
+        Debug.Log("Sent Deck Name Change Request");
+        connection.Send(EncryptStringToBase64Bytes("changedeckname\r\n" + name + "\r\n" + newName));
+    }
     public void OnOutcome(bool outcome) //takes in bool, true for hostvictory, false for clientvictory
     {
         if (!connection.Connected)

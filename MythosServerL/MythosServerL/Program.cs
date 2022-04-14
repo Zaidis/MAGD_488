@@ -8,8 +8,9 @@ using Microsoft.Data.Sqlite;
 
 namespace MythosServer {    
     class Program {
-        public static readonly string[] StringSeparators = { "\r\n" };  
+        public static readonly string[] StringSeparators = { "\r\n" };
         private static string KLocalIp = "10.0.3.201"; //Local IP
+        //private static string KLocalIp = "127.0.0.1"; //Local IP
         private const int KPort = 2552; //Port selected
 
         private static List<User> Users = new List<User>();
@@ -138,13 +139,17 @@ namespace MythosServer {
                         GetDeckContent(user!, messageArgArr[1]);
                     else if (messageArgArr[0].Equals("savedeck", StringComparison.OrdinalIgnoreCase))
                         SaveDeckContent(user!, messageArgArr[1], messageArgArr[2]);
+                    else if (messageArgArr[0].Equals("deletedeck", StringComparison.OrdinalIgnoreCase))
+                        DeleteDeck(user!, messageArgArr[1]);
+                    else if (messageArgArr[0].Equals("changedeckname", StringComparison.OrdinalIgnoreCase))
+                        ChangeDeckName(user!, messageArgArr[1], messageArgArr[2]);
                     else if (messageArgArr[0].Equals("quit", StringComparison.OrdinalIgnoreCase)) //Exit case
                         HandleDisconnect(user!);
                 }
             }
             handler.Shutdown(SocketShutdown.Both);
             handler.Close();
-        }
+        }        
         private static void PrintConnections() //Print current connection statuses
         {
             Console.Clear();
@@ -362,10 +367,37 @@ namespace MythosServer {
             lock (SQLLock) {
                 connection.Open();
                 SqliteCommand command = connection.CreateCommand();
-                command.CommandText = @"INSERT INTO Deck (Username, Deckname, Deck) VALUES (@u, @dn, @d) ON DUPLICATE KEY UPDATE Deck=@d";
+                command.CommandText = @"INSERT INTO Deck (Username, Deckname, Deck) VALUES (@u, @dn, @d) ON CONFLICT(Deckname) DO UPDATE SET Deck = @d";
                 command.Parameters.AddWithValue("@u", user.Username);
                 command.Parameters.AddWithValue("@dn", deckname);
                 command.Parameters.AddWithValue("@d", deck);
+                command.ExecuteNonQuery();
+                connection.Close();
+            }
+        }
+        private static void DeleteDeck(User user, string deckname) {
+            Console.WriteLine("Entered Deck Deleting...");
+            using SqliteConnection connection = new SqliteConnection("Data Source=Mythos.db");
+            lock (SQLLock) {
+                connection.Open();
+                SqliteCommand command = connection.CreateCommand();
+                command.CommandText = @"DELETE FROM Deck WHERE User = @u AND Deckname = @dn";
+                command.Parameters.AddWithValue("@u", user.Username);
+                command.Parameters.AddWithValue("@dn", deckname);
+                command.ExecuteNonQuery();
+                connection.Close();
+            }
+        }
+        private static void ChangeDeckName(User user, string deckname, string newDeckname) {
+            Console.WriteLine("Entered Deck Name Changing...");
+            using SqliteConnection connection = new SqliteConnection("Data Source=Mythos.db");
+            lock (SQLLock) {
+                connection.Open();
+                SqliteCommand command = connection.CreateCommand();
+                command.CommandText = @"UPDATE Deck SET Deckname = @ndn WHERE User = @u AND Deckname = @dn";
+                command.Parameters.AddWithValue("@u", user.Username);
+                command.Parameters.AddWithValue("@dn", deckname);
+                command.Parameters.AddWithValue("@ndn", newDeckname);
                 command.ExecuteNonQuery();
                 connection.Close();
             }
