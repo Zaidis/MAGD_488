@@ -26,7 +26,11 @@ public class Tile : MonoBehaviour, IPointerClickHandler {
                 t.GetComponent<CreatureToken>().ApplyCard();
                 SetToken(t);
 
+                GameManager.Singleton.AffectCurrentMana(c.manaCost * -1);
+
                 Hand.instance.RemoveCardFromHand();
+
+                GameManager.Singleton.ResetSelectedCard();
 
             }
         }

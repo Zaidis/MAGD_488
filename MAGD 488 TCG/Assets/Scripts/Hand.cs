@@ -41,7 +41,7 @@ public class Hand : MonoBehaviour
         UICard c = newCard.GetComponent<UICard>();
         c.ConjureCard(card);
         newCard.transform.parent = this.transform;
-        newCard.GetComponent<Canvas>().sortingOrder = uiCards.Count;
+        newCard.GetComponent<Canvas>().sortingOrder = uiCards.Count - 1;
         c.sortingOrder = uiCards.Count;
 
         uiCards.Add(newCard);
@@ -69,7 +69,7 @@ public class Hand : MonoBehaviour
         Destroy(c);
 
         for(int i = 0; i < uiCards.Count; i++) {
-            uiCards[i].GetComponent<UICard>().sortingOrder = i + 1;
+            uiCards[i].GetComponent<UICard>().sortingOrder = i;
         }
         myTransform.anchoredPosition = new Vector2(myTransform.anchoredPosition.x + handCenteringAmount, myTransform.anchoredPosition.y);
         RotateCards();

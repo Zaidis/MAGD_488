@@ -34,7 +34,8 @@ public class GameManager : MonoBehaviour
     public Tile[] clientBoard = new Tile[2*5];
 
     public int maxMana;
-    public int currentMana = 10;
+    public int currentMana;
+    [SerializeField] private TextMeshProUGUI manaText;
 
     public bool needsToSelectTile;
     public Card selectedCard; //for placement and making a token
@@ -48,6 +49,9 @@ public class GameManager : MonoBehaviour
     }
 
     private void Start() {
+
+        AffectCurrentMana(10);
+
         _networkManager = NetworkManager.Singleton;
         if (!_networkManager.IsClient && !_networkManager.IsServer && !_networkManager.IsHost)
             _networkManager.StartHost();
@@ -65,10 +69,27 @@ public class GameManager : MonoBehaviour
         }
         opponentName = MythosClient.instance.opponentUserName;
         opponent.text = "Opponent: " + opponentName;
-        StartCoroutine(ClearConnectingOnConnect());        
+        StartCoroutine(ClearConnectingOnConnect());
+
+        
+
     }
 
-    
+    /// <summary>
+    /// Add or remove mana. 
+    /// </summary>
+    public void AffectCurrentMana(int amount) {
+        
+        currentMana += amount;
+        manaText.text = "Current Mana: " + currentMana.ToString();
+    }
+
+    public void ResetSelectedCard() {
+        needsToSelectTile = false;
+        selectedCard = null;
+        selectedCardNumber = -5;
+    }
+
     private void BeginGame() {
         /*
          * The player who goes first will draw 3 cards. 
