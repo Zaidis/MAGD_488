@@ -100,7 +100,8 @@ public class GameManager : MonoBehaviour
     }
 
     public void DrawTopCard(List<Card> deck) {
-        myHand.myCards.Add(deck[0]);
+        //myHand.myCards.Add(deck[0]);
+        myHand.AddCardToHand(deck[0]);
         deck.RemoveAt(0);
     }
 
