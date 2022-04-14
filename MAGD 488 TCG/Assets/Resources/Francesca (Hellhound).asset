@@ -16,7 +16,7 @@ MonoBehaviour:
   type: 0
   manaCost: 2
   cardName: Francesca (Hellhound)
-  cardArt: {fileID: 0}
+  cardArt: {fileID: 21300000, guid: eaa03d4d7a026b24387bcff036ba5b7a, type: 3}
   description: 
   defaultHealthAmount: 3
   defaultPowerAmount: 1

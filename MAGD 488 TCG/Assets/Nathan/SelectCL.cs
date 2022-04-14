@@ -19,9 +19,7 @@ public class SelectCL : MonoBehaviour, IPointerClickHandler
             }
         }
         if (eventData.button == PointerEventData.InputButton.Right)
-        {
-
-        }
+            DeckEditor.instance.DisplayCard(card);
     }
 
     void AddToDeck()

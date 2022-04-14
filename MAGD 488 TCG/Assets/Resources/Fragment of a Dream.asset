@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2f79a6932d765641b47fd5ba415f7d3, type: 3}
+  m_Name: Fragment of a Dream
+  m_EditorClassIdentifier: 
+  ID: 1104
+  type: 0
+  manaCost: 5
+  cardName: Fragment of a Dream
+  cardArt: {fileID: 0}
+  description: "Passive: \r\nAbility: Buff Target Card: Every 2 Turns add any attribute
+    to a card"
+  defaultHealthAmount: 10
+  myAttributes: 

@@ -16,7 +16,7 @@ MonoBehaviour:
   type: 0
   manaCost: 5
   cardName: Cyra (Phoenix)
-  cardArt: {fileID: 0}
+  cardArt: {fileID: 21300000, guid: 2edcb084b8a41d943be41a620ff5214e, type: 3}
   description: 'needs endure
 
     Sacrifices themselves for surrounding Ally''s or

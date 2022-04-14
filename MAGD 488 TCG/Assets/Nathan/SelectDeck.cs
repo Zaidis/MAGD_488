@@ -7,6 +7,6 @@ public class SelectDeck : MonoBehaviour, IPointerClickHandler
     public void OnPointerClick(PointerEventData eventData)
     {
         Menu.instance.OpenEditor();
-        DeckEditor.instance.name = name;
+        DeckEditor.instance.SetDeckName(name);
     }
 }

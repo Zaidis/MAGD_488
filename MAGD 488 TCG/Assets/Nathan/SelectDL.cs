@@ -18,8 +18,6 @@ public class SelectDL : MonoBehaviour, IPointerClickHandler
             }
         }
         if (eventData.button == PointerEventData.InputButton.Right)
-        {
-
-        }
+            DeckEditor.instance.DisplayCard(card.card);
     }
 }
