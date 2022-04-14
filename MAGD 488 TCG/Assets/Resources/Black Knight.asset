@@ -16,11 +16,13 @@ MonoBehaviour:
   type: 0
   manaCost: 8
   cardName: Black Knight
-  cardArt: {fileID: 0}
+  cardArt: {fileID: 21300000, guid: 298f0b89e00e6594da899848a73bc6c6, type: 3}
   description: 'Taunt not in atrribute list
 
-    Self-Buff: Pierce OR Cleave (4 Mana
-    Cost) (choose at every turn)'
+    Self-Buff - 4 Mana
+
+    Gain Cleave
+    or Pierce'
   defaultHealthAmount: 8
   defaultPowerAmount: 4
   myAttributes: 00000000

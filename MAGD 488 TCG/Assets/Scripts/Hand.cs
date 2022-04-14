@@ -21,11 +21,17 @@ public class Hand : MonoBehaviour
     }
 
     public void AddCardToHand(Card card) {
-
+        cardGroup.enabled = true;
         myCards.Add(card);
 
         GameObject newCard = Instantiate(emptyCard, transform.position, Quaternion.identity);
+
+        UICard c = newCard.GetComponent<UICard>();
+        c.ConjureCard(card);
         newCard.transform.parent = this.transform;
+        newCard.GetComponent<Canvas>().sortingOrder = uiCards.Count;
+        c.sortingOrder = uiCards.Count;
+
         uiCards.Add(newCard);
         //move hand to the left when adding card
         if(myCards.Count > 1) {
@@ -35,6 +41,8 @@ public class Hand : MonoBehaviour
             RotateCards();
         }
 
+        Invoke("DisableGridLayoutGroup", 0.2f);
+        
     }
 
     private void RotateCards() {
@@ -49,34 +57,62 @@ public class Hand : MonoBehaviour
 
         Debug.Log(maxRotation);
         RectTransform t;
+        UICard c;
         //rotate to the left
         float temp = maxRotation;
         
         for(int i = 0; i <= right; i++) {
             t = uiCards[i].GetComponent<RectTransform>();
-
+            c = uiCards[i].GetComponent<UICard>();
             //t.Rotate(new Vector3(0, 0, temp));
             t.rotation = Quaternion.Euler(0, 0, temp);
+            c.defaultRotation_Z = temp;
             temp -= 2;
 
         }
+        uiCards[mid].GetComponent<RectTransform>().Rotate(Vector3.zero);
+    }
 
+    private void PositionCards() {
+        int left = 0, right = uiCards.Count - 1;
+        int mid = (left + right) / 2;
 
-       /* for (int i = left; i < mid; i++) {
-            t = uiCards[i].GetComponent<RectTransform>();
-            //uiCards[i].transform.Rotate(new Vector3(uiCards[i].transform.rotation.x, uiCards[i].transform.rotation.y, uiCards[i].transform.rotation.z + rotateCardAmount), Space.Self);
-            t.Rotate(new Vector3(0, 0, maxRotation));
-            //Quaternion.Euler(new Vector3(t.rotation.x, t.rotation.y, t.rotation.z + rotateCardAmount)); 
+        float maxPositionChange = rotateCardAmount * mid + 1;
 
+        if (uiCards.Count % 2 != 0) {
+            maxPositionChange -= rotateCardAmount; //if the amount is odd, then the middle should be taken out of the equation. 
         }
 
-        for(int i = mid + 1; i <= right; i++) {
-            //uiCards[i].transform.Rotate(new Vector3(uiCards[i].transform.rotation.x, uiCards[i].transform.rotation.y, uiCards[i].transform.rotation.z - rotateCardAmount), Space.Self);
-            //uiCards[i].transform.rotation = Quaternion.Euler(uiCards[i].transform.rotation.x, uiCards[i].transform.rotation.y, uiCards[i].transform.rotation.z - rotateCardAmount);
+        
+        RectTransform t;
+        UICard c;
+        //rotate to the left
+        float temp = (50 + maxPositionChange) * -1f; //everything begins at 50
+        Debug.Log("+++" + temp);
+        for (int i = 0; i <= mid; i++) {
+            c = uiCards[i].GetComponent<UICard>();
+            c.defaultPosition_Y = temp;
             t = uiCards[i].GetComponent<RectTransform>();
-            t.Rotate(new Vector3(0, 0, maxRotation / (i + 1) * -1));
-        } */
 
-        uiCards[mid].GetComponent<RectTransform>().Rotate(Vector3.zero);
+            //t.Rotate(new Vector3(0, 0, temp));
+            t.anchoredPosition = new Vector2(t.anchoredPosition.x, temp);
+            temp += 2;
+
+        }
+        temp = (50 + maxPositionChange) * -1f;
+        for (int i = right; i >= mid; i--) {
+            c = uiCards[i].GetComponent<UICard>();
+            c.defaultPosition_Y = temp;
+            t = uiCards[i].GetComponent<RectTransform>();
+
+            //t.Rotate(new Vector3(0, 0, temp));
+            t.anchoredPosition = new Vector2(t.anchoredPosition.x, temp);
+            temp += 2;
+
+        }
+    }
+    private void DisableGridLayoutGroup() {
+        cardGroup.enabled = false; //so we can move cards
+        PositionCards();
     }
 }
