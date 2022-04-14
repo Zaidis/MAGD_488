@@ -1710,7 +1710,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 34.8
+  m_fontSize: 42.95
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -2053,7 +2053,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 183.9
+  m_fontSize: 221.15
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -2931,7 +2931,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 34.8
+  m_fontSize: 42.95
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -3523,11 +3523,13 @@ MonoBehaviour:
   aspectRation: 1
   IFsearch: {fileID: 265498442}
   Text_name: {fileID: 1123141963}
+  Button_save: {fileID: 1037418709}
   GOcard: {fileID: 1413685241}
   cardName: {fileID: 528089343}
   description: {fileID: 895593988}
   manaCost: {fileID: 1226955537}
   cardArt: {fileID: 1224601906}
+  PrefabDL: {fileID: 3169702027782735365, guid: ae4474a4684e92940ab4bdfddbca8c0e, type: 3}
 --- !u!222 &868277113
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4342,7 +4344,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 34.8
+  m_fontSize: 42.95
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -7493,7 +7495,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 34.8
+  m_fontSize: 42.95
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
