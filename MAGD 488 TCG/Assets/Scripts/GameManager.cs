@@ -38,7 +38,7 @@ public class GameManager : MonoBehaviour
 
     public bool needsToSelectTile;
     public Card selectedCard; //for placement and making a token
-
+    public int selectedCardNumber; //to know which card in your hand will be removed
     private void Awake() {
         if(_singleton == null) {
             _singleton = this;
@@ -101,11 +101,21 @@ public class GameManager : MonoBehaviour
 
     public void DrawTopCard(List<Card> deck) {
         //myHand.myCards.Add(deck[0]);
-        myHand.AddCardToHand(deck[0]);
-        deck.RemoveAt(0);
+        if(deck[0] != null) {
+            myHand.AddCardToHand(deck[0]);
+            deck.RemoveAt(0);
+        }
+        
     }
 
+    public void DrawTopCard() {
+        //myHand.myCards.Add(deck[0]);
+        if (deck[0] != null) {
+            myHand.AddCardToHand(deck[0]);
+            deck.RemoveAt(0);
+        }
 
+    }
 
     public void DrawRandomCard(List<Card> deck) {
         int rand = rng.Next(deck.Count);

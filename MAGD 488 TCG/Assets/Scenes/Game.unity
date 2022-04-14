@@ -4549,11 +4549,11 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 7259119635421666368}
         m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: TestDrawCard
-        m_Mode: 2
+        m_MethodName: DrawTopCard
+        m_Mode: 1
         m_Arguments:
-          m_ObjectArgument: {fileID: 11400000, guid: fab5adeae34a584419a1d285f728bfa3, type: 2}
-          m_ObjectArgumentAssemblyTypeName: Card, Assembly-CSharp
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 2005
           m_FloatArgument: 0
           m_StringArgument: 
@@ -5145,7 +5145,12 @@ MonoBehaviour:
   IsHostTurn: 1
   yourName: 
   myHand: {fileID: 680024615}
-  deck: []
+  deck:
+  - {fileID: 11400000, guid: fab5adeae34a584419a1d285f728bfa3, type: 2}
+  - {fileID: 11400000, guid: 9eed4b3d0a384d44eb551f94316feaff, type: 2}
+  - {fileID: 11400000, guid: b1b1e8565a42f594884bd6a25e7c6b1e, type: 2}
+  - {fileID: 11400000, guid: e0b0442256f5b2e408ce7a7cac31de3a, type: 2}
+  - {fileID: 11400000, guid: b1b1e8565a42f594884bd6a25e7c6b1e, type: 2}
   CreatureTokenPrefab: {fileID: 1263412054170208604, guid: d1a577df298e8e44697c7d48b3e1907e, type: 3}
   SpellTokenPrefab: {fileID: 1263412054170208604, guid: 7e77b64bfaaea4647b204e79eaf2cf95, type: 3}
   ArtifactTokenPrefab: {fileID: 1263412054170208604, guid: 1998d7a45e48ccd4f8868492be46c807, type: 3}
@@ -5175,6 +5180,7 @@ MonoBehaviour:
   currentMana: 0
   needsToSelectTile: 0
   selectedCard: {fileID: 0}
+  selectedCardNumber: 0
 --- !u!1 &7259119635421666369
 GameObject:
   m_ObjectHideFlags: 0
