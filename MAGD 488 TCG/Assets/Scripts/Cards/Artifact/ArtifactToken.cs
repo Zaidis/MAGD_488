@@ -8,8 +8,8 @@ public class ArtifactToken : Token
     public override void ApplyCard() {
         currentHealth = artifact.defaultHealthAmount;        
         Name.text = artifact.name;
-        Description.text = artifact.description;
-        Mana.text = artifact.manaCost.ToString();
+        //Description.text = artifact.description;
+       // Mana.text = artifact.manaCost.ToString();
         Art = artifact.cardArt;
     }
 }

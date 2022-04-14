@@ -27,17 +27,13 @@ public class Player : NetworkBehaviour {
             Debug.Log("Player Spawned!");
         }
     }
-    void Update() {
-
-    }
     public void NextTurnPressed(bool isHostTurn) {
         if (_networkManager.IsHost) {
             UpdateTurnClientRpc(isHostTurn);
         } else {
             UpdateTurnServerRpc(isHostTurn);
         }
-    }
-
+    }    
     public void PlaceCard(int cardID, int x, int y) { //<----- NEEDS TO CALL THIS
         if (_networkManager.IsHost) {
             GameManager.Singleton.PlaceCard(true, cardID, x, y);

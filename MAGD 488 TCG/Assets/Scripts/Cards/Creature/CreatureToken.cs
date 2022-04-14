@@ -7,13 +7,18 @@ public class CreatureToken : Token
 {
     public int currentAttack;
     public Creature creature;
-    public TextMeshPro Attack;
+    public TextMeshPro AttackText;
+    public TextMeshPro HealthText;
     public override void ApplyCard() {
         currentAttack = creature.defaultPowerAmount;
         currentHealth = creature.defaultHealthAmount;
-        Name.text = creature.name;
-        Description.text = creature.description;
-        Mana.text = creature.manaCost.ToString();
-        Art = creature.cardArt;
+        Name.text = creature.cardName;
+
+        AttackText.text = currentAttack.ToString();
+        HealthText.text = currentHealth.ToString();
+
+        //Description.text = creature.description;
+       // Mana.text = creature.manaCost.ToString();
+      //  Art = creature.cardArt;
     }    
 }

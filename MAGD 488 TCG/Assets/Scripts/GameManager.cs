@@ -5,6 +5,8 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using System.Linq;
+
 public class GameManager : MonoBehaviour
 {
     private static System.Random rng = new System.Random();
@@ -24,19 +26,33 @@ public class GameManager : MonoBehaviour
     public List<Card> deck;
     private List<Card> cards;
 
-    [SerializeField] private GameObject CreatureTokenPrefab;
-    [SerializeField] private GameObject SpellTokenPrefab;
-    [SerializeField] private GameObject ArtifactTokenPrefab;
+    public GameObject CreatureTokenPrefab;
+    public GameObject SpellTokenPrefab;
+    public GameObject ArtifactTokenPrefab;
 
     public Tile[] hostBoard = new Tile[2*5];
     public Tile[] clientBoard = new Tile[2*5];
+
+    public int maxMana;
+    public int currentMana = 10;
+
+    public bool needsToSelectTile;
+    public Card selectedCard; //for placement and making a token
+
+    private void Awake() {
+        if(_singleton == null) {
+            _singleton = this;
+        } else {
+            Destroy(this);
+        }
+    }
+
     private void Start() {
         _networkManager = NetworkManager.Singleton;
         if (!_networkManager.IsClient && !_networkManager.IsServer && !_networkManager.IsHost)
             _networkManager.StartHost();
-        _singleton = this;
 
-        cards = new List<Card>(Resources.FindObjectsOfTypeAll(typeof(Card)) as Card[]);
+        cards = new List<Card>(Resources.LoadAll("", typeof(Card)).Cast<Card>().ToArray());
 
         TurnStatus = GameObject.Find("TurnStatus").GetComponent<TextMeshProUGUI>();
         NextTurn = GameObject.Find("NextTurn").GetComponent<Button>();
@@ -88,9 +104,12 @@ public class GameManager : MonoBehaviour
         deck.RemoveAt(0);
     }
 
+
+
     public void DrawRandomCard(List<Card> deck) {
         int rand = rng.Next(deck.Count);
-        myHand.myCards.Add(deck[rand]);
+        //myHand.myCards.Add(deck[rand]);
+        myHand.AddCardToHand(deck[rand]);
         deck.RemoveAt(rand);
     }
 
@@ -156,11 +175,14 @@ public class GameManager : MonoBehaviour
         BeginGame();
     }
 
-
-    [System.Serializable]
-    public class Hand {
-
-        public List<Card> myCards = new List<Card>();
-
+    public void TestCardPlace(int x) {
+        System.Random rand = new System.Random();
+        Player player = _networkManager.SpawnManager.GetLocalPlayerObject().GetComponent<Player>();
+        player.PlaceCard(x, rand.Next(5), rand.Next(2));
     }
+
+    public void TestDrawCard(Card card) {
+        myHand.AddCardToHand(card);
+    }
+
 }
