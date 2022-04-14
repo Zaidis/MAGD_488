@@ -266,7 +266,20 @@ public class MythosClient : MonoBehaviour {
         message = message.TrimEnd(',');
         connection.Send(EncryptStringToBase64Bytes(message));
     }
+    public void OnDeleteDeck(string name) 
+    {
+        if (!connection.Connected)
+            return;
+        Debug.Log("Sent Deck Delete Request");
+        connection.Send(EncryptStringToBase64Bytes("deletedeck\r\n" + name));
+    }
+    public void OnChangeDeckName(string name, string newName) {
 
+        if (!connection.Connected)
+            return;
+        Debug.Log("Sent Deck Name Change Request");
+        connection.Send(EncryptStringToBase64Bytes("changedeckname\r\n" + name + "\r\n" + newName));
+    }
     public void OnOutcome(bool outcome) //takes in bool, true for hostvictory, false for clientvictory
     {
         if (!connection.Connected)
