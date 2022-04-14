@@ -101,6 +101,9 @@ public class MythosClient : MonoBehaviour {
         syncFunctions.Enqueue(() => {
             ConnectingPanel.SetActive(false);
             LoginPanel.SetActive(true);
+            status.gameObject.SetActive(true);
+            user.gameObject.SetActive(true);
+            pass.gameObject.SetActive(true);
         });
         Debug.Log("Connected to " + connection.RemoteEndPoint);
 
