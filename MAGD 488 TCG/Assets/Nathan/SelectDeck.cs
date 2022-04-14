@@ -17,10 +17,12 @@ public class SelectDeck : MonoBehaviour, IPointerClickHandler
     }
     public void ButtonEdit()
     {
-
+        Menu.instance.OpenEditor();
+        DeckEditor.instance.SetDeckName(name);
     }
     public void ButtonDelete()
     {
-        
+        MythosClient.instance.OnDeleteDeck(name);
+        Destroy(transform.parent.gameObject);
     }
 }
