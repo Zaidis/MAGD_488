@@ -192,7 +192,7 @@ public class MythosClient : MonoBehaviour {
                     if (OnDecknamesLoaded != null)
                         OnDecknamesLoaded(deckNames);
                 });                
-            } else if (messageArgArr[0].Equals("deckcontent", StringComparison.OrdinalIgnoreCase)) {
+            } else if (messageArgArr[0].Equals("deckcontent", StringComparison.OrdinalIgnoreCase) && !messageArgArr[1].Equals("", StringComparison.OrdinalIgnoreCase)) {
                 currentDeck.Clear();
                 string[] splitIntsAsStrings = messageArgArr[1].Split(',');
                 foreach (string intString in splitIntsAsStrings)
@@ -200,7 +200,7 @@ public class MythosClient : MonoBehaviour {
                 syncFunctions.Enqueue(() => {
                     if (OnDeckContentLoaded != null)
                         OnDeckContentLoaded(currentDeck);
-                });                
+                });
             }
         }
     }
