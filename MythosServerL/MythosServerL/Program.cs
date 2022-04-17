@@ -9,8 +9,8 @@ using Microsoft.Data.Sqlite;
 namespace MythosServer {    
     class Program {
         public static readonly string[] StringSeparators = { "\r\n" };
-        private static string KLocalIp = "10.0.3.201"; //Local IP
-        //private static string KLocalIp = "127.0.0.1"; //Local IP
+        //private static string KLocalIp = "10.0.3.201"; //Local IP
+        private static string KLocalIp = "127.0.0.1"; //Local IP
         private const int KPort = 2552; //Port selected
 
         private static List<User> Users = new List<User>();
@@ -41,7 +41,7 @@ namespace MythosServer {
 
             listener.Bind(localEp); //Bind to local ip and port, listen, and then handle new connections
             listener.Listen(1);
-            Console.WriteLine("Server Started!");
+            Log("Server Started!");
             for (; ; ) { //Welcome loop
                 try {
                     Socket handler = listener.Accept(); //Accept incoming client connection requests, create new socket and thread
@@ -52,6 +52,7 @@ namespace MythosServer {
         }
         private static void ClientHandler(Socket handler) //Handle client communication, run in thread
         {
+            Log(handler.RemoteEndPoint + " Connected");
             byte[] buffer = new byte[1024];
             int numBytesReceived = 0;
             bool loggedIn = false;
@@ -63,7 +64,7 @@ namespace MythosServer {
             try {
                 numBytesReceived = handler.Receive(buffer);
             } catch (SocketException e) {
-                Console.WriteLine(e);
+                Log(e.ToString());
                 return;
             }
             string textReceived = Encoding.ASCII.GetString(buffer, 0, numBytesReceived); //decode from stream to ASCII
@@ -75,23 +76,19 @@ namespace MythosServer {
                 textReceived = Encoding.ASCII.GetString(bytesPlainTextData);
                 messageArgArr = textReceived.Split(StringSeparators, StringSplitOptions.None);
             } catch (Exception e) {
-                Console.WriteLine(e);
+                Log(e.ToString());
                 return;
-            }
-            foreach (string s in messageArgArr) {
-                Console.WriteLine(s);
             }
             if (!messageArgArr[0].Equals("aes", StringComparison.OrdinalIgnoreCase))
                 return;
             try {
                 key = Convert.FromBase64String(messageArgArr[1]); //end handshake by recieving AES key and storing it
             } catch (Exception e) {
-                Console.WriteLine(e);
+                Log(e.ToString());
                 return;
             }
             #endregion
             for (; ; ) {
-                PrintConnections();
                 #region check connection & recieve input             
                 if (!Users.Any(u => u.socket == handler) && user != null) //Exits loop if user exists but is not in Users, or starts exit if handler is not connected
                     break;
@@ -101,13 +98,11 @@ namespace MythosServer {
                 }       
                 try {
                     numBytesReceived = handler.Receive(buffer);
-                } catch (SocketException e) {
-                    Console.WriteLine(e);
+                } catch {
                     HandleDisconnect(user);
                     break;
                 }
                 textReceived = Encoding.ASCII.GetString(buffer, 0, numBytesReceived); //decode from stream to ASCII
-                Console.WriteLine("Text Received:\n" + textReceived);
                 messageArgArr = textReceived.Split(StringSeparators, StringSplitOptions.None);
                 try {
                     textReceived = DecrpytBase64ToString(messageArgArr[1], key, Convert.FromBase64String(messageArgArr[0]));
@@ -121,6 +116,7 @@ namespace MythosServer {
                             handler.Send(EncryptStringToBase64Bytes("logingood\r\n", key));
                             Users.Add(user);
                             loggedIn = true;
+                            Log("User " + user.Username + " Logged in from " + user.socket.RemoteEndPoint);
                         } else
                             handler.Send(EncryptStringToBase64Bytes("loginbad\r\n", key));
                     } else if (messageArgArr[0].Equals("newaccount", StringComparison.OrdinalIgnoreCase))
@@ -139,6 +135,10 @@ namespace MythosServer {
                         GetDeckContent(user!, messageArgArr[1]);
                     else if (messageArgArr[0].Equals("savedeck", StringComparison.OrdinalIgnoreCase))
                         SaveDeckContent(user!, messageArgArr[1], messageArgArr[2]);
+                    else if (messageArgArr[0].Equals("deletedeck", StringComparison.OrdinalIgnoreCase))
+                        DeleteDeck(user!, messageArgArr[1]);
+                    else if (messageArgArr[0].Equals("changedeckname", StringComparison.OrdinalIgnoreCase))
+                        ChangeDeckName(user!, messageArgArr[1], messageArgArr[2]);
                     else if (messageArgArr[0].Equals("quit", StringComparison.OrdinalIgnoreCase)) //Exit case
                         HandleDisconnect(user!);
                 }
@@ -146,30 +146,10 @@ namespace MythosServer {
             handler.Shutdown(SocketShutdown.Both);
             handler.Close();
         }
-        private static void PrintConnections() //Print current connection statuses
-        {
-            Console.Clear();
-            try {
-                if (Users.Count > 0) {
-                    Console.WriteLine("Logged in Clients: ");
-                    foreach (User user in Users)
-                        Console.WriteLine(user.socket.RemoteEndPoint + " : " + user.Username + " : Skill : " + user.Skill);
-                }
-                lock (MatchmakingLock) {
-                    if (MatchmakingUsers.Count > 0) {
-                        Console.WriteLine("Matchmaking Clients: ");
-                        foreach (User user in MatchmakingUsers)
-                            Console.WriteLine(user.socket.RemoteEndPoint + " : " + user.Username + " : Skill : " + user.Skill);
-                    }
-                }
-            } catch {
-                Console.WriteLine("User has been removed while printing!");
-            }                     
-        }
         private static bool NewUser(string username, string salt, string hash) //Attempt to create a user based on passed username and password, return true for success, return false for failure
         {
             lock (SQLLock) {
-                Console.WriteLine("Entered User Creation");
+                Log(username + " Entered User Creation");
                 using SqliteConnection connection = new SqliteConnection("Data Source=Mythos.db");
                 connection.Open();
                 SqliteCommand command = connection.CreateCommand();
@@ -196,7 +176,7 @@ namespace MythosServer {
         {
             lock (MatchmakingLock) {
                 if (MatchmakingUsers.Count > 1 && user.Match == null) { //matchmake if users matchmaking > 1
-                    Console.WriteLine("Attempting to Match");
+                    Log(user.Username + " At " + user.socket.RemoteEndPoint + " Attempting to Match");
                     byte[] buffer = new byte[1024];
                     User host = MatchmakingUsers[1];
                     User client = MatchmakingUsers[0];
@@ -213,12 +193,12 @@ namespace MythosServer {
                     }
 
                     host.socket.Send(EncryptStringToBase64Bytes("start\r\n" + client.Username, host.key)); //Send start command to selected host
-                    Console.WriteLine("Start command sent to host");
+                    Log("Start command sent to host " + host.Username + " At " + host.socket.RemoteEndPoint);
                     int numBytesReceived = 0;
                     try {
                         numBytesReceived = user.socket.Receive(buffer);
                     } catch (SocketException e) {
-                        Console.WriteLine(e);
+                        Log(e.ToString());
                         HandleDisconnect(user);
                         return;
                     }
@@ -231,11 +211,10 @@ namespace MythosServer {
                         return;
                     }
                     messageArgArr = textReceived.Split(StringSeparators, StringSplitOptions.None);
-                    Console.WriteLine(textReceived);
                     if (messageArgArr[0].Equals("code")) {
-                        Console.WriteLine("Sent " + "connect\r\n" + messageArgArr[1] + "\nto " + client.socket.RemoteEndPoint + " : " + client.Username + " : Skill : " + client.Skill);
+                        Log("Sent " + "connect\r\n" + messageArgArr[1] + "\nto " + client.socket.RemoteEndPoint + " : " + client.Username + " : Skill : " + client.Skill);
                         client.socket.Send(EncryptStringToBase64Bytes("connect\r\n" + messageArgArr[1] + "\r\n" + host.Username, client.key));
-                        Console.WriteLine("Sent connection message to client");
+                        Log("Sent connection message to client " + client.Username + " At " + client.socket.RemoteEndPoint);
 
                         Match newMatch = new Match(host, client);
                         host.Match = newMatch;
@@ -266,7 +245,7 @@ namespace MythosServer {
                     //Code that changes skill of users based on win/loss, and stores it with sqlite 
                 }
             } else if (!match.Hostoutcome.Equals("") && !match.Clientoutcome.Equals(""))
-                Console.Write("u1 and u2 outcome do not match no skill will be changed!");
+                Console.Write(match.Host.Username + " and " + match.Client.Username + " outcome do not match, no skill will be changed!");
         }
         private static User? Login(string username, Socket socket, byte[] key)  //login "socket" based on passed username and password, create User and return it
         {
@@ -276,7 +255,7 @@ namespace MythosServer {
             string salt = "";
             string hash = "";
 
-            Console.WriteLine("Entered User Login");
+            Log("Entered User Login for " + username + " at " + socket.RemoteEndPoint);
             using SqliteConnection connection = new SqliteConnection("Data Source=Mythos.db");
             lock (SQLLock) {
                 connection.Open();
@@ -298,7 +277,7 @@ namespace MythosServer {
             try {
                 numBytesReceived = socket.Receive(buffer);
             } catch (SocketException e) {
-                Console.WriteLine(e);
+                Log(e.ToString());
                 return null;
             }
             string textReceived = Encoding.ASCII.GetString(buffer, 0, numBytesReceived); //decode from stream to ASCII
@@ -316,13 +295,13 @@ namespace MythosServer {
             if (hash.Equals(hashed)) {
                 if (!Users.Any(u => u.socket == socket))
                     return new User(username, 1500, socket, key);
-                Console.WriteLine("Already Logged In!");
+                Log(username + " already Logged In!");
             }
             return null;
         }
         private static void GetDeckNames(User user) //returns list of all decks belonging to a user, in format <deckname>\r\n...
         { 
-            Console.WriteLine("Entered Deck Name Retrieval");
+            Log("Entered Deck Name Retrieval for " + user.Username + " at " + user.socket.RemoteEndPoint);
             using SqliteConnection connection = new SqliteConnection("Data Source=Mythos.db");
             lock (SQLLock) {
                 connection.Open();
@@ -334,13 +313,14 @@ namespace MythosServer {
                     while (reader.Read())
                         message = message + reader.GetString(0) + "\r\n";
                 message = message.Substring(0, message.LastIndexOf("\r\n"));
+                Log("Sent message for deck retrieval " + message);
                 user.socket.Send(EncryptStringToBase64Bytes(message, user.key));
                 connection.Close();
             }
         }
         private static void GetDeckContent(User user, string deckname) //takes user and deckname, and retrieves deck content, returns as csv of ints
         {
-            Console.WriteLine("Entered Deck Content Retrieval");
+            Log("Entered Deck Content Retrieval for " + user.Username + " at " + user.socket.RemoteEndPoint);
             using SqliteConnection connection = new SqliteConnection("Data Source=Mythos.db");
             lock (SQLLock) {
                 connection.Open();
@@ -358,12 +338,17 @@ namespace MythosServer {
         }
         private static void SaveDeckContent(User user, string deckname, string deck) //takes user, deckname, and deck (formatted as csv ints) and stores them in the database
         {
-            Console.WriteLine("Entered Deck Saving...");
+            Log("Entered Deck Saving for " + user.Username + " at " + user.socket.RemoteEndPoint);
             using SqliteConnection connection = new SqliteConnection("Data Source=Mythos.db");
             lock (SQLLock) {
                 connection.Open();
                 SqliteCommand command = connection.CreateCommand();
-                command.CommandText = @"INSERT INTO Deck (Username, Deckname, Deck) VALUES (@u, @dn, @d) ON CONFLICT(Deckname) DO UPDATE SET Deck = @d";
+                command.CommandText = @"DELETE FROM Deck WHERE Username = @u and Deckname = @dn";
+                command.Parameters.AddWithValue("@u", user.Username);
+                command.Parameters.AddWithValue("@dn", deckname);
+                command.ExecuteNonQuery();
+                command = connection.CreateCommand();
+                command.CommandText = @"INSERT INTO Deck (Username, Deckname, Deck) VALUES (@u, @dn, @d)";
                 command.Parameters.AddWithValue("@u", user.Username);
                 command.Parameters.AddWithValue("@dn", deckname);
                 command.Parameters.AddWithValue("@d", deck);
@@ -371,14 +356,41 @@ namespace MythosServer {
                 connection.Close();
             }
         }
+        private static void DeleteDeck(User user, string deckname) {
+            Log("Entered Deck Deleting for " + user.Username + " at " + user.socket.RemoteEndPoint);
+            using SqliteConnection connection = new SqliteConnection("Data Source=Mythos.db");
+            lock (SQLLock) {
+                connection.Open();
+                SqliteCommand command = connection.CreateCommand();
+                command.CommandText = @"DELETE FROM Deck WHERE Username = @u AND Deckname = @dn";
+                command.Parameters.AddWithValue("@u", user.Username);
+                command.Parameters.AddWithValue("@dn", deckname);
+                command.ExecuteNonQuery();
+                connection.Close();
+            }
+        }
+        private static void ChangeDeckName(User user, string deckname, string newDeckname) {
+            Log("Entered Deck Name Changing for " + user.Username + " at " + user.socket.RemoteEndPoint);
+            using SqliteConnection connection = new SqliteConnection("Data Source=Mythos.db");
+            lock (SQLLock) {
+                connection.Open();
+                SqliteCommand command = connection.CreateCommand();
+                command.CommandText = @"UPDATE Deck SET Deckname = @ndn WHERE Username = @u AND Deckname = @dn";
+                command.Parameters.AddWithValue("@u", user.Username);
+                command.Parameters.AddWithValue("@dn", deckname);
+                command.Parameters.AddWithValue("@ndn", newDeckname);
+                command.ExecuteNonQuery();
+                connection.Close();
+            }
+        }
         private static void HandleDisconnect(User? user)  //Takes in a user, removes from matchmaking and user list, prints status
         {
             if (user != null) {
+                Log(user.Username + " At " + user.socket.RemoteEndPoint + " Disconnected");
                 lock (MatchmakingLock)
                     MatchmakingUsers.Remove(user);
                 Users.Remove(user);
             }
-            PrintConnections();
         }
         private static byte[] EncryptStringToBase64Bytes(string plainText, byte[] key) //takes in plaintext and AES key, return string formatted as <IV>\r\n<Base64 Encoded Encrypted message>
         {
@@ -417,6 +429,12 @@ namespace MythosServer {
                             plaintext = srDecrypt.ReadToEnd();
             }
             return plaintext;
+        }
+        public static void Log(string output) {
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write(DateTime.Now.ToString("'['yyyy/MM/dd HH:mm:ss']\t'"));
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write(output + '\n');
         }
     }
     class User 

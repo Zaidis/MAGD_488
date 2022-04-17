@@ -26,10 +26,8 @@ public class SelectCL : MonoBehaviour, IPointerClickHandler
     {
         if (count == 0)
         {
-            GameObject selected = new GameObject("Card " + name, typeof(Image), typeof(SelectDL));
+            GameObject selected = Instantiate(DeckEditor.instance.PrefabDL);
             selected.transform.SetParent(GameObject.Find("DeckList").transform);
-
-            selected.GetComponent<Image>().sprite = card.cardArt;
             selected.GetComponent<SelectDL>().card = this;
         }
 

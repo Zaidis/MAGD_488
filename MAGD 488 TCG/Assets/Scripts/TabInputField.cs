@@ -7,6 +7,7 @@ public class TabInputField : MonoBehaviour
 {
     [SerializeField] public TMP_InputField[] inputFields;
     public Button enter;
+    public Button create;
     public int InputSelected;
     private bool usingFields = false;
     private void Update() {
@@ -16,8 +17,12 @@ public class TabInputField : MonoBehaviour
                 if (InputSelected > inputFields.Length-1) InputSelected = 0;
                 inputFields[InputSelected].Select();
             }
-            if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
-                enter.onClick.Invoke();
+            if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter)) {
+                if (create.gameObject.activeInHierarchy)
+                    create.onClick.Invoke();
+                else if (enter.gameObject.activeInHierarchy)
+                    enter.onClick.Invoke();
+            }                
         }
     }
     public void UsingField(int i) {

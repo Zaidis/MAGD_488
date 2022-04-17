@@ -101,6 +101,9 @@ public class MythosClient : MonoBehaviour {
         syncFunctions.Enqueue(() => {
             ConnectingPanel.SetActive(false);
             LoginPanel.SetActive(true);
+            status.gameObject.SetActive(true);
+            user.gameObject.SetActive(true);
+            pass.gameObject.SetActive(true);
         });
         Debug.Log("Connected to " + connection.RemoteEndPoint);
 
@@ -189,7 +192,7 @@ public class MythosClient : MonoBehaviour {
                     if (OnDecknamesLoaded != null)
                         OnDecknamesLoaded(deckNames);
                 });                
-            } else if (messageArgArr[0].Equals("deckcontent", StringComparison.OrdinalIgnoreCase)) {
+            } else if (messageArgArr[0].Equals("deckcontent", StringComparison.OrdinalIgnoreCase) && !messageArgArr[1].Equals("", StringComparison.OrdinalIgnoreCase)) {
                 currentDeck.Clear();
                 string[] splitIntsAsStrings = messageArgArr[1].Split(',');
                 foreach (string intString in splitIntsAsStrings)
@@ -197,7 +200,7 @@ public class MythosClient : MonoBehaviour {
                 syncFunctions.Enqueue(() => {
                     if (OnDeckContentLoaded != null)
                         OnDeckContentLoaded(currentDeck);
-                });                
+                });
             }
         }
     }
@@ -266,7 +269,20 @@ public class MythosClient : MonoBehaviour {
         message = message.TrimEnd(',');
         connection.Send(EncryptStringToBase64Bytes(message));
     }
+    public void OnDeleteDeck(string name) 
+    {
+        if (!connection.Connected)
+            return;
+        Debug.Log("Sent Deck Delete Request");
+        connection.Send(EncryptStringToBase64Bytes("deletedeck\r\n" + name));
+    }
+    public void OnChangeDeckName(string name, string newName) {
 
+        if (!connection.Connected)
+            return;
+        Debug.Log("Sent Deck Name Change Request");
+        connection.Send(EncryptStringToBase64Bytes("changedeckname\r\n" + name + "\r\n" + newName));
+    }
     public void OnOutcome(bool outcome) //takes in bool, true for hostvictory, false for clientvictory
     {
         if (!connection.Connected)
