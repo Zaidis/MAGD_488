@@ -17,6 +17,7 @@ MonoBehaviour:
   manaCost: 3
   cardName: Elin (Light)
   cardArt: {fileID: 21300000, guid: cc6417464250bcb499c9d9acfb18029c, type: 3}
+  cardBorder: {fileID: 21300000, guid: c87a9ce75a363f848ac15c3db95cb966, type: 3}
   description: Blind - cannot target a specific creature next turn (3 mana)
   defaultHealthAmount: 4
   defaultPowerAmount: 4

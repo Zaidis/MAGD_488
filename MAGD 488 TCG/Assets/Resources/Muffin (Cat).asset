@@ -17,6 +17,7 @@ MonoBehaviour:
   manaCost: 1
   cardName: Muffin (Cat)
   cardArt: {fileID: 21300000, guid: 051d9ede71907b641b8640450f934bf7, type: 3}
+  cardBorder: {fileID: 21300000, guid: c87a9ce75a363f848ac15c3db95cb966, type: 3}
   description: 
   defaultHealthAmount: 2
   defaultPowerAmount: 1

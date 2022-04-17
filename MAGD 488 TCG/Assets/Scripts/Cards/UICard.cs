@@ -19,6 +19,7 @@ public class UICard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
     [SerializeField] private TextMeshProUGUI cardHealth;
     [SerializeField] private TextMeshProUGUI cardDescription;
     [SerializeField] private TextMeshProUGUI manaCost;
+    [SerializeField] private Image cardBorderArt;
     private void Start() {
         myTransform = GetComponent<RectTransform>();
     }
@@ -29,7 +30,7 @@ public class UICard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
         cardDescription.text = card.description;
 
         cardArt.sprite = card.cardArt;
-
+        cardBorderArt.sprite = card.cardBorder;
         manaCost.text = card.manaCost.ToString();
 
         if(card.type == cardType.creature) {
