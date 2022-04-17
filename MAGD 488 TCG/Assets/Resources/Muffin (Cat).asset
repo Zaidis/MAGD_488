@@ -22,3 +22,4 @@ MonoBehaviour:
   defaultHealthAmount: 2
   defaultPowerAmount: 1
   myAttributes: 
+  isMelee: 1

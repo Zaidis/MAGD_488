@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: Hellhound Whistle
   m_EditorClassIdentifier: 
   ID: 1103
-  type: 0
+  type: 1
   manaCost: 3
   cardName: Hellhound Whistle
-  cardArt: {fileID: 0}
-  description: "Passive: \rSurrounding Melee Cards: +2/0\nAbility: "
+  cardArt: {fileID: 21300000, guid: eaa03d4d7a026b24387bcff036ba5b7a, type: 3}
+  cardBorder: {fileID: 21300000, guid: c3044a06ab0c16940a82f709242944f7, type: 3}
+  description: "\rSurrounding Melee Cards: +2/0"
   defaultHealthAmount: 2
   myAttributes: 

@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviour
     public Hand myHand;
     public List<Card> deck;
     private List<Card> cards;
-
+    
     public GameObject CreatureTokenPrefab;
     public GameObject SpellTokenPrefab;
     public GameObject ArtifactTokenPrefab;
@@ -37,9 +37,23 @@ public class GameManager : MonoBehaviour
     public int currentMana;
     [SerializeField] private TextMeshProUGUI manaText;
 
+
     public bool needsToSelectTile;
+    public bool isAttecking;
+    public CreatureToken selectedCreature;
+
     public Card selectedCard; //for placement and making a token
     public int selectedCardNumber; //to know which card in your hand will be removed
+
+    public bool isHost;
+
+
+
+    #region Tile Materials
+    public Material m_default;
+    public Material m_active;
+    public Material m_deactive;
+    #endregion
     private void Awake() {
         if(_singleton == null) {
             _singleton = this;
@@ -49,9 +63,10 @@ public class GameManager : MonoBehaviour
     }
 
     private void Start() {
-
-        AffectCurrentMana(10);
-
+        
+        AffectCurrentMana(20);
+        //isHost = NetworkManager.Singleton.IsHost;
+        isHost = true;
         _networkManager = NetworkManager.Singleton;
         if (!_networkManager.IsClient && !_networkManager.IsServer && !_networkManager.IsHost)
             _networkManager.StartHost();
@@ -175,7 +190,7 @@ public class GameManager : MonoBehaviour
             clientBoard[x + y * 5].SetToken(token);
         }
     }
-    public void Attack(int x1, int y1, int x2, int y2) {
+    /*public void Attack(int x1, int y1, int x2, int y2) {
         if (_networkManager.IsHost) {
             CreatureToken t_one = hostBoard[x1 + y1 * 5].token.GetComponent<CreatureToken>();
             t_one.creature.OnAttack(hostBoard, clientBoard, new Vector2Int(x1, y1), new Vector2Int(x2, y2), true);
@@ -187,7 +202,7 @@ public class GameManager : MonoBehaviour
             if (t_one.currentHealth <= 0) Destroy(hostBoard[x1 + y1 * 5].token);
             if (t_two.currentHealth <= 0) Destroy(clientBoard[x2 + y2 * 5].token);
         }
-    }
+    }*/
 
     public void OnNextTurnPressed() {
         TurnStatus.text = "Other User's Turn";
@@ -217,4 +232,45 @@ public class GameManager : MonoBehaviour
         myHand.AddCardToHand(card);
     }
 
+    public void ChangeTilesMaterial(Tile[] board, bool isMelee) {
+        if (isMelee) {
+             for(int i = 9; i > 4; i--) {
+                Tile t = board[i].GetComponent<Tile>();
+                Tile t2 = board[i - 5].GetComponent<Tile>();
+                if (t.token != null) {
+                    t.ChangeMaterial(m_active);
+                    t.active = true;
+                } else if(t2.token != null) { //checks the tile behind
+                    t2.ChangeMaterial(m_active);
+                    t2.active = true;
+                }
+            }
+        } else { //if you are ranged, check ALL tiles
+            for(int i = 0; i < board.Length; i++) {
+                Tile t = board[i].GetComponent<Tile>();
+                if(t.token != null) {
+                    t.ChangeMaterial(m_active);
+                    t.active = true;
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// All tiles become unactive.
+    /// </summary>
+    public void ResetAllTiles(Tile[] board) {
+        for(int i = 0; i < board.Length; i++) {
+            Tile t = board[i].GetComponent<Tile>();
+            t.ChangeMaterial(m_default);
+        }
+    }
+
+    public bool CheckIfMyCreature(Tile[] board, Tile t) {
+        for(int i = 0; i < board.Length; i++) {
+            if (t == board[i]) return true;
+        }
+
+        return false;
+    }
 }

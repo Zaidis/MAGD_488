@@ -5,10 +5,12 @@ using TMPro;
 
 public abstract class Token : MonoBehaviour {
     public int currentHealth;  
-    public TextMeshPro Name;
     //public TextMeshPro Description;    
     //public TextMeshPro Mana;
+    [Header("All Token Variables")]
+    public TextMeshPro Name;
     public Sprite Art;
+
 
     public abstract void ApplyCard();
 }
