@@ -19,6 +19,11 @@ public class Hand : MonoBehaviour
     public float handCenteringAmount;
     public float rotateCardAmount;
 
+    private Vector3 cursorPosition;
+    [SerializeField] private Transform cursor_to_hand;
+    private float hand_away_y = -700; //the y value when you are not hovering over the hand
+    private float hand_show_y = -490; //the y value when you are hovering over the hand. 
+
     public void Awake() {
         if(instance == null) {
             instance = this;
@@ -31,6 +36,17 @@ public class Hand : MonoBehaviour
         cardGroup = GetComponent<GridLayoutGroup>();
         myTransform = GetComponent<RectTransform>();
     }
+
+    private void FixedUpdate() {
+        cursorPosition = Input.mousePosition;
+        if(cursorPosition.y <= cursor_to_hand.position.y) {
+            //Debug.Log("IT WORKS!!!");
+            myTransform.anchoredPosition = new Vector2(myTransform.anchoredPosition.x, hand_show_y);
+        } else {
+            myTransform.anchoredPosition = new Vector2(myTransform.anchoredPosition.x, hand_away_y);
+        }
+    }
+
 
     public void AddCardToHand(Card card) {
         cardGroup.enabled = true;
