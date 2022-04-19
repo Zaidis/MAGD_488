@@ -7,6 +7,8 @@ public class BlackKnight : Creature
 {
     public override void OnAttack(Tile[] hostBoard, Tile[] clientBoard, Tile attacker, bool isHost, Tile attacked) {
         base.OnAttack(hostBoard, clientBoard, attacker, isHost, attacked);
+        Cleave(hostBoard, clientBoard, attacker, isHost, attacked);
+        Pierce(hostBoard, clientBoard, attacker, isHost, attacked);
     }
     public override void OnAbility(Tile[] hostBoard, Tile[] clientBoard, Tile attacker, bool isHost)
     {

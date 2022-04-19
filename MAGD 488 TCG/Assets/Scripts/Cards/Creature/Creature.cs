@@ -49,4 +49,66 @@ public class Creature : Card
     {
 
     }
+
+    /// <summary>
+    /// Attacker deals damage to the left and right of the attacked token. 
+    /// </summary>
+    /// <param name="hostBoard"></param>
+    /// <param name="clientBoard"></param>
+    /// <param name="attacker"></param>
+    /// <param name="isHost"></param>
+    /// <param name="attacked"></param>
+    public void Cleave(Tile[] hostBoard, Tile[] clientBoard, Tile attacker, bool isHost, Tile attacked) {
+
+        int attackedID = attacked.token.transform.parent.GetComponent<Tile>().GetTileID();
+        if (isHost) {
+            if(clientBoard[attackedID - 1] != null) { //check the tile to the left of the attacked tile
+                if(clientBoard[attackedID - 1].token != null) { //if there is a token here, attack it
+                    clientBoard[attackedID - 1].DealtDamage(attacker.token.GetComponent<CreatureToken>().currentAttack);
+                }
+            }
+            if (clientBoard[attackedID + 1] != null) { //check the tile to the right of the attacked tile
+                if (clientBoard[attackedID + 1].token != null) {
+                    clientBoard[attackedID + 1].DealtDamage(attacker.token.GetComponent<CreatureToken>().currentAttack);
+                }
+            }
+        } else {
+            if (hostBoard[attackedID - 1] != null) {
+                if (hostBoard[attackedID - 1].token != null) {
+                    hostBoard[attackedID - 1].DealtDamage(attacker.token.GetComponent<CreatureToken>().currentAttack);
+                }
+            }
+            if (hostBoard[attackedID + 1] != null) {
+                if (hostBoard[attackedID + 1].token != null) {
+                    hostBoard[attackedID + 1].DealtDamage(attacker.token.GetComponent<CreatureToken>().currentAttack);
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// Attacker hits behind the attacked tile. 
+    /// </summary>
+    /// <param name="hostBoard"></param>
+    /// <param name="clientBoard"></param>
+    /// <param name="attacker"></param>
+    /// <param name="isHost"></param>
+    /// <param name="attacked"></param>
+    public void Pierce(Tile[] hostBoard, Tile[] clientBoard, Tile attacker, bool isHost, Tile attacked) {
+        int attackedID = attacked.token.transform.parent.GetComponent<Tile>().GetTileID();
+
+        if (isHost) {
+            if(clientBoard[attackedID - 5] != null) {
+                if(clientBoard[attackedID - 5].token != null) {
+                    clientBoard[attackedID - 5].DealtDamage(attacker.token.GetComponent<CreatureToken>().currentAttack);
+                }
+            }
+        } else {
+            if (hostBoard[attackedID - 5] != null) {
+                if (hostBoard[attackedID - 5].token != null) {
+                    hostBoard[attackedID - 5].DealtDamage(attacker.token.GetComponent<CreatureToken>().currentAttack);
+                }
+            }
+        }
+    }
 }
