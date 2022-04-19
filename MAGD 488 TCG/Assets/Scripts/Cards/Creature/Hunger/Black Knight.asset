@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a38ee5160a716ba47b4d14169e941aa9, type: 3}
   m_Name: Black Knight
   m_EditorClassIdentifier: 
-  ID: 9999
+  ID: 9951
   type: 0
   manaCost: 8
   cardName: Black Knight

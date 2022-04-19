@@ -46,9 +46,9 @@ public class CreatureToken : Token, IPointerClickHandler
                     //needs access to tile ID
                     //also needs to know if its melee or ranged
                     if (creature.isMelee) {
-                        GameManager.Singleton.ChangeTilesMaterial(GameManager.Singleton.clientBoard, true);
+                        GameManager.Singleton.ChangeTilesMaterial(GameManager.Singleton.clientBoard, true, transform.parent.GetComponent<Tile>().GetTileID());
                     } else {
-                        GameManager.Singleton.ChangeTilesMaterial(GameManager.Singleton.clientBoard, false);
+                        GameManager.Singleton.ChangeTilesMaterial(GameManager.Singleton.clientBoard, false, transform.parent.GetComponent<Tile>().GetTileID());
                     }
 
                     GameManager.Singleton.isAttecking = true;

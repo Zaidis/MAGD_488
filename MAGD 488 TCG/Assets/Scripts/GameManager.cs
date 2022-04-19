@@ -232,7 +232,13 @@ public class GameManager : MonoBehaviour
         myHand.AddCardToHand(card);
     }
 
-    public void ChangeTilesMaterial(Tile[] board, bool isMelee) {
+    /// <summary>
+    /// Called When attacking a creature. Sets opponents tiles to active if attackable. 
+    /// </summary>
+    /// <param name="board">Specific board to turn active.</param>
+    /// <param name="isMelee">Whether or not the attacking creature is melee.</param>
+    /// <param name="attackerID">The creature that is attacking.</param>
+    public void ChangeTilesMaterial(Tile[] board, bool isMelee, int attackerID) {
         if (isMelee) {
              for(int i = 9; i > 4; i--) {
                 Tile t = board[i].GetComponent<Tile>();
@@ -254,6 +260,15 @@ public class GameManager : MonoBehaviour
                 }
             }
         }
+
+        //checks to see if you can attack the opponent with this particular creature. 
+        //in order to attack the opponent, the entire enemy column that matches the attacking creature must be empty.
+        //that goes for both melee and ranged creatures. The difference is ranged can attack the backline even if
+        //there is a melee creature in front.
+        if(board[attackerID].GetComponent<Tile>().token == null && board[attackerID - 5].GetComponent<Tile>().token == null) {
+            //checks entire column
+
+        }
     }
 
     /// <summary>
@@ -263,6 +278,7 @@ public class GameManager : MonoBehaviour
         for(int i = 0; i < board.Length; i++) {
             Tile t = board[i].GetComponent<Tile>();
             t.ChangeMaterial(m_default);
+            t.active = false;
         }
     }
 
