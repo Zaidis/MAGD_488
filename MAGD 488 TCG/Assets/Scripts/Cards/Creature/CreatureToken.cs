@@ -38,36 +38,42 @@ public class CreatureToken : Token, IPointerClickHandler
     /// </summary>
     /// <param name="eventData"></param>
     public void OnPointerClick(PointerEventData eventData) {
-        if (GameManager.Singleton.isHost) {
-            if (GameManager.Singleton.CheckIfMyCreature(GameManager.Singleton.hostBoard, transform.parent.GetComponent<Tile>())) {
-                //this is my creature
-                if (hasAttacked == false) {
-                    //you can attack with this creature. 
-                    //needs access to tile ID
-                    //also needs to know if its melee or ranged
-                    if (creature.isMelee) {
-                        GameManager.Singleton.ChangeTilesMaterial(GameManager.Singleton.clientBoard, true, transform.parent.GetComponent<Tile>().GetTileID());
-                    } else {
-                        GameManager.Singleton.ChangeTilesMaterial(GameManager.Singleton.clientBoard, false, transform.parent.GetComponent<Tile>().GetTileID());
-                    }
+        if (eventData.button == PointerEventData.InputButton.Left) {
+            if (GameManager.Singleton.isHost) {
+                if (GameManager.Singleton.CheckIfMyCreature(GameManager.Singleton.hostBoard, transform.parent.GetComponent<Tile>())) {
+                    //this is my creature
+                    if (hasAttacked == false) {
+                        //you can attack with this creature. 
+                        //needs access to tile ID
+                        //also needs to know if its melee or ranged
+                        if (creature.isMelee) {
+                            GameManager.Singleton.ChangeTilesMaterial(GameManager.Singleton.clientBoard, true, transform.parent.GetComponent<Tile>().GetTileID());
+                        }
+                        else {
+                            GameManager.Singleton.ChangeTilesMaterial(GameManager.Singleton.clientBoard, false, transform.parent.GetComponent<Tile>().GetTileID());
+                        }
 
-                    GameManager.Singleton.isAttecking = true;
-                    GameManager.Singleton.selectedCreature = this;
+                        GameManager.Singleton.isAttecking = true;
+                        GameManager.Singleton.selectedCreature = this;
+                    }
                 }
-            } else {
-                if (GameManager.Singleton.isAttecking) {
-                    if (transform.parent.GetComponent<Tile>().active) {
-                        GameManager.Singleton.selectedCreature.AttackWithToken(transform.parent.GetComponent<Tile>());
-                        GameManager.Singleton.selectedCreature = null;
-                        GameManager.Singleton.isAttecking = false;
+                else {
+                    if (GameManager.Singleton.isAttecking) {
+                        if (transform.parent.GetComponent<Tile>().active) {
+                            GameManager.Singleton.selectedCreature.AttackWithToken(transform.parent.GetComponent<Tile>());
+                            GameManager.Singleton.selectedCreature = null;
+                            GameManager.Singleton.isAttecking = false;
+                        }
                     }
                 }
             }
-        } else {
-            //not the host
-            
+            else {
+                //not the host
+
+            }
+        } else if (eventData.button == PointerEventData.InputButton.Right) {
+            GameManager.Singleton.popup.UpdatePopup(creature);
         }
-        
 
     }
 

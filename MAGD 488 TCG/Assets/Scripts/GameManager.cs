@@ -47,7 +47,7 @@ public class GameManager : MonoBehaviour
 
     public bool isHost;
 
-
+    public Card_Popup popup; //when you right click a card
 
     #region Tile Materials
     public Material m_default;

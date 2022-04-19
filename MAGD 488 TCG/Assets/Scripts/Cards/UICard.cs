@@ -56,9 +56,10 @@ public class UICard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
                 }
             }
         } else if (eventData.button == PointerEventData.InputButton.Right) {
+            Debug.Log("Updating popup");
             //will bring up a pop up to see the card more closely and also read lore. 
-
-
+            GameManager.Singleton.popup.UpdatePopup(myCard);
+            
         }
 
     }

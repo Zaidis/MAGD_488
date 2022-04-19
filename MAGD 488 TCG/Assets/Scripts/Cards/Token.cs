@@ -13,4 +13,7 @@ public abstract class Token : MonoBehaviour {
 
 
     public abstract void ApplyCard();
+
+
+
 }
