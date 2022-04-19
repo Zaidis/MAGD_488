@@ -49,6 +49,20 @@ public class GameManager : MonoBehaviour
 
     public Card_Popup popup; //when you right click a card
 
+    #region Creature Options
+    //When clicking on a creature, these buttons will appear. 
+    public O_AttackToken attackTokenOption;
+    public O_AttackPlayer attackPlayerOption;
+    public O_Ability abilityOption;
+    [SerializeField] private Transform[] optionSpawnLocations;
+    [SerializeField] private GameObject optionsParent;
+    #endregion
+
+    #region Player Variables
+    public int hostHealth = 20;
+    public int clientHealth = 20;
+    #endregion
+
     #region Tile Materials
     public Material m_default;
     public Material m_active;
@@ -260,15 +274,19 @@ public class GameManager : MonoBehaviour
                 }
             }
         }
+    }
 
+
+    public bool CheckIfCreatureCanAttackPlayer(Tile[] board, int attackerID) {
         //checks to see if you can attack the opponent with this particular creature. 
         //in order to attack the opponent, the entire enemy column that matches the attacking creature must be empty.
         //that goes for both melee and ranged creatures. The difference is ranged can attack the backline even if
         //there is a melee creature in front.
-        if(board[attackerID].GetComponent<Tile>().token == null && board[attackerID - 5].GetComponent<Tile>().token == null) {
+        if (board[attackerID].GetComponent<Tile>().token == null && board[attackerID - 5].GetComponent<Tile>().token == null) {
             //checks entire column
-
+            return true;
         }
+        return false;
     }
 
     /// <summary>
@@ -289,4 +307,41 @@ public class GameManager : MonoBehaviour
 
         return false;
     }
+
+    /// <summary>
+    /// When I click on a creature, these buttons will apear for what is available.
+    /// </summary>
+    public void CreatureOptionButtons(CreatureToken token, bool isHost) {
+        int counter = 0;
+        attackTokenOption.token = token;
+        attackPlayerOption.token = token;
+
+        attackTokenOption.gameObject.SetActive(false);
+        attackPlayerOption.gameObject.SetActive(false);
+        abilityOption.gameObject.SetActive(false);
+
+        if (isHost) {
+            if (token.hasAttacked == false) {
+                //add attack button
+                attackTokenOption.transform.position = optionSpawnLocations[counter].position;
+                attackTokenOption.gameObject.SetActive(true);
+                counter++;
+
+                if (CheckIfCreatureCanAttackPlayer(clientBoard, token.transform.parent.GetComponent<Tile>().GetTileID())) {
+                    //add attack player button
+
+                    attackPlayerOption.transform.position = optionSpawnLocations[counter].position;
+                    attackPlayerOption.gameObject.SetActive(true);
+                    counter++;
+                }
+            }
+
+            //ability
+        }
+        
+
+        
+    }
+
+    
 }

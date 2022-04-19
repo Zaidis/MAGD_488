@@ -39,9 +39,11 @@ public class Creature : Card
         } */
 
         //first attacker will hit the attecked token
+        attacker.token.GetComponent<CreatureToken>().hasAttacked = true;
+        GameManager.Singleton.CreatureOptionButtons(attacker.token.GetComponent<CreatureToken>(), GameManager.Singleton.isHost);
         attacked.DealtDamage(attacker.token.GetComponent<CreatureToken>().currentAttack);
         attacker.DealtDamage(attacked.token.GetComponent<CreatureToken>().currentAttack);
-
+        
     }
     public virtual void OnAbility(Tile[] hostBoard, Tile[] clientBoard, Tile attacker, bool isHost)
     {

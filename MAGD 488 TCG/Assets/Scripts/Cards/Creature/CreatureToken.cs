@@ -12,7 +12,7 @@ public class CreatureToken : Token, IPointerClickHandler
     public Creature creature;
     public TextMeshPro AttackText;
     public TextMeshPro HealthText;
-    [SerializeField] private bool hasAttacked;
+    public bool hasAttacked;
 
 
     public override void ApplyCard() {
@@ -42,7 +42,9 @@ public class CreatureToken : Token, IPointerClickHandler
             if (GameManager.Singleton.isHost) {
                 if (GameManager.Singleton.CheckIfMyCreature(GameManager.Singleton.hostBoard, transform.parent.GetComponent<Tile>())) {
                     //this is my creature
-                    if (hasAttacked == false) {
+
+                    GameManager.Singleton.CreatureOptionButtons(this, GameManager.Singleton.isHost);
+                    /*if (hasAttacked == false) {
                         //you can attack with this creature. 
                         //needs access to tile ID
                         //also needs to know if its melee or ranged
@@ -55,7 +57,7 @@ public class CreatureToken : Token, IPointerClickHandler
 
                         GameManager.Singleton.isAttecking = true;
                         GameManager.Singleton.selectedCreature = this;
-                    }
+                    }*/
                 }
                 else {
                     if (GameManager.Singleton.isAttecking) {
@@ -65,10 +67,10 @@ public class CreatureToken : Token, IPointerClickHandler
                             GameManager.Singleton.isAttecking = false;
                         }
                     }
-                }
+                } 
             }
             else {
-                //not the host
+                //not the host 
 
             }
         } else if (eventData.button == PointerEventData.InputButton.Right) {
