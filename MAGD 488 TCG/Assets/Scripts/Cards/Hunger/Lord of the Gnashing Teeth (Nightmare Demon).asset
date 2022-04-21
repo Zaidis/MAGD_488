@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7362d6eb3b411b04a9128bc8cc99df67, type: 3}
+  m_Name: Lord of the Gnashing Teeth (Nightmare Demon)
+  m_EditorClassIdentifier: 
+  ID: 1013
+  type: 0
+  manaCost: 5
+  cardName: Lord of the Gnashing Teeth (Nightmare Demon)
+  cardArt: {fileID: 0}
+  cardBorder: {fileID: 0}
+  description: 'Self-Buff: Add Thorns for the next (2) turns + -2/0 (2 Mana Cost)'
+  defaultHealthAmount: 6
+  defaultPowerAmount: 3
+  myAttributes: 
+  isMelee: 0

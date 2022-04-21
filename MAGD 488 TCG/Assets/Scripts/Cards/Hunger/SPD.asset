@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47d16e87845be6b46bac0c324aacf665, type: 3}
+  m_Name: SPD
+  m_EditorClassIdentifier: 
+  ID: 1001
+  type: 0
+  manaCost: 3
+  cardName: SPD
+  cardArt: {fileID: 21300000, guid: a79471d4d1ac4444396c6a3fb07751f4, type: 3}
+  cardBorder: {fileID: 0}
+  description: 'Debuff Enemy Card: Fear Target Card (2 Mana Cost)'
+  defaultHealthAmount: 5
+  defaultPowerAmount: 0
+  myAttributes: 
+  isMelee: 1
