@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce8bac823d895754f860642282d982d5, type: 3}
+  m_Name: Kaylon
+  m_EditorClassIdentifier: 
+  ID: 2010
+  type: 0
+  manaCost: 3
+  cardName: Kaylon
+  cardArt: {fileID: 0}
+  cardBorder: {fileID: 0}
+  description: 'Special Effect Arrows (fire/burn, etc) (4-5 mana cost)
+
+    Send
+    animal to attack (can send hawk for range attack or boar to attack melee) (4-5
+    mana cost) (send individual animal hawk = 3 mana boar = 4) (or set one animal)'
+  defaultHealthAmount: 2
+  defaultPowerAmount: 3
+  myAttributes: 
+  isMelee: 0

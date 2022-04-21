@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6774b68442db76543bedf35639b6ee45, type: 3}
+  m_Name: Lumine
+  m_EditorClassIdentifier: 
+  ID: 2015
+  type: 0
+  manaCost: 3
+  cardName: Lumine
+  cardArt: {fileID: 0}
+  cardBorder: {fileID: 0}
+  description: Heals 1 hp to target area (6 targets max) (4 mana cost)
+  defaultHealthAmount: 4
+  defaultPowerAmount: 2
+  myAttributes: 
+  isMelee: 0
