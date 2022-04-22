@@ -13,36 +13,29 @@ public class Creature : Card
     public virtual void OnAttack(Tile[] hostBoard, Tile[] clientBoard, Tile attacker, bool isHost, Tile attacked)
     {
 
-        /*if (isHost) {
-            if (attacker.token.GetComponent<CreatureToken>().creature.isMelee) {
-                //if the creature is melee, it attacks in front if itself
-
-                //GameManager.Singleton.ChangeTilesMaterial(clientBoard, true);
-
-                if (clientBoard[attacker.GetTileID()].token != null) { //check if there is a token here
-                    //first the client's creautre is attacked
-                    clientBoard[attacker.GetTileID()].DealtDamage(attacker.token.GetComponent<CreatureToken>().currentAttack);
-
-                    //second the attacker is dealt damage 
-                    attacker.DealtDamage(clientBoard[attacker.GetTileID()].token.GetComponent<CreatureToken>().currentAttack);
-                } else if (clientBoard[attacker.GetTileID() - 5].token != null) { //check if the tile behind it is not null
-                    //we attack the next tile behind the ID's tile. 
-                    clientBoard[attacker.GetTileID() - 5].DealtDamage(attacker.token.GetComponent<CreatureToken>().currentAttack);
-                    attacker.DealtDamage(clientBoard[attacker.GetTileID() - 5].token.GetComponent<CreatureToken>().currentAttack);
-                } else {
-                    //attack the player!
-                    Debug.Log("I hit the player for " + attacker.token.GetComponent<CreatureToken>().currentAttack);
-                }
-            } else {
-                //this is ranged
-            }
-        } */
-
         //first attacker will hit the attecked token
         attacker.token.GetComponent<CreatureToken>().hasAttacked = true;
         GameManager.Singleton.CreatureOptionButtons(attacker.token.GetComponent<CreatureToken>(), GameManager.Singleton.isHost);
         attacked.DealtDamage(attacker.token.GetComponent<CreatureToken>().currentAttack);
         attacker.DealtDamage(attacked.token.GetComponent<CreatureToken>().currentAttack);
+
+        //Attributes
+
+        if (myAttributes.Contains(attributes.cleave)) {
+            Cleave(hostBoard, clientBoard, attacker, isHost, attacked);
+        }
+        if (myAttributes.Contains(attributes.pierce)) {
+            Pierce(hostBoard, clientBoard, attacker, isHost, attacked);
+        }
+        if (myAttributes.Contains(attributes.lifesteal)) { //when this deals damage, heal your player
+            LifeSteal(attacker, attacked);
+        }
+        if (myAttributes.Contains(attributes.thorn)) { //when attacked, deals damage to attacker
+
+        }
+        if (myAttributes.Contains(attributes.taunt)) { //must be destroyed before attacking another tile
+
+        }
         
     }
     public virtual void OnAbility(Tile[] hostBoard, Tile[] clientBoard, Tile attacker, bool isHost)
@@ -110,5 +103,11 @@ public class Creature : Card
                 }
             }
         }
+    }
+
+    public void LifeSteal(Tile attacker, Tile attacked) {
+
+
+
     }
 }
