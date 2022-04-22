@@ -26,7 +26,11 @@ public class Tile : MonoBehaviour, IPointerClickHandler {
     public void DealtDamage(int damageAmount) {
         Token t = token.GetComponent<CreatureToken>();
         t.currentHealth -= damageAmount;
-        
+        if(t is CreatureToken c){
+            if (c.creature.myAttributes.Contains(attributes.lifesteal)) {
+                //make this later
+            } 
+        }
         if(t.currentHealth <= 0) {
             //destroy token
             Destroy(token);
@@ -46,7 +50,11 @@ public class Tile : MonoBehaviour, IPointerClickHandler {
             if (GameManager.Singleton.needsToSelectTile) { //if you need to select a tile (you are playing a card)
                                                            //we have selected the tile
 
-                if (GameManager.Singleton.selectedCard.type == cardType.creature) {
+                Player p = GameManager.Singleton._networkManager.SpawnManager.GetLocalPlayerObject().GetComponent<Player>();
+                p.PlaceCard(GameManager.Singleton.selectedCard.ID, GetTileID());
+                Hand.instance.RemoveCardFromHand();
+                GameManager.Singleton.ResetSelectedCard();
+                /*if (GameManager.Singleton.selectedCard.type == cardType.creature) {
 
                     Creature c = (Creature)GameManager.Singleton.selectedCard;
                     GameObject t = Instantiate(GameManager.Singleton.CreatureTokenPrefab);
@@ -73,19 +81,8 @@ public class Tile : MonoBehaviour, IPointerClickHandler {
                     Hand.instance.RemoveCardFromHand();
 
                     GameManager.Singleton.ResetSelectedCard();
-                }
+                } */
             }
-        }/* else {
-            if (GameManager.Singleton.isAttecking) {
-
-                if (this.active) {
-                    //attack this
-                    GameManager.Singleton.selectedCreature.AttackWithToken(this);
-
-                }
-
-
-            }
-        } */
+        }
     }
 }

@@ -34,13 +34,13 @@ public class Player : NetworkBehaviour {
             UpdateTurnServerRpc(isHostTurn);
         }
     }    
-    public void PlaceCard(int cardID, int x, int y) { //<----- NEEDS TO CALL THIS
+    public void PlaceCard(int cardID, int id) { //<----- NEEDS TO CALL THIS
         if (_networkManager.IsHost) {
-            GameManager.Singleton.PlaceCard(true, cardID, x, y);
-            UpdatePlaceCardClientRpc(x, y, cardID);
+            GameManager.Singleton.PlaceCard(true, cardID, id);
+            UpdatePlaceCardClientRpc(id, cardID);
         } else {
-            GameManager.Singleton.PlaceCard(false, cardID, x, y);
-            UpdatePlaceCardServerRpc(x, y, cardID);
+            GameManager.Singleton.PlaceCard(false, cardID, id);
+            UpdatePlaceCardServerRpc(id, cardID);
         }
     }
    
@@ -50,27 +50,39 @@ public class Player : NetworkBehaviour {
      * WE need to know the location of where the card is placed. <---- Do this first
      */
     [ServerRpc]
-    private void UpdatePlaceCardServerRpc(int x, int y, int cardID) {
-        GameManager.Singleton.PlaceCard(false, cardID, x, y);
+    private void UpdatePlaceCardServerRpc(int id, int cardID) {
+        GameManager.Singleton.PlaceCard(false, cardID, id);
     }
 
     [ClientRpc]
-    private void UpdatePlaceCardClientRpc(int x, int y, int cardID) {
-        GameManager.Singleton.PlaceCard(true, cardID, x, y);
+    private void UpdatePlaceCardClientRpc(int id, int cardID) {
+        GameManager.Singleton.PlaceCard(true, cardID, id);
     }
     #endregion*/
     
     #region Attacking
+
+    public void Attack(int attackerID, int attackedID) {
+        if (GameManager.Singleton.isHost) {
+            GameManager.Singleton.Attack(attackerID, attackedID, true);
+            UpdateAttackClientRpc(attackerID, attackedID);
+        } else {
+            GameManager.Singleton.Attack(attackerID, attackedID, false);
+            UpdateAttackServerRpc(attackerID, attackedID);
+        }
+    }
+
+
     [ServerRpc]
-    private void UpdateAttackServerRpc(bool isHostTurn) {
-        
-        
+    private void UpdateAttackServerRpc(int attackerID, int attackedID) {
+
+        GameManager.Singleton.Attack(attackerID, attackedID, false);
 
     }
 
     [ClientRpc]
-    private void UpdateClientClientRpc(bool isHostTurn) {
-
+    private void UpdateAttackClientRpc(int attackerID, int attackedID) {
+        GameManager.Singleton.Attack(attackerID, attackedID, true);
     }
     #endregion
     #region Turns

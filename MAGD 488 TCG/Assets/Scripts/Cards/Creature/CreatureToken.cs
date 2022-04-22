@@ -62,9 +62,12 @@ public class CreatureToken : Token, IPointerClickHandler
                 else {
                     if (GameManager.Singleton.isAttecking) {
                         if (transform.parent.GetComponent<Tile>().active) {
-                            GameManager.Singleton.selectedCreature.AttackWithToken(transform.parent.GetComponent<Tile>());
+                            /*GameManager.Singleton.selectedCreature.AttackWithToken(transform.parent.GetComponent<Tile>());
                             GameManager.Singleton.selectedCreature = null;
-                            GameManager.Singleton.isAttecking = false;
+                            GameManager.Singleton.isAttecking = false;*/
+
+                            Player p = GameManager.Singleton._networkManager.SpawnManager.GetLocalPlayerObject().GetComponent<Player>();
+                            p.Attack(GameManager.Singleton.selectedCreature.GetComponentInParent<Tile>().GetTileID(), transform.parent.GetComponent<Tile>().GetTileID());
                         }
                     }
                 } 
@@ -80,16 +83,23 @@ public class CreatureToken : Token, IPointerClickHandler
     }
 
     public void AttackWithToken(Tile attackedToken) {
-        creature.OnAttack(GameManager.Singleton.hostBoard, GameManager.Singleton.clientBoard,
-                transform.parent.GetComponent<Tile>(), GameManager.Singleton.isHost, attackedToken);
+        if (!hasAttacked) {
+            creature.OnAttack(GameManager.Singleton.hostBoard, GameManager.Singleton.clientBoard,
+                    transform.parent.GetComponent<Tile>(), GameManager.Singleton.isHost, attackedToken);
 
-        if (GameManager.Singleton.isHost) {
+            /* if (GameManager.Singleton.isHost) {
+                 GameManager.Singleton.ResetAllTiles(GameManager.Singleton.clientBoard);
+                 hasAttacked = true;
+                 GameManager.Singleton.isAttecking = false;
+                 GameManager.Singleton.selectedCreature = null;
+             }*/
+
+            GameManager.Singleton.ResetAllTiles(GameManager.Singleton.hostBoard);
             GameManager.Singleton.ResetAllTiles(GameManager.Singleton.clientBoard);
             hasAttacked = true;
             GameManager.Singleton.isAttecking = false;
             GameManager.Singleton.selectedCreature = null;
         }
-        
     }
     
 }

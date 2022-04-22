@@ -17,7 +17,7 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI opponent;
     public GameObject Connecting;
     public Button NextTurn;
-    private NetworkManager _networkManager;
+    public NetworkManager _networkManager;
     public bool IsHostTurn = true;
     public string yourName;
     private string opponentName; //TODO IMPLEMENT
@@ -33,10 +33,7 @@ public class GameManager : MonoBehaviour
     public Tile[] hostBoard = new Tile[2*5];
     public Tile[] clientBoard = new Tile[2*5];
 
-    public int maxMana;
-    public int currentMana;
-    [SerializeField] private TextMeshProUGUI manaText;
-
+   
 
     public bool needsToSelectTile;
     public bool isAttecking;
@@ -49,18 +46,26 @@ public class GameManager : MonoBehaviour
 
     public Card_Popup popup; //when you right click a card
 
+    #region Mana
+        public int maxMana;
+        public int currentMana;
+        [SerializeField] private TextMeshProUGUI manaText;
+    #endregion
+
     #region Creature Options
     //When clicking on a creature, these buttons will appear. 
     public O_AttackToken attackTokenOption;
-    public O_AttackPlayer attackPlayerOption;
-    public O_Ability abilityOption;
-    [SerializeField] private Transform[] optionSpawnLocations;
-    [SerializeField] private GameObject optionsParent;
+        public O_AttackPlayer attackPlayerOption;
+        public O_Ability abilityOption;
+        [SerializeField] private Transform[] optionSpawnLocations;
+        [SerializeField] private GameObject optionsParent;
     #endregion
 
     #region Player Variables
-    public int hostHealth = 20;
-    public int clientHealth = 20;
+        public int hostHealth = 20;
+        public int clientHealth = 20;
+        [SerializeField] TextMeshPro hostHealthText;
+        [SerializeField] TextMeshPro clientHealthText;
     #endregion
 
     #region Tile Materials
@@ -79,8 +84,8 @@ public class GameManager : MonoBehaviour
     private void Start() {
         
         AffectCurrentMana(20);
-        //isHost = NetworkManager.Singleton.IsHost;
-        isHost = true;
+        isHost = NetworkManager.Singleton.IsHost;
+        //isHost = true;
         _networkManager = NetworkManager.Singleton;
         if (!_networkManager.IsClient && !_networkManager.IsServer && !_networkManager.IsHost)
             _networkManager.StartHost();
@@ -100,7 +105,11 @@ public class GameManager : MonoBehaviour
         opponent.text = "Opponent: " + opponentName;
         StartCoroutine(ClearConnectingOnConnect());
 
-        
+        if (!isHost) {
+            //flip text 180
+            hostHealthText.transform.rotation = Quaternion.Euler(0, 180, 0);
+            clientHealthText.transform.rotation = Quaternion.Euler(0, 180, 0);
+        }
 
     }
 
@@ -111,6 +120,18 @@ public class GameManager : MonoBehaviour
         
         currentMana += amount;
         manaText.text = "Current Mana: " + currentMana.ToString();
+
+    }
+
+    public void AffectHostCurrentHealth(int amount) {
+
+        hostHealth += amount;
+        hostHealthText.text = hostHealth.ToString();
+    }
+
+    public void AffectClientCurrentHealth(int amount) {
+        clientHealth += amount;
+        clientHealthText.text = clientHealth.ToString();
     }
 
     public void ResetSelectedCard() {
@@ -166,14 +187,6 @@ public class GameManager : MonoBehaviour
         }
 
     }
-
-    public void DrawRandomCard(List<Card> deck) {
-        int rand = rng.Next(deck.Count);
-        //myHand.myCards.Add(deck[rand]);
-        myHand.AddCardToHand(deck[rand]);
-        deck.RemoveAt(rand);
-    }
-
     public GameObject NewToken(int cardID) //Creates Token based on card type and return gameObject
     {        
         Card card = cards.Find(c => c.ID == cardID);
@@ -183,40 +196,50 @@ public class GameManager : MonoBehaviour
             CreatureToken creatureToken = tokenObject.GetComponent<CreatureToken>();
             creatureToken.creature = creature;
             creatureToken.ApplyCard();
-        } else if (card is Spell spell) {
-            tokenObject = Instantiate(SpellTokenPrefab);
-            SpellToken spellToken = tokenObject.GetComponent<SpellToken>();
-            spellToken.spell = spell;
-            spellToken.ApplyCard();
         } else if (card is Artifact artifact) {
             tokenObject = Instantiate(ArtifactTokenPrefab);
             ArtifactToken artifactToken = tokenObject.GetComponent<ArtifactToken>();
             artifactToken.artifact = artifact;
             artifactToken.ApplyCard();
         }
+
         return tokenObject;
     }
-    public void PlaceCard(bool isHost, int cardID, int x, int y) {
+
+
+
+    public void PlaceCard(bool isHost, int cardID, int id) {
         GameObject token = NewToken(cardID);        
         if (isHost) {
-            hostBoard[x + y * 5].SetToken(token);         
+            if(hostBoard[id].token == null)
+                hostBoard[id].SetToken(token);         
         } else {
-            clientBoard[x + y * 5].SetToken(token);
+            if(clientBoard[id].token == null)
+                clientBoard[id].SetToken(token);
         }
     }
-    /*public void Attack(int x1, int y1, int x2, int y2) {
-        if (_networkManager.IsHost) {
-            CreatureToken t_one = hostBoard[x1 + y1 * 5].token.GetComponent<CreatureToken>();
-            t_one.creature.OnAttack(hostBoard, clientBoard, new Vector2Int(x1, y1), new Vector2Int(x2, y2), true);
-            CreatureToken t_two = clientBoard[x2 + y2 * 5].token.GetComponent<CreatureToken>();
 
-            t_one.currentHealth -= t_two.currentAttack;
-            t_two.currentHealth -= t_one.currentAttack;
 
-            if (t_one.currentHealth <= 0) Destroy(hostBoard[x1 + y1 * 5].token);
-            if (t_two.currentHealth <= 0) Destroy(clientBoard[x2 + y2 * 5].token);
+
+    public void Attack(int attackerID, int attackedID, bool isHost) {
+        if (isHost) {
+            CreatureToken t_one = hostBoard[attackerID].token.GetComponent<CreatureToken>();
+            //CreatureToken t_two = clientBoard[attackedID].token.GetComponent<CreatureToken>();
+
+            //t_one.creature.OnAttack(hostBoard, clientBoard, t_one.GetComponentInParent<Tile>(), true, t_two.GetComponentInParent<Tile>());
+            t_one.AttackWithToken(clientBoard[attackedID]);
+
+
+            //t_one.currentHealth -= t_two.currentAttack;
+           //t_two.currentHealth -= t_one.currentAttack;
+
+            //if (t_one.currentHealth <= 0) Destroy(hostBoard[x1 + y1 * 5].token);
+            //if (t_two.currentHealth <= 0) Destroy(clientBoard[x2 + y2 * 5].token);
+        } else {
+            CreatureToken t_one = clientBoard[attackerID].token.GetComponent<CreatureToken>();
+            t_one.AttackWithToken(hostBoard[attackedID]);
         }
-    }*/
+    }
 
     public void OnNextTurnPressed() {
         TurnStatus.text = "Other User's Turn";
@@ -236,11 +259,11 @@ public class GameManager : MonoBehaviour
         BeginGame();
     }
 
-    public void TestCardPlace(int x) {
+    /*public void TestCardPlace(int x) {
         System.Random rand = new System.Random();
         Player player = _networkManager.SpawnManager.GetLocalPlayerObject().GetComponent<Player>();
         player.PlaceCard(x, rand.Next(5), rand.Next(2));
-    }
+    } */
 
     public void TestDrawCard(Card card) {
         myHand.AddCardToHand(card);

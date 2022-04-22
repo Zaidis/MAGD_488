@@ -14,6 +14,7 @@ public class O_AttackPlayer : MonoBehaviour, IPointerClickHandler
 
         if (GameManager.Singleton.isHost) {
             GameManager.Singleton.clientHealth -= token.currentAttack;
+            
         } else {
             GameManager.Singleton.hostHealth -= token.currentAttack;
         }
