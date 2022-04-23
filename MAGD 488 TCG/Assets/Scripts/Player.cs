@@ -84,6 +84,30 @@ public class Player : NetworkBehaviour {
     private void UpdateAttackClientRpc(int attackerID, int attackedID) {
         GameManager.Singleton.Attack(attackerID, attackedID, true);
     }
+
+
+    public void UpdateHealth(bool isHost, int hostAmount, int clientAmount) {
+        if (isHost) {
+            GameManager.Singleton.AffectHealthValues(hostAmount, clientAmount);
+            UpdateHealthClientRpc(hostAmount, clientAmount);
+        } else {
+            GameManager.Singleton.AffectHealthValues(hostAmount, clientAmount);
+            UpdateHealthServerRpc(hostAmount, clientAmount);
+        }
+    }
+
+    [ServerRpc]
+    private void UpdateHealthServerRpc(int hostAmount, int clientAmount) {
+
+        GameManager.Singleton.AffectHealthValues(hostAmount, clientAmount);
+    }
+
+    [ClientRpc]
+    private void UpdateHealthClientRpc(int hostAmount, int clientAmount) {
+        Debug.Log("Test test test!");
+        GameManager.Singleton.AffectHealthValues(hostAmount, clientAmount);
+    }
+
     #endregion
     #region Turns
 

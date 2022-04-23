@@ -123,15 +123,17 @@ public class GameManager : MonoBehaviour
         manaText.text = "Current Mana: " + currentMana.ToString();
 
     }
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="hostAmount">The amount of health that will affect the host.</param>
+    /// <param name="clientAmount">The amount of health that will affect the client.</param>
+    public void AffectHealthValues(int hostAmount, int clientAmount) {
+        hostHealth += hostAmount;
+        clientHealth += clientAmount;
 
-    public void AffectHostCurrentHealth(int amount) {
-
-        hostHealth += amount;
         hostHealthText.text = hostHealth.ToString();
-    }
-
-    public void AffectClientCurrentHealth(int amount) {
-        clientHealth += amount;
         clientHealthText.text = clientHealth.ToString();
     }
 
@@ -225,17 +227,8 @@ public class GameManager : MonoBehaviour
     public void Attack(int attackerID, int attackedID, bool isHost) {
         if (isHost) {
             CreatureToken t_one = hostBoard[attackerID].token.GetComponent<CreatureToken>();
-            //CreatureToken t_two = clientBoard[attackedID].token.GetComponent<CreatureToken>();
-
-            //t_one.creature.OnAttack(hostBoard, clientBoard, t_one.GetComponentInParent<Tile>(), true, t_two.GetComponentInParent<Tile>());
             t_one.AttackWithToken(clientBoard[attackedID]);
 
-
-            //t_one.currentHealth -= t_two.currentAttack;
-           //t_two.currentHealth -= t_one.currentAttack;
-
-            //if (t_one.currentHealth <= 0) Destroy(hostBoard[x1 + y1 * 5].token);
-            //if (t_two.currentHealth <= 0) Destroy(clientBoard[x2 + y2 * 5].token);
         } else {
             CreatureToken t_one = clientBoard[attackerID].token.GetComponent<CreatureToken>();
             t_one.AttackWithToken(hostBoard[attackedID]);
@@ -306,9 +299,17 @@ public class GameManager : MonoBehaviour
         //in order to attack the opponent, the entire enemy column that matches the attacking creature must be empty.
         //that goes for both melee and ranged creatures. The difference is ranged can attack the backline even if
         //there is a melee creature in front.
-        if (board[attackerID].GetComponent<Tile>().token == null && board[attackerID - 5].GetComponent<Tile>().token == null) {
-            //checks entire column
-            return true;
+        
+        if(attackerID >= 0 && attackerID <= 4) {
+            //this creature is in the back row
+            if(board[attackerID].GetComponent<Tile>().token == null && board[attackerID + 5].GetComponent<Tile>().token == null) {
+                return true;
+            }
+        } else if(attackerID >= 5 && attackerID <= 9) {
+            if (board[attackerID].GetComponent<Tile>().token == null && board[attackerID - 5].GetComponent<Tile>().token == null) {
+                
+                return true;
+            }
         }
         return false;
     }
