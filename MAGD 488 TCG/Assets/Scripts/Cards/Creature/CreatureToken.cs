@@ -18,14 +18,14 @@ public class CreatureToken : Token, IPointerClickHandler
     public override void ApplyCard() {
         currentAttack = creature.defaultPowerAmount;
         currentHealth = creature.defaultHealthAmount;
-        Name.text = creature.cardName;
+       // Name.text = creature.cardName;
 
         AttackText.text = currentAttack.ToString();
         HealthText.text = currentHealth.ToString();
 
         //Description.text = creature.description;
        // Mana.text = creature.manaCost.ToString();
-      //  Art = creature.cardArt;
+        Art = creature.cardArt;
     }    
 
     public void UpdateStats() {
@@ -44,20 +44,7 @@ public class CreatureToken : Token, IPointerClickHandler
                     //this is my creature
 
                     GameManager.Singleton.CreatureOptionButtons(this, GameManager.Singleton.isHost);
-                    /*if (hasAttacked == false) {
-                        //you can attack with this creature. 
-                        //needs access to tile ID
-                        //also needs to know if its melee or ranged
-                        if (creature.isMelee) {
-                            GameManager.Singleton.ChangeTilesMaterial(GameManager.Singleton.clientBoard, true, transform.parent.GetComponent<Tile>().GetTileID());
-                        }
-                        else {
-                            GameManager.Singleton.ChangeTilesMaterial(GameManager.Singleton.clientBoard, false, transform.parent.GetComponent<Tile>().GetTileID());
-                        }
-
-                        GameManager.Singleton.isAttecking = true;
-                        GameManager.Singleton.selectedCreature = this;
-                    }*/
+                   
                 }
                 else {
                     if (GameManager.Singleton.isAttecking) {
@@ -74,7 +61,24 @@ public class CreatureToken : Token, IPointerClickHandler
             }
             else {
                 //not the host 
+                if (GameManager.Singleton.CheckIfMyCreature(GameManager.Singleton.clientBoard, transform.parent.GetComponent<Tile>())) {
+                    //this is my creature
 
+                    GameManager.Singleton.CreatureOptionButtons(this, false);
+
+                }
+                else {
+                    if (GameManager.Singleton.isAttecking) {
+                        if (transform.parent.GetComponent<Tile>().active) {
+                            /*GameManager.Singleton.selectedCreature.AttackWithToken(transform.parent.GetComponent<Tile>());
+                            GameManager.Singleton.selectedCreature = null;
+                            GameManager.Singleton.isAttecking = false;*/
+
+                            Player p = GameManager.Singleton._networkManager.SpawnManager.GetLocalPlayerObject().GetComponent<Player>();
+                            p.UpdateAttackServerRpc(GameManager.Singleton.selectedCreature.GetComponentInParent<Tile>().GetTileID(), transform.parent.GetComponent<Tile>().GetTileID(), false);
+                        }
+                    }
+                }
             }
         } else if (eventData.button == PointerEventData.InputButton.Right) {
             GameManager.Singleton.popup.UpdatePopup(creature);

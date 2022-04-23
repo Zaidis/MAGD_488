@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour
     public List<Card> deck;
     private List<Card> cards;
     
-    public GameObject CreatureTokenPrefab;
+    public GameObject[] CreatureTokenPrefab;
     public GameObject SpellTokenPrefab;
     public GameObject ArtifactTokenPrefab;
 
@@ -54,6 +54,8 @@ public class GameManager : MonoBehaviour
 
     #region Creature Options
     //When clicking on a creature, these buttons will appear. 
+    public Shader defaultShader; //for tokens
+
     public O_AttackToken attackTokenOption;
         public O_AttackPlayer attackPlayerOption;
         public O_Ability abilityOption;
@@ -195,7 +197,20 @@ public class GameManager : MonoBehaviour
         Card card = cards.Find(c => c.ID == cardID);
         GameObject tokenObject = null;
         if (card is Creature creature) {
-            tokenObject = Instantiate(CreatureTokenPrefab);
+
+            if(card.cardFaction == faction.empire) {
+                tokenObject = Instantiate(CreatureTokenPrefab[0]);
+            } else if(card.cardFaction == faction.beasts) {
+                tokenObject = Instantiate(CreatureTokenPrefab[1]);
+            } else if (card.cardFaction == faction.guidingLight) {
+                tokenObject = Instantiate(CreatureTokenPrefab[2]);
+            } else if (card.cardFaction == faction.hunted) {
+                tokenObject = Instantiate(CreatureTokenPrefab[3]);
+            } else if (card.cardFaction == faction.unaligned) {
+                tokenObject = Instantiate(CreatureTokenPrefab[4]);
+            }
+
+            
             CreatureToken creatureToken = tokenObject.GetComponent<CreatureToken>();
             creatureToken.creature = creature;
             creatureToken.ApplyCard();
@@ -205,6 +220,8 @@ public class GameManager : MonoBehaviour
             artifactToken.artifact = artifact;
             artifactToken.ApplyCard();
         }
+
+        
 
         return tokenObject;
     }
@@ -361,6 +378,21 @@ public class GameManager : MonoBehaviour
             }
 
             //ability
+        } else {
+            if (token.hasAttacked == false) {
+                //add attack button
+                attackTokenOption.transform.position = optionSpawnLocations[counter].position;
+                attackTokenOption.gameObject.SetActive(true);
+                counter++;
+
+                if (CheckIfCreatureCanAttackPlayer(hostBoard, token.transform.parent.GetComponent<Tile>().GetTileID())) {
+                    //add attack player button
+
+                    attackPlayerOption.transform.position = optionSpawnLocations[counter].position;
+                    attackPlayerOption.gameObject.SetActive(true);
+                    counter++;
+                }
+            }
         }
         
 

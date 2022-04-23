@@ -30,9 +30,6 @@ public class Creature : Card
         if (myAttributes.Contains(attributes.lifesteal)) { //when this deals damage, heal your player
             LifeSteal(attacker, attacked);
         }
-        if (myAttributes.Contains(attributes.thorn)) { //when attacked, deals damage to attacker
-
-        }
         if (myAttributes.Contains(attributes.taunt)) { //must be destroyed before attacking another tile
 
         }
@@ -107,7 +104,12 @@ public class Creature : Card
 
     public void LifeSteal(Tile attacker, Tile attacked) {
 
-
-
+        Player p = GameManager.Singleton._networkManager.SpawnManager.GetLocalPlayerObject().GetComponent<Player>();
+        if (attacker.hostTile) {
+            p.UpdateHealthServerRpc(attacker.token.GetComponent<CreatureToken>().currentAttack, 0);
+        } else {
+            p.UpdateHealthServerRpc(0, attacker.token.GetComponent<CreatureToken>().currentAttack);
+        }
+        
     }
 }

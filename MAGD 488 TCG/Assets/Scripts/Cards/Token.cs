@@ -10,7 +10,7 @@ public abstract class Token : MonoBehaviour {
     [Header("All Token Variables")]
     public TextMeshPro Name;
     public Sprite Art;
-
+    public GameObject cardArtHolder;
 
     public abstract void ApplyCard();
 

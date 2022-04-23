@@ -11,13 +11,22 @@ public class O_AttackToken : MonoBehaviour, IPointerClickHandler
 
 
         //we already know this token has NOT attacked yet
-
-        if (token.creature.isMelee) {
-            GameManager.Singleton.ChangeTilesMaterial(GameManager.Singleton.clientBoard, true, token.transform.parent.GetComponent<Tile>().GetTileID());
+        if (GameManager.Singleton.isHost) {
+            if (token.creature.isMelee) {
+                GameManager.Singleton.ChangeTilesMaterial(GameManager.Singleton.clientBoard, true, token.transform.parent.GetComponent<Tile>().GetTileID());
+            }
+            else {
+                GameManager.Singleton.ChangeTilesMaterial(GameManager.Singleton.clientBoard, false, token.transform.parent.GetComponent<Tile>().GetTileID());
+            }
+        } else {
+            if (token.creature.isMelee) {
+                GameManager.Singleton.ChangeTilesMaterial(GameManager.Singleton.hostBoard, true, token.transform.parent.GetComponent<Tile>().GetTileID());
+            }
+            else {
+                GameManager.Singleton.ChangeTilesMaterial(GameManager.Singleton.hostBoard, false, token.transform.parent.GetComponent<Tile>().GetTileID());
+            }
         }
-        else {
-            GameManager.Singleton.ChangeTilesMaterial(GameManager.Singleton.clientBoard, false, token.transform.parent.GetComponent<Tile>().GetTileID());
-        }
+        
 
         GameManager.Singleton.isAttecking = true;
         GameManager.Singleton.selectedCreature = token;

@@ -6,6 +6,8 @@ using UnityEngine.EventSystems;
 public class Tile : MonoBehaviour, IPointerClickHandler {
     public GameObject token;
     public Transform spawnLocation;
+    public bool hostTile;
+    public bool meleeTile;
     public bool active;
     [SerializeField] private int tileID; //each tile is unique
     
@@ -15,8 +17,16 @@ public class Tile : MonoBehaviour, IPointerClickHandler {
     }
     public void SetToken(GameObject token) {
         this.token = token;
+        
+        //new material texture
+        Renderer r = token.GetComponent<Token>().cardArtHolder.GetComponent<Renderer>();
+        
+        r.material = new Material(GameManager.Singleton.defaultShader);
+        r.material.mainTexture = token.GetComponent<Token>().Art.texture;
+
         token.transform.position = spawnLocation.position;
         token.transform.parent = transform;
+        token.transform.localScale = new Vector3(0.4f, 0.4f, 0.4f);
     }
 
     public int GetTileID() {
@@ -27,9 +37,26 @@ public class Tile : MonoBehaviour, IPointerClickHandler {
         Token t = token.GetComponent<CreatureToken>();
         t.currentHealth -= damageAmount;
         if(t is CreatureToken c){
+            Player p = GameManager.Singleton._networkManager.SpawnManager.GetLocalPlayerObject().GetComponent<Player>();
             if (c.creature.myAttributes.Contains(attributes.lifesteal)) {
                 //make this later
-            } 
+                if (hostTile) { //host health goes up
+                    p.UpdateHealthServerRpc(c.currentAttack, 0);
+
+                } else { //client health goes up
+                    p.UpdateHealthServerRpc(0, c.currentAttack);
+                }
+            }
+            if (c.creature.myAttributes.Contains(attributes.thorn)) { //when attacked, deals damage to attacker
+                if (hostTile) { //deals 1 damage to the opponent
+
+                    p.UpdateHealthServerRpc(0, c.currentAttack * -1);
+                }
+                else { //client health goes up
+                    p.UpdateHealthServerRpc(c.currentAttack * -1, 0);
+                    
+                }
+            }
         }
         if(t.currentHealth <= 0) {
             //destroy token
