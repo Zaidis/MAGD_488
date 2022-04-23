@@ -224,11 +224,10 @@ public class GameManager : MonoBehaviour
 
 
 
-    public void Attack(int attackerID, int attackedID, bool isHost) {
-        if (isHost) {
+    public void Attack(int attackerID, int attackedID, bool attackingFromHostSide) {
+        if (attackingFromHostSide) {
             CreatureToken t_one = hostBoard[attackerID].token.GetComponent<CreatureToken>();
             t_one.AttackWithToken(clientBoard[attackedID]);
-
         } else {
             CreatureToken t_one = clientBoard[attackerID].token.GetComponent<CreatureToken>();
             t_one.AttackWithToken(hostBoard[attackedID]);
@@ -239,7 +238,7 @@ public class GameManager : MonoBehaviour
         TurnStatus.text = "Other User's Turn";
         IsHostTurn = IsHostTurn ? false : true;
         Player player = _networkManager.SpawnManager.GetLocalPlayerObject().GetComponent<Player>();
-        player.NextTurnPressed(IsHostTurn);
+        player.UpdateTurnServerRpc(IsHostTurn);
     }    
     private IEnumerator ClearConnectingOnConnect() { //Guarentees that connecting screen is shown until all users are connected and it's safe to start gameplay
         if (_networkManager.IsServer) {

@@ -67,7 +67,7 @@ public class CreatureToken : Token, IPointerClickHandler
                             GameManager.Singleton.isAttecking = false;*/
 
                             Player p = GameManager.Singleton._networkManager.SpawnManager.GetLocalPlayerObject().GetComponent<Player>();
-                            p.Attack(GameManager.Singleton.selectedCreature.GetComponentInParent<Tile>().GetTileID(), transform.parent.GetComponent<Tile>().GetTileID());
+                            p.UpdateAttackServerRpc(GameManager.Singleton.selectedCreature.GetComponentInParent<Tile>().GetTileID(), transform.parent.GetComponent<Tile>().GetTileID(), true);
                         }
                     }
                 } 

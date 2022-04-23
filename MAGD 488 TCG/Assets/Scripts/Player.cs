@@ -26,110 +26,41 @@ public class Player : NetworkBehaviour {
             Camera.main.transform.parent = transform;
             Debug.Log("Player Spawned!");
         }
-    }
-    public void NextTurnPressed(bool isHostTurn) {
-        if (_networkManager.IsHost) {
-            UpdateTurnClientRpc(isHostTurn);
-        } else {
-            UpdateTurnServerRpc(isHostTurn);
-        }
     }    
-    public void PlaceCard(int cardID, int id) { //<----- NEEDS TO CALL THIS
-        if (_networkManager.IsHost) {
-            GameManager.Singleton.PlaceCard(true, cardID, id);
-            UpdatePlaceCardClientRpc(id, cardID);
-        } else {
-            GameManager.Singleton.PlaceCard(false, cardID, id);
-            UpdatePlaceCardServerRpc(id, cardID);
-        }
-    }
-   
-    #region Placing Cards
-    /*
-     * We need to know the empty token prefab to add in the info
-     * WE need to know the location of where the card is placed. <---- Do this first
-     */
-    [ServerRpc]
-    private void UpdatePlaceCardServerRpc(int id, int cardID) {
-        GameManager.Singleton.PlaceCard(false, cardID, id);
-    }
-
-    [ClientRpc]
-    private void UpdatePlaceCardClientRpc(int id, int cardID) {
-        GameManager.Singleton.PlaceCard(true, cardID, id);
-    }
-    #endregion*/
     
-    #region Attacking
-
-    public void Attack(int attackerID, int attackedID) {
-        if (GameManager.Singleton.isHost) {
-            GameManager.Singleton.Attack(attackerID, attackedID, true);
-            UpdateAttackClientRpc(attackerID, attackedID);
-        } else {
-            GameManager.Singleton.Attack(attackerID, attackedID, false);
-            UpdateAttackServerRpc(attackerID, attackedID);
-        }
+    [ClientRpc]
+    public void UpdatePlaceCardClientRpc(bool sidePlacedOn, int id, int cardID) {
+        GameManager.Singleton.PlaceCard(sidePlacedOn, cardID, id);
     }
-
-
     [ServerRpc]
-    private void UpdateAttackServerRpc(int attackerID, int attackedID) {
-
-        GameManager.Singleton.Attack(attackerID, attackedID, false);
-
+    public void UpdatePlaceCardServerRpc(bool sidePlacedOn, int id, int cardID) {
+        UpdatePlaceCardClientRpc(sidePlacedOn, id, cardID);
     }
 
     [ClientRpc]
-    private void UpdateAttackClientRpc(int attackerID, int attackedID) {
-        GameManager.Singleton.Attack(attackerID, attackedID, true);
+    public void UpdateAttackClientRpc(int attackerID, int attackedID, bool attackingFromHostSide) {
+        GameManager.Singleton.Attack(attackerID, attackedID, attackingFromHostSide);
     }
-
-
-    public void UpdateHealth(bool isHost, int hostAmount, int clientAmount) {
-        if (isHost) {
-            GameManager.Singleton.AffectHealthValues(hostAmount, clientAmount);
-            UpdateHealthClientRpc(hostAmount, clientAmount);
-        } else {
-            GameManager.Singleton.AffectHealthValues(hostAmount, clientAmount);
-            UpdateHealthServerRpc(hostAmount, clientAmount);
-        }
-    }
-
     [ServerRpc]
-    private void UpdateHealthServerRpc(int hostAmount, int clientAmount) {
+    public void UpdateAttackServerRpc(int attackerID, int attackedID, bool attackingFromHostSide) {
+        UpdateAttackClientRpc(attackerID, attackedID, attackingFromHostSide);
+    }
 
+    [ClientRpc]
+    public void UpdateHealthClientRpc(int hostAmount, int clientAmount) {
         GameManager.Singleton.AffectHealthValues(hostAmount, clientAmount);
     }
-
-    [ClientRpc]
-    private void UpdateHealthClientRpc(int hostAmount, int clientAmount) {
-        Debug.Log("Test test test!");
-        GameManager.Singleton.AffectHealthValues(hostAmount, clientAmount);
+    [ServerRpc]
+    public void UpdateHealthServerRpc(int hostAmount, int clientAmount) {
+        UpdateHealthClientRpc(hostAmount, clientAmount);
     }
-
-    #endregion
-    #region Turns
 
     [ServerRpc]
-    private void UpdateTurnServerRpc(bool isHostTurn) {
-        GameManager.Singleton.IsHostTurn = isHostTurn;
-        if (_networkManager.IsHost) {
-            if (isHostTurn) {
-                GameManager.Singleton.TurnStatus.text = "Your Turn!";
-                GameManager.Singleton.NextTurn.interactable = true;
-            }
-        }
-        else {
-            if (!isHostTurn) {
-                GameManager.Singleton.TurnStatus.text = "Your Turn!";
-                GameManager.Singleton.NextTurn.interactable = true;
-            }
-        }
+    public void UpdateTurnServerRpc(bool isHostTurn) {
+        UpdateTurnClientRpc(isHostTurn);
     }
-
     [ClientRpc]
-    void UpdateTurnClientRpc(bool isHostTurn) {
+    private void UpdateTurnClientRpc(bool isHostTurn) {
         GameManager.Singleton.IsHostTurn = isHostTurn;
         if (_networkManager.IsHost) {
             if (isHostTurn) {
@@ -143,5 +74,4 @@ public class Player : NetworkBehaviour {
             }                
         }
     }
-    #endregion
 }

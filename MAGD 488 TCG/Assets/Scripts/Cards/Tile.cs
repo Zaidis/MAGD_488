@@ -51,7 +51,7 @@ public class Tile : MonoBehaviour, IPointerClickHandler {
                                                            //we have selected the tile
 
                 Player p = GameManager.Singleton._networkManager.SpawnManager.GetLocalPlayerObject().GetComponent<Player>();
-                p.PlaceCard(GameManager.Singleton.selectedCard.ID, GetTileID());
+                p.UpdatePlaceCardServerRpc(GameManager.Singleton._networkManager.IsHost, GetTileID(), GameManager.Singleton.selectedCard.ID);
                 Hand.instance.RemoveCardFromHand();
                 GameManager.Singleton.ResetSelectedCard();
                 /*if (GameManager.Singleton.selectedCard.type == cardType.creature) {

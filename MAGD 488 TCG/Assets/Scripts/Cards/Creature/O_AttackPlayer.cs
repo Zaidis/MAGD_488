@@ -14,10 +14,10 @@ public class O_AttackPlayer : MonoBehaviour, IPointerClickHandler
 
         if (GameManager.Singleton.isHost) {
             //GameManager.Singleton.AffectClientCurrentHealth(token.currentAttack * -1);
-            p.UpdateHealth(true, 0, token.currentAttack * -1);
+            p.UpdateHealthServerRpc(0, token.currentAttack * -1);
         } else {
             //GameManager.Singleton.AffectHostCurrentHealth(token.currentAttack * -1);
-            p.UpdateHealth(false, token.currentAttack * -1, 0);
+            p.UpdateHealthServerRpc(token.currentAttack * -1, 0);
         }
 
         token.hasAttacked = true;
