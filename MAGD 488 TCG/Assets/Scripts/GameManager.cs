@@ -84,7 +84,7 @@ public class GameManager : MonoBehaviour
     private void Start() {
         
         AffectCurrentMana(20);
-        isHost = NetworkManager.Singleton.IsHost;
+        
         //isHost = true;
         _networkManager = NetworkManager.Singleton;
         if (!_networkManager.IsClient && !_networkManager.IsServer && !_networkManager.IsHost)
@@ -105,10 +105,11 @@ public class GameManager : MonoBehaviour
         opponent.text = "Opponent: " + opponentName;
         StartCoroutine(ClearConnectingOnConnect());
 
+        isHost = NetworkManager.Singleton.IsHost;
         if (!isHost) {
             //flip text 180
-            hostHealthText.transform.rotation = Quaternion.Euler(0, 180, 0);
-            clientHealthText.transform.rotation = Quaternion.Euler(0, 180, 0);
+            hostHealthText.transform.rotation = Quaternion.Euler(90, 180, 0);
+            clientHealthText.transform.rotation = Quaternion.Euler(90, 180, 0);
         }
 
     }
