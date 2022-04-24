@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2db2d717dcd6e2f44a7a68b7f4c0c9a4, type: 3}
+  m_Name: Kimi (Wind)
+  m_EditorClassIdentifier: 
+  ID: 5013
+  type: 0
+  manaCost: 4
+  cardName: Kimi
+  cardArt: {fileID: 0}
+  description: Tornado - captures surrounding enemies (sides, front, back, diagonally)
+    and randomizes their landing stop and dealing 2 damage
+  defaultHealthAmount: 4
+  defaultPowerAmount: 5
+  myAttributes: 0100000005000000

@@ -3,8 +3,6 @@ public enum attributes {
     cleave, 
     thorn, 
     lifesteal, 
-    melee, 
-    ranged, 
     passive,
-
+    taunt,
 }

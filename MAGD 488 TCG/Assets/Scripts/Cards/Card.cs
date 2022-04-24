@@ -10,7 +10,9 @@ public abstract class Card : ScriptableObject
     public int manaCost;
     public string cardName;
     public Sprite cardArt;
+    public Sprite cardBorder;
+    public faction cardFaction = faction.empire;
 
     [TextArea()]
-    public string description;
+    public string description;    
 }

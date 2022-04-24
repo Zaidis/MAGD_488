@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: fc8a24286d0a56147aeccb23100bab9d
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Rowdy
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: a3ac0329fc0378646abc875e1495b615, type: 3}
+  - {fileID: 12800000, guid: c413f4b32c70857418622bb22f3993b8, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
