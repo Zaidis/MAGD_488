@@ -44,8 +44,8 @@ public class GameManager : MonoBehaviour
 
     public bool isHost;
 
-    public Card_Popup popup; //when you right click a card
-
+    public Card_Popup panelPopup; //when you right click a card
+    public Hover_Popup cardPopup; //when you hover over a token
     #region Mana
         public int maxMana;
         public int currentMana;

@@ -4,7 +4,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.EventSystems;
 
-public class CreatureToken : Token, IPointerClickHandler
+public class CreatureToken : Token, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
     [Header("Creature Token Variables")]
     public int currentAttack;
@@ -81,7 +81,7 @@ public class CreatureToken : Token, IPointerClickHandler
                 }
             }
         } else if (eventData.button == PointerEventData.InputButton.Right) {
-            GameManager.Singleton.popup.UpdatePopup(creature);
+            GameManager.Singleton.panelPopup.UpdatePopup(creature);
         }
 
     }
@@ -106,4 +106,12 @@ public class CreatureToken : Token, IPointerClickHandler
         }
     }
     
+    public void OnPointerEnter(PointerEventData eventData) {
+        GameManager.Singleton.cardPopup.UpdateHoverPopup(creature);
+        GameManager.Singleton.cardPopup.gameObject.SetActive(true);
+    }
+
+    public void OnPointerExit(PointerEventData eventData) {
+        GameManager.Singleton.cardPopup.gameObject.SetActive(false);
+    }
 }

@@ -10,6 +10,9 @@ public class Creature : Card
     public int defaultPowerAmount; //attack damage
     public List<attributes> myAttributes;
     public bool isMelee;
+
+
+
     public virtual void OnAttack(Tile[] hostBoard, Tile[] clientBoard, Tile attacker, bool isHost, Tile attacked)
     {
 
