@@ -5,7 +5,8 @@ using UnityEngine.EventSystems;
 
 public class Tile : MonoBehaviour, IPointerClickHandler {
     public GameObject token;
-    public Transform spawnLocation;
+    public Transform hostSpawnLocation;
+    public Transform clientSpawnLocation;
     public bool hostTile;
     public bool meleeTile;
     public bool active;
@@ -24,7 +25,13 @@ public class Tile : MonoBehaviour, IPointerClickHandler {
         r.material = new Material(GameManager.Singleton.defaultShader);
         r.material.mainTexture = token.GetComponent<Token>().Art.texture;
 
-        token.transform.position = spawnLocation.position;
+        if (GameManager.Singleton.isHost) {
+            token.transform.position = hostSpawnLocation.position;
+        } else {
+            token.transform.position = clientSpawnLocation.position;
+            token.transform.rotation = Quaternion.Euler(270, 0, 0);
+        }
+        
         token.transform.parent = transform;
         token.transform.localScale = new Vector3(0.4f, 0.4f, 0.4f);
     }
