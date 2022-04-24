@@ -37,6 +37,9 @@ public class UICard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
             Creature c = (Creature)card;
             cardAttack.text = c.defaultPowerAmount.ToString();
             cardHealth.text = c.defaultHealthAmount.ToString();
+        } else if (card.type == cardType.artifact) {
+            Artifact a = (Artifact)card;
+            cardHealth.text = a.defaultHealthAmount.ToString();
         }
     }
 

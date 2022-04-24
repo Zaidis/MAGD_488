@@ -28,7 +28,7 @@ public class CreatureToken : Token, IPointerClickHandler, IPointerEnterHandler, 
         Art = creature.cardArt;
     }    
 
-    public void UpdateStats() {
+    public override void UpdateStats() {
         HealthText.text = currentHealth.ToString();
         AttackText.text = currentAttack.ToString();
     }

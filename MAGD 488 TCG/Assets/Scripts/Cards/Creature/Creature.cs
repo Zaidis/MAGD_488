@@ -19,8 +19,14 @@ public class Creature : Card
         //first attacker will hit the attecked token
         attacker.token.GetComponent<CreatureToken>().hasAttacked = true;
         GameManager.Singleton.CreatureOptionButtons(attacker.token.GetComponent<CreatureToken>(), GameManager.Singleton.isHost);
+
         attacked.DealtDamage(attacker.token.GetComponent<CreatureToken>().currentAttack);
-        attacker.DealtDamage(attacked.token.GetComponent<CreatureToken>().currentAttack);
+
+        if (attacked.token.GetComponent<Token>() is CreatureToken c) {
+            attacker.DealtDamage(c.currentAttack);
+        }
+
+        
 
         //Attributes
 

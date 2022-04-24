@@ -83,12 +83,20 @@ public class Hand : MonoBehaviour
         uiCards.RemoveAt(GameManager.Singleton.selectedCardNumber);
 
         Destroy(c);
-
-        for(int i = 0; i < uiCards.Count; i++) {
-            uiCards[i].GetComponent<UICard>().sortingOrder = i;
-        }
         myTransform.anchoredPosition = new Vector2(myTransform.anchoredPosition.x + handCenteringAmount, myTransform.anchoredPosition.y);
-        RotateCards();
+
+        if (uiCards.Count != 0) {
+            if (uiCards.Count > 1) {
+                for (int i = 0; i < uiCards.Count; i++) {
+                    uiCards[i].GetComponent<UICard>().sortingOrder = i;
+                }
+
+                RotateCards();
+            }
+            else {
+                uiCards[0].GetComponent<UICard>().sortingOrder = 0;
+            }
+        }
 
         Invoke("DisableGridLayoutGroup", 0.2f);
     }
@@ -162,6 +170,8 @@ public class Hand : MonoBehaviour
     }
     private void DisableGridLayoutGroup() {
         cardGroup.enabled = false; //so we can move cards
-        PositionCards();
+
+        if(uiCards.Count > 1)
+            PositionCards();
     }
 }

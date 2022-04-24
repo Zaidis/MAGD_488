@@ -28,7 +28,7 @@ public class GameManager : MonoBehaviour
     
     public GameObject[] CreatureTokenPrefab;
     public GameObject SpellTokenPrefab;
-    public GameObject ArtifactTokenPrefab;
+    public GameObject[] ArtifactTokenPrefab;
 
     public Tile[] hostBoard = new Tile[2*5];
     public Tile[] clientBoard = new Tile[2*5];
@@ -216,7 +216,24 @@ public class GameManager : MonoBehaviour
             creatureToken.creature = creature;
             creatureToken.ApplyCard();
         } else if (card is Artifact artifact) {
-            tokenObject = Instantiate(ArtifactTokenPrefab);
+            //tokenObject = Instantiate(ArtifactTokenPrefab);
+
+            if (card.cardFaction == faction.empire) {
+                tokenObject = Instantiate(ArtifactTokenPrefab[0]);
+            }
+            else if (card.cardFaction == faction.beasts) {
+                tokenObject = Instantiate(ArtifactTokenPrefab[1]);
+            }
+            else if (card.cardFaction == faction.guidingLight) {
+                tokenObject = Instantiate(ArtifactTokenPrefab[2]);
+            }
+            else if (card.cardFaction == faction.hunted) {
+                tokenObject = Instantiate(ArtifactTokenPrefab[3]);
+            }
+            else if (card.cardFaction == faction.unaligned) {
+                tokenObject = Instantiate(ArtifactTokenPrefab[4]);
+            }
+
             ArtifactToken artifactToken = tokenObject.GetComponent<ArtifactToken>();
             artifactToken.artifact = artifact;
             artifactToken.ApplyCard();

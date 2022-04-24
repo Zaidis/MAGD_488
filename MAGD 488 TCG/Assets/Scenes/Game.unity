@@ -22016,7 +22016,12 @@ MonoBehaviour:
   - {fileID: 6431356680584286177, guid: 3fd10c0ff413cc342905835c1ee43011, type: 3}
   - {fileID: 3877804525579949086, guid: c01cae9d09b2f3549bd64fb5f363f4c5, type: 3}
   SpellTokenPrefab: {fileID: 1263412054170208604, guid: 7e77b64bfaaea4647b204e79eaf2cf95, type: 3}
-  ArtifactTokenPrefab: {fileID: 7209715763135634967, guid: 1998d7a45e48ccd4f8868492be46c807, type: 3}
+  ArtifactTokenPrefab:
+  - {fileID: 3097501429765352917, guid: ffbe278c88ff789479691ec154295ba0, type: 3}
+  - {fileID: 3127390075249442513, guid: 6c3e8762ebe5d8549a84ae6d67fa6cb6, type: 3}
+  - {fileID: 5599556794981005704, guid: e061942756933c3418d02f3591dd0a77, type: 3}
+  - {fileID: 3601206577733296858, guid: 8f1e0952a667b434e9f4ed7d6009fed1, type: 3}
+  - {fileID: 6928058133569965985, guid: ae1c253807a645947a80ec093c058580, type: 3}
   hostBoard:
   - {fileID: 8642421397158386221}
   - {fileID: 5298133178858024273}

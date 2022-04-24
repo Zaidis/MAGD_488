@@ -41,7 +41,7 @@ public class Tile : MonoBehaviour, IPointerClickHandler {
     }
 
     public void DealtDamage(int damageAmount) {
-        Token t = token.GetComponent<CreatureToken>();
+        Token t = token.GetComponent<Token>();
         t.currentHealth -= damageAmount;
         if(t is CreatureToken c){
             Player p = GameManager.Singleton._networkManager.SpawnManager.GetLocalPlayerObject().GetComponent<Player>();
@@ -64,12 +64,12 @@ public class Tile : MonoBehaviour, IPointerClickHandler {
                     
                 }
             }
-        }
+        } 
         if(t.currentHealth <= 0) {
             //destroy token
             Destroy(token);
         } else {
-            token.GetComponent<CreatureToken>().UpdateStats();
+            t.UpdateStats();
         }
         
 

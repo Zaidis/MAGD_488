@@ -11,4 +11,8 @@ public class SpellToken : Token
        // Mana.text = spell.manaCost.ToString();
         Art = spell.cardArt;
     }
+
+    public override void UpdateStats() {
+        throw new System.NotImplementedException();
+    }
 }
