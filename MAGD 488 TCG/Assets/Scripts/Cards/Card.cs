@@ -14,5 +14,10 @@ public abstract class Card : ScriptableObject
     public faction cardFaction = faction.empire;
 
     [TextArea()]
-    public string description;    
+    public string description;
+
+    [TextArea()]
+    public string lore;
+
+    public string artistName;
 }
