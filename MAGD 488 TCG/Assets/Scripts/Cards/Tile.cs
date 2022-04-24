@@ -69,7 +69,9 @@ public class Tile : MonoBehaviour, IPointerClickHandler {
     }
 
     public void ChangeMaterial(Material mat) {
-        GetComponent<MeshRenderer>().material = mat;
+        if(token != null)
+            token.GetComponent<Token>().ChangeMaterial(mat);
+        //GetComponent<MeshRenderer>().material = mat;
     }
     public void OnPointerClick(PointerEventData eventData) {
         Debug.Log("I clicked on a tile!");

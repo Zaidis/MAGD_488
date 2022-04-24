@@ -748,6 +748,7 @@ MonoBehaviour:
   Name: {fileID: 0}
   Art: {fileID: 0}
   cardArtHolder: {fileID: 2217705076830453248}
+  activePartOfTile: {fileID: 8800260651151707192}
   currentAttack: 0
   creature: {fileID: 0}
   AttackText: {fileID: 4676427861214588345}

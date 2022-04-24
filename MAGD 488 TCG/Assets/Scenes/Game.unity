@@ -21418,9 +21418,10 @@ MonoBehaviour:
   clientHealth: 20
   hostHealthText: {fileID: 7767450}
   clientHealthText: {fileID: 1334822443}
-  m_default: {fileID: 2100000, guid: 586dac63de03a3644be597de1d071cb2, type: 2}
+  m_default: {fileID: 2100000, guid: df4995268fbbcbf4eba9b9b691a74e1d, type: 2}
   m_active: {fileID: 2100000, guid: 60dcaad522851a6458fbebbac8bb8f11, type: 2}
   m_deactive: {fileID: 2100000, guid: 0dd93ab7e7dccc545bec8c9def4f1644, type: 2}
+  m_selected: {fileID: 2100000, guid: 91001d37e717df345956d0db995ad29b, type: 2}
 --- !u!1 &7259119635421666369
 GameObject:
   m_ObjectHideFlags: 0

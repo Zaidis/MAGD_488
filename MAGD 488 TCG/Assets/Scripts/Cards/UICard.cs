@@ -53,6 +53,7 @@ public class UICard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
                     GameManager.Singleton.needsToSelectTile = true;
                     GameManager.Singleton.selectedCard = myCard;
                     GameManager.Singleton.selectedCardNumber = sortingOrder;
+
                 }
             }
         } else if (eventData.button == PointerEventData.InputButton.Right) {

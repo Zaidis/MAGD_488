@@ -74,6 +74,7 @@ public class GameManager : MonoBehaviour
     public Material m_default;
     public Material m_active;
     public Material m_deactive;
+    public Material m_selected;
     #endregion
     private void Awake() {
         if(_singleton == null) {
@@ -353,9 +354,15 @@ public class GameManager : MonoBehaviour
     /// When I click on a creature, these buttons will apear for what is available.
     /// </summary>
     public void CreatureOptionButtons(CreatureToken token, bool isHost) {
+        if (isHost) {
+            ResetAllTiles(hostBoard);
+        } else {
+            ResetAllTiles(clientBoard);
+        }
         int counter = 0;
         attackTokenOption.token = token;
         attackPlayerOption.token = token;
+        token.GetComponent<Token>().ChangeMaterial(m_selected);
 
         attackTokenOption.gameObject.SetActive(false);
         attackPlayerOption.gameObject.SetActive(false);

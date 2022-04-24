@@ -12,8 +12,11 @@ public abstract class Token : MonoBehaviour {
     public Sprite Art;
     public GameObject cardArtHolder;
 
+    public GameObject activePartOfTile; //the part that changes material
     public abstract void ApplyCard();
 
-
+    public void ChangeMaterial(Material m) {
+        activePartOfTile.GetComponent<MeshRenderer>().material = m;
+    }
 
 }
