@@ -34,6 +34,12 @@ public class Tile : MonoBehaviour, IPointerClickHandler {
         
         token.transform.parent = transform;
         token.transform.localScale = new Vector3(0.4f, 0.4f, 0.4f);
+
+        //after setting the token, check to see if there are any OnPlay calls from the creature/artifact
+
+        token.GetComponent<Token>().OnPlay();
+
+
     }
 
     public int GetTileID() {

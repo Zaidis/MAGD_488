@@ -15,8 +15,25 @@ public class ArtifactToken : Token, IPointerEnterHandler, IPointerExitHandler, I
         Art = artifact.cardArt;
 
     }
+    public override void OnPlay() {
+        artifact.OnPlay(GameManager.Singleton.hostBoard, GameManager.Singleton.clientBoard, 
+            transform.parent.GetComponent<Tile>());
+    }
 
     public override void UpdateStats() {
+
+        //health
+        if (currentHealth > artifact.defaultHealthAmount) {
+            //green text because its bigger
+            healthText.color = Color.green;
+        }
+        else if (currentHealth == artifact.defaultHealthAmount) {
+            healthText.color = Color.white;
+        }
+        else {
+            healthText.color = Color.red;
+        }
+
         healthText.text = currentHealth.ToString();
     }
 
@@ -34,9 +51,7 @@ public class ArtifactToken : Token, IPointerEnterHandler, IPointerExitHandler, I
                 else {
                     if (GameManager.Singleton.isAttecking) {
                         if (transform.parent.GetComponent<Tile>().active) {
-                            /*GameManager.Singleton.selectedCreature.AttackWithToken(transform.parent.GetComponent<Tile>());
-                            GameManager.Singleton.selectedCreature = null;
-                            GameManager.Singleton.isAttecking = false;*/
+                            
 
                             Player p = GameManager.Singleton._networkManager.SpawnManager.GetLocalPlayerObject().GetComponent<Player>();
                             p.UpdateAttackServerRpc(GameManager.Singleton.selectedCreature.GetComponentInParent<Tile>().GetTileID(), transform.parent.GetComponent<Tile>().GetTileID(), true);
@@ -55,9 +70,7 @@ public class ArtifactToken : Token, IPointerEnterHandler, IPointerExitHandler, I
                 else {
                     if (GameManager.Singleton.isAttecking) {
                         if (transform.parent.GetComponent<Tile>().active) {
-                            /*GameManager.Singleton.selectedCreature.AttackWithToken(transform.parent.GetComponent<Tile>());
-                            GameManager.Singleton.selectedCreature = null;
-                            GameManager.Singleton.isAttecking = false;*/
+                            
 
                             Player p = GameManager.Singleton._networkManager.SpawnManager.GetLocalPlayerObject().GetComponent<Player>();
                             p.UpdateAttackServerRpc(GameManager.Singleton.selectedCreature.GetComponentInParent<Tile>().GetTileID(), transform.parent.GetComponent<Tile>().GetTileID(), false);

@@ -12,6 +12,9 @@ public class SpellToken : Token
         Art = spell.cardArt;
     }
 
+    public override void OnPlay() {
+        throw new System.NotImplementedException();
+    }
     public override void UpdateStats() {
         throw new System.NotImplementedException();
     }

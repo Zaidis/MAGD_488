@@ -26,9 +26,31 @@ public class CreatureToken : Token, IPointerClickHandler, IPointerEnterHandler, 
         //Description.text = creature.description;
        // Mana.text = creature.manaCost.ToString();
         Art = creature.cardArt;
-    }    
+    }
 
+    public override void OnPlay() {
+        //throw new System.NotImplementedException();
+    }
     public override void UpdateStats() {
+        //health
+        if(currentHealth > creature.defaultHealthAmount) {
+            //green text because its bigger
+            HealthText.color = Color.green;
+        } else if (currentHealth == creature.defaultHealthAmount) {
+            HealthText.color = Color.white;
+        } else {
+            HealthText.color = Color.red;
+        }
+
+        //attack
+        if(currentAttack > creature.defaultPowerAmount) {
+            AttackText.color = Color.green;
+        } else if (currentAttack == creature.defaultPowerAmount) {
+            AttackText.color = Color.white;
+        } else {
+            AttackText.color = Color.red;
+        }
+
         HealthText.text = currentHealth.ToString();
         AttackText.text = currentAttack.ToString();
     }
@@ -91,12 +113,14 @@ public class CreatureToken : Token, IPointerClickHandler, IPointerEnterHandler, 
             creature.OnAttack(GameManager.Singleton.hostBoard, GameManager.Singleton.clientBoard,
                     transform.parent.GetComponent<Tile>(), GameManager.Singleton.isHost, attackedToken);
 
-            /* if (GameManager.Singleton.isHost) {
-                 GameManager.Singleton.ResetAllTiles(GameManager.Singleton.clientBoard);
-                 hasAttacked = true;
-                 GameManager.Singleton.isAttecking = false;
-                 GameManager.Singleton.selectedCreature = null;
-             }*/
+            //animation
+
+            if (transform.parent.GetComponent<Tile>().hostTile) {
+                BeginMovement(attackedToken.hostSpawnLocation.localPosition);
+            } else {
+                BeginMovement(attackedToken.clientSpawnLocation.localPosition);
+            }
+
 
             GameManager.Singleton.ResetAllTiles(GameManager.Singleton.hostBoard);
             GameManager.Singleton.ResetAllTiles(GameManager.Singleton.clientBoard);
@@ -113,5 +137,70 @@ public class CreatureToken : Token, IPointerClickHandler, IPointerEnterHandler, 
 
     public void OnPointerExit(PointerEventData eventData) {
         GameManager.Singleton.cardPopup.gameObject.SetActive(false);
+    }
+
+    private void BeginMovement(Vector3 attackedPosition) {
+        Debug.Log("Moving...");
+        StartCoroutine(MoveUp(transform.localPosition, new Vector3(transform.localPosition.x, 0.006f, transform.localPosition.z), attackedPosition));
+    }
+
+    private IEnumerator MoveUp(Vector3 startPosition, Vector3 endPosition, Vector3 loc) {
+        float speed = 2f;
+        float y = 0.004f;
+
+        var i = 0f;
+        //var rate = 1f / 2f;
+        while(i < 1f) {
+            i += Time.deltaTime * speed;
+            transform.localPosition = Vector3.Lerp(startPosition, endPosition, i);
+            yield return null;
+        }
+
+
+        StartCoroutine(MoveTowardsToken(loc, endPosition));
+    }
+
+    private IEnumerator MoveTowardsToken(Vector3 targetLocation, Vector3 startLocation) {
+
+        float speed = 4f;
+        var i = 0f;
+
+
+        while (i < 1f) {
+            i += Time.deltaTime * speed;
+            transform.localPosition = Vector3.Lerp(startLocation, targetLocation, i);
+            yield return null;
+        }
+
+        StartCoroutine(MoveBack(startLocation, targetLocation));
+
+    }
+
+    private IEnumerator MoveBack(Vector3 targetLocation, Vector3 startLocation) {
+        float speed = 4f;
+        var i = 0f;
+
+
+        while (i < 1f) {
+            i += Time.deltaTime * speed;
+            transform.localPosition = Vector3.Lerp(startLocation, targetLocation, i);
+            yield return null;
+        }
+
+        StartCoroutine(MoveDown(transform.localPosition, new Vector3(transform.localPosition.x, 
+            transform.parent.GetComponent<Tile>().hostSpawnLocation.transform.localPosition.y, transform.localPosition.z)));
+    }
+
+    private IEnumerator MoveDown(Vector3 startPosition, Vector3 endPosition) {
+        float speed = 2f;
+        float y = 0.004f;
+
+        var i = 0f;
+        //var rate = 1f / 2f;
+        while (i < 1f) {
+            i += Time.deltaTime * speed;
+            transform.localPosition = Vector3.Lerp(startPosition, endPosition, i);
+            yield return null;
+        }
     }
 }

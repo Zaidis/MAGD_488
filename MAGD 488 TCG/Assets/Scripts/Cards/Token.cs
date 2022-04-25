@@ -15,6 +15,7 @@ public abstract class Token : MonoBehaviour {
     public GameObject activePartOfTile; //the part that changes material
     public abstract void ApplyCard();
 
+    public abstract void OnPlay();
     public abstract void UpdateStats();
     public void ChangeMaterial(Material m) {
         activePartOfTile.GetComponent<MeshRenderer>().material = m;
