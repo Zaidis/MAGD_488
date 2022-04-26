@@ -106,7 +106,10 @@ namespace MythosServer {
                 messageArgArr = textReceived.Split(StringSeparators, StringSplitOptions.None);
                 try {
                     textReceived = DecrpytBase64ToString(messageArgArr[1], key, Convert.FromBase64String(messageArgArr[0]));
-                } catch { break; }                
+                } catch {
+                    HandleDisconnect(user);
+                    break; 
+                }                
                 messageArgArr = textReceived.Split(StringSeparators, StringSplitOptions.None);
                 #endregion
                 if (!loggedIn) {
@@ -149,7 +152,6 @@ namespace MythosServer {
         private static bool NewUser(string username, string salt, string hash) //Attempt to create a user based on passed username and password, return true for success, return false for failure
         {
             lock (SQLLock) {
-                Log(username + " Entered User Creation");
                 using SqliteConnection connection = new SqliteConnection("Data Source=Mythos.db");
                 connection.Open();
                 SqliteCommand command = connection.CreateCommand();
@@ -212,7 +214,6 @@ namespace MythosServer {
                     }
                     messageArgArr = textReceived.Split(StringSeparators, StringSplitOptions.None);
                     if (messageArgArr[0].Equals("code")) {
-                        Log("Sent " + "connect\r\n" + messageArgArr[1] + "\nto " + client.socket.RemoteEndPoint + " : " + client.Username + " : Skill : " + client.Skill);
                         client.socket.Send(EncryptStringToBase64Bytes("connect\r\n" + messageArgArr[1] + "\r\n" + host.Username, client.key));
                         Log("Sent connection message to client " + client.Username + " At " + client.socket.RemoteEndPoint);
 
