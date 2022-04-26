@@ -9,15 +9,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2db2d717dcd6e2f44a7a68b7f4c0c9a4, type: 3}
+  m_Script: {fileID: 11500000, guid: 261e67aa251ca094e9cda94081f8679b, type: 3}
   m_Name: Bill (Hodag)
   m_EditorClassIdentifier: 
-  ID: 4014
+  ID: 4008
   type: 0
   manaCost: 3
   cardName: Bill (Hodag)
   cardArt: {fileID: 0}
-  description: 
+  cardBorder: {fileID: 0}
+  cardFaction: 3
+  description: Surrounding creatures gain thorns for 1 turn (2 Mana)
+  lore: 
+  artistName: 
   defaultHealthAmount: 3
   defaultPowerAmount: 2
   myAttributes: 02000000
+  isMelee: 1

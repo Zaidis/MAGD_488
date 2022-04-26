@@ -9,16 +9,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2db2d717dcd6e2f44a7a68b7f4c0c9a4, type: 3}
+  m_Script: {fileID: 11500000, guid: 0ab2dd824dee25f4aa981f3e9ed80563, type: 3}
   m_Name: Kimi (Wind)
   m_EditorClassIdentifier: 
-  ID: 5013
+  ID: 5008
   type: 0
   manaCost: 4
   cardName: Kimi
   cardArt: {fileID: 0}
+  cardBorder: {fileID: 0}
+  cardFaction: 0
   description: Tornado - captures surrounding enemies (sides, front, back, diagonally)
     and randomizes their landing stop and dealing 2 damage
+  lore: 
+  artistName: 
   defaultHealthAmount: 4
   defaultPowerAmount: 5
-  myAttributes: 0100000005000000
+  myAttributes: 01000000
+  isMelee: 0

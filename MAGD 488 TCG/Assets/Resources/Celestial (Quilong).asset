@@ -9,17 +9,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2db2d717dcd6e2f44a7a68b7f4c0c9a4, type: 3}
+  m_Script: {fileID: 11500000, guid: b59b08cfc3cbecd429f2f0da1fe2a422, type: 3}
   m_Name: Celestial (Quilong)
   m_EditorClassIdentifier: 
-  ID: 3001
+  ID: 3006
   type: 0
   manaCost: 8
-  cardName: Celestial (Quilong)
+  cardName: Celestial
   cardArt: {fileID: 0}
-  description: 'N/A. CAN''T GO IN DECK!!!
-
-    Taunt'
+  cardBorder: {fileID: 0}
+  cardFaction: 2
+  description: N/A. CAN'T GO IN DECK!!!
+  lore: 
+  artistName: 
   defaultHealthAmount: 12
   defaultPowerAmount: 12
-  myAttributes: 00000000
+  myAttributes: 05000000
+  isMelee: 1

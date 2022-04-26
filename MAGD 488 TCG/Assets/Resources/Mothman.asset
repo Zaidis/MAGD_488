@@ -9,15 +9,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2db2d717dcd6e2f44a7a68b7f4c0c9a4, type: 3}
+  m_Script: {fileID: 11500000, guid: ed0ba8b1c3bb166419ced70c706942df, type: 3}
   m_Name: Mothman
   m_EditorClassIdentifier: 
-  ID: 1016
+  ID: 1009
   type: 0
   manaCost: 2
   cardName: Mothman
   cardArt: {fileID: 0}
+  cardBorder: {fileID: 0}
+  cardFaction: 0
   description: 
+  lore: 
+  artistName: 
   defaultHealthAmount: 1
   defaultPowerAmount: 3
-  myAttributes: 0200000006000000
+  myAttributes: 0200000004000000
+  isMelee: 1

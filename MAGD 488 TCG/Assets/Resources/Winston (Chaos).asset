@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be2491c33b5cf0e4ba8a15b4b1170646, type: 3}
+  m_Name: Winston (Chaos)
+  m_EditorClassIdentifier: 
+  ID: 5016
+  type: 0
+  manaCost: 3
+  cardName: Winston
+  cardArt: {fileID: 0}
+  cardBorder: {fileID: 0}
+  cardFaction: 4
+  description: Can't increase attack by any means
+  lore: 
+  artistName: 
+  defaultHealthAmount: 6
+  defaultPowerAmount: 1
+  myAttributes: 
+  isMelee: 0

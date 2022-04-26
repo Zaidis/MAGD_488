@@ -9,15 +9,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2db2d717dcd6e2f44a7a68b7f4c0c9a4, type: 3}
+  m_Script: {fileID: 11500000, guid: e9cc0b127d12d7144af92ca0b952e776, type: 3}
   m_Name: Atticus (Unicorn)
   m_EditorClassIdentifier: 
-  ID: 4004
+  ID: 4006
   type: 0
   manaCost: 3
-  cardName: Atticus (Unicorn)
+  cardName: Atticus
   cardArt: {fileID: 0}
+  cardBorder: {fileID: 0}
+  cardFaction: 3
   description: 
+  lore: 
+  artistName: 
   defaultHealthAmount: 3
-  defaultPowerAmount: 3
+  defaultPowerAmount: 2
   myAttributes: 00000000
+  isMelee: 1

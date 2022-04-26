@@ -9,15 +9,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2db2d717dcd6e2f44a7a68b7f4c0c9a4, type: 3}
+  m_Script: {fileID: 11500000, guid: a65468cdf706e314e8d37fecf91c082b, type: 3}
   m_Name: Erland Fulkvare (Draugr Lord)
   m_EditorClassIdentifier: 
-  ID: 1009
+  ID: 1005
   type: 0
   manaCost: 5
-  cardName: Erland Fulkvare (Draugr Lord)
+  cardName: Erland Fulkvare
   cardArt: {fileID: 0}
+  cardBorder: {fileID: 0}
+  cardFaction: 0
   description: 'All Cards (ally side - for one turn): 0/+2 and Taunt (4 Mana Cost)'
+  lore: 
+  artistName: 
   defaultHealthAmount: 4
   defaultPowerAmount: 2
   myAttributes: 01000000
+  isMelee: 0

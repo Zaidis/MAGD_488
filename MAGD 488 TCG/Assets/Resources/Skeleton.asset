@@ -9,15 +9,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2db2d717dcd6e2f44a7a68b7f4c0c9a4, type: 3}
+  m_Script: {fileID: 11500000, guid: 88d26cdd94a69084c89cfc686ff8bfe2, type: 3}
   m_Name: Skeleton
   m_EditorClassIdentifier: 
-  ID: 1011
+  ID: 1013
   type: 0
   manaCost: 1
   cardName: Skeleton
   cardArt: {fileID: 0}
+  cardBorder: {fileID: 0}
+  cardFaction: 0
   description: 
+  lore: 
+  artistName: 
   defaultHealthAmount: 1
   defaultPowerAmount: 1
   myAttributes: 
+  isMelee: 0

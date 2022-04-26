@@ -9,15 +9,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2db2d717dcd6e2f44a7a68b7f4c0c9a4, type: 3}
+  m_Script: {fileID: 11500000, guid: f66e2120e0364ec499acee1aa02a95b8, type: 3}
   m_Name: (Dryad - Oak Tree)
   m_EditorClassIdentifier: 
-  ID: 4009
+  ID: 4001
   type: 0
-  manaCost: 5
-  cardName: (Dryad - Oak Tree)
+  manaCost: 4
+  cardName: Dryad
   cardArt: {fileID: 0}
-  description: buff target ally +3/+1 on turns end
+  cardBorder: {fileID: 0}
+  cardFaction: 3
+  description: buff target ally +2 health (2 mana)
+  lore: 
+  artistName: 
   defaultHealthAmount: 5
   defaultPowerAmount: 2
-  myAttributes: 06000000
+  myAttributes: 04000000
+  isMelee: 1

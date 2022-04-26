@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0488d22f84d480a4db0566b5d1b5bae1, type: 3}
+  m_Name: JerGnome (Lawn)
+  m_EditorClassIdentifier: 
+  ID: 5007
+  type: 0
+  manaCost: 3
+  cardName: JerGnome
+  cardArt: {fileID: 0}
+  cardBorder: {fileID: 0}
+  cardFaction: 4
+  description: 
+  lore: 
+  artistName: 
+  defaultHealthAmount: 3
+  defaultPowerAmount: 3
+  myAttributes: 
+  isMelee: 1

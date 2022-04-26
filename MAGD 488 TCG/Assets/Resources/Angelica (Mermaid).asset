@@ -9,17 +9,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2db2d717dcd6e2f44a7a68b7f4c0c9a4, type: 3}
+  m_Script: {fileID: 11500000, guid: 880bc29a23acab348b4015d0a326f600, type: 3}
   m_Name: Angelica (Mermaid)
   m_EditorClassIdentifier: 
-  ID: 3006
+  ID: 3002
   type: 0
   manaCost: 3
-  cardName: Angelica (Mermaid)
+  cardName: Angelica
   cardArt: {fileID: 0}
+  cardBorder: {fileID: 0}
+  cardFaction: 2
   description: '3 Mana: Heal target for 2 health
 
     Remove Debuff'
+  lore: 
+  artistName: 
   defaultHealthAmount: 4
   defaultPowerAmount: 2
   myAttributes: 
+  isMelee: 0
