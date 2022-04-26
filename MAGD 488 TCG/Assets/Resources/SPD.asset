@@ -17,8 +17,11 @@ MonoBehaviour:
   manaCost: 3
   cardName: SPD
   cardArt: {fileID: 21300000, guid: a79471d4d1ac4444396c6a3fb07751f4, type: 3}
-  cardBorder: {fileID: 21300000, guid: c3044a06ab0c16940a82f709242944f7, type: 3}
+  cardBorder: {fileID: 21300000, guid: 50a19f21e799ebe429f8c3762fb0b38f, type: 3}
+  cardFaction: 0
   description: 'Ability: Debuff Enemy Card: Fear Target Card (2 Mana Cost)'
+  lore: 
+  artistName: 
   defaultHealthAmount: 5
   defaultPowerAmount: 0
   myAttributes: 

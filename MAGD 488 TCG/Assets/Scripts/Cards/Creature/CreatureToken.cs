@@ -110,17 +110,17 @@ public class CreatureToken : Token, IPointerClickHandler, IPointerEnterHandler, 
 
     public void AttackWithToken(Tile attackedToken) {
         if (!hasAttacked) {
-            creature.OnAttack(GameManager.Singleton.hostBoard, GameManager.Singleton.clientBoard,
-                    transform.parent.GetComponent<Tile>(), GameManager.Singleton.isHost, attackedToken);
+            
 
             //animation
 
             if (transform.parent.GetComponent<Tile>().hostTile) {
-                BeginMovement(attackedToken.hostSpawnLocation.localPosition);
+                BeginMovement(attackedToken.AttackLocation.localPosition, attackedToken);
             } else {
-                BeginMovement(attackedToken.clientSpawnLocation.localPosition);
+                BeginMovement(attackedToken.AttackLocation.localPosition, attackedToken);
             }
 
+            
 
             GameManager.Singleton.ResetAllTiles(GameManager.Singleton.hostBoard);
             GameManager.Singleton.ResetAllTiles(GameManager.Singleton.clientBoard);
@@ -139,12 +139,12 @@ public class CreatureToken : Token, IPointerClickHandler, IPointerEnterHandler, 
         GameManager.Singleton.cardPopup.gameObject.SetActive(false);
     }
 
-    private void BeginMovement(Vector3 attackedPosition) {
+    private void BeginMovement(Vector3 attackedPosition, Tile a) {
         Debug.Log("Moving...");
-        StartCoroutine(MoveUp(transform.localPosition, new Vector3(transform.localPosition.x, 0.006f, transform.localPosition.z), attackedPosition));
+        StartCoroutine(MoveUp(transform.localPosition, new Vector3(transform.localPosition.x, 0.006f, transform.localPosition.z), attackedPosition, a));
     }
 
-    private IEnumerator MoveUp(Vector3 startPosition, Vector3 endPosition, Vector3 loc) {
+    private IEnumerator MoveUp(Vector3 startPosition, Vector3 endPosition, Vector3 loc, Tile a) {
         float speed = 2f;
         float y = 0.004f;
 
@@ -157,10 +157,10 @@ public class CreatureToken : Token, IPointerClickHandler, IPointerEnterHandler, 
         }
 
 
-        StartCoroutine(MoveTowardsToken(loc, endPosition));
+        StartCoroutine(MoveTowardsToken(loc, endPosition, a));
     }
 
-    private IEnumerator MoveTowardsToken(Vector3 targetLocation, Vector3 startLocation) {
+    private IEnumerator MoveTowardsToken(Vector3 targetLocation, Vector3 startLocation, Tile a) {
 
         float speed = 4f;
         var i = 0f;
@@ -171,6 +171,11 @@ public class CreatureToken : Token, IPointerClickHandler, IPointerEnterHandler, 
             transform.localPosition = Vector3.Lerp(startLocation, targetLocation, i);
             yield return null;
         }
+
+        //at this point, the token has struct the other token
+
+        creature.OnAttack(GameManager.Singleton.hostBoard, GameManager.Singleton.clientBoard,
+                    transform.parent.GetComponent<Tile>(), GameManager.Singleton.isHost, a);
 
         StartCoroutine(MoveBack(startLocation, targetLocation));
 
@@ -188,7 +193,7 @@ public class CreatureToken : Token, IPointerClickHandler, IPointerEnterHandler, 
         }
 
         StartCoroutine(MoveDown(transform.localPosition, new Vector3(transform.localPosition.x, 
-            transform.parent.GetComponent<Tile>().hostSpawnLocation.transform.localPosition.y, transform.localPosition.z)));
+            transform.parent.GetComponent<Tile>().AttackLocation.transform.localPosition.y, transform.localPosition.z)));
     }
 
     private IEnumerator MoveDown(Vector3 startPosition, Vector3 endPosition) {

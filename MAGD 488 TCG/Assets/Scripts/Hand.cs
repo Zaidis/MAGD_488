@@ -57,8 +57,20 @@ public class Hand : MonoBehaviour
         UICard c = newCard.GetComponent<UICard>();
         c.ConjureCard(card);
         newCard.transform.parent = this.transform;
-        newCard.GetComponent<Canvas>().sortingOrder = uiCards.Count - 1;
-        c.sortingOrder = uiCards.Count;
+        //newCard.GetComponent<Canvas>().sortingOrder = uiCards.Count - 1;
+        c.handID = uiCards.Count;
+
+        if(uiCards.Count != 0) {
+            int j = uiCards.Count;
+            for(int i = 0; i < uiCards.Count; i++) {
+                uiCards[i].GetComponent<UICard>().sortingOrder = j;
+                uiCards[i].GetComponent<Canvas>().sortingOrder = j;
+                j--;
+            }
+        } else {
+            newCard.GetComponent<Canvas>().sortingOrder = 0;
+        }
+
 
         uiCards.Add(newCard);
         //move hand to the left when adding card
@@ -87,14 +99,20 @@ public class Hand : MonoBehaviour
 
         if (uiCards.Count != 0) {
             if (uiCards.Count > 1) {
+                int j = uiCards.Count;
                 for (int i = 0; i < uiCards.Count; i++) {
-                    uiCards[i].GetComponent<UICard>().sortingOrder = i;
-                }
+                    uiCards[i].GetComponent<UICard>().handID = i;
 
+                    uiCards[i].GetComponent<UICard>().sortingOrder = j;
+                    j--;
+                }
+                
+                
                 RotateCards();
             }
             else {
                 uiCards[0].GetComponent<UICard>().sortingOrder = 0;
+                uiCards[0].GetComponent<UICard>().handID = 0;
             }
         }
 

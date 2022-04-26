@@ -17,7 +17,7 @@ MonoBehaviour:
   manaCost: 3
   cardName: Hellhound Whistle
   cardArt: {fileID: 21300000, guid: eaa03d4d7a026b24387bcff036ba5b7a, type: 3}
-  cardBorder: {fileID: 21300000, guid: c3044a06ab0c16940a82f709242944f7, type: 3}
+  cardBorder: {fileID: 21300000, guid: 50a19f21e799ebe429f8c3762fb0b38f, type: 3}
   cardFaction: 0
   description: "\rSurrounding Melee Cards: +2/0"
   lore: 

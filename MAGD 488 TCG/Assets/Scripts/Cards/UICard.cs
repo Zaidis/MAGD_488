@@ -9,7 +9,8 @@ public class UICard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
     public Card myCard;
     public float defaultRotation_Z;
     public float defaultPosition_Y;
-    public int sortingOrder;
+    public int sortingOrder; //UI canvas sorting order
+    public int handID; //place in hand array
 
     private RectTransform myTransform;
     [Header("UI Information")]
@@ -55,7 +56,7 @@ public class UICard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
                     //we need to select a place to put the card. 
                     GameManager.Singleton.needsToSelectTile = true;
                     GameManager.Singleton.selectedCard = myCard;
-                    GameManager.Singleton.selectedCardNumber = sortingOrder;
+                    GameManager.Singleton.selectedCardNumber = handID;
 
                 }
             }

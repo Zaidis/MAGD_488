@@ -7,6 +7,7 @@ public class Tile : MonoBehaviour, IPointerClickHandler {
     public GameObject token;
     public Transform hostSpawnLocation;
     public Transform clientSpawnLocation;
+    public Transform AttackLocation; //where the animation of tokens will go to
     public bool hostTile;
     public bool meleeTile;
     public bool active;
