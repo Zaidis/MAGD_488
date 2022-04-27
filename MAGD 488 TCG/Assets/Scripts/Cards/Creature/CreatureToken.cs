@@ -14,7 +14,8 @@ public class CreatureToken : Token, IPointerClickHandler, IPointerEnterHandler, 
     public TextMeshPro HealthText;
     public bool hasAttacked;
 
-
+    public bool hasAbility;
+    public bool castedAbility;
     public override void ApplyCard() {
         currentAttack = creature.defaultPowerAmount;
         currentHealth = creature.defaultHealthAmount;
@@ -108,6 +109,11 @@ public class CreatureToken : Token, IPointerClickHandler, IPointerEnterHandler, 
 
     }
 
+    public void UseAbility() {
+        creature.OnAbility(GameManager.Singleton.hostBoard, GameManager.Singleton.clientBoard, null, GameManager.Singleton.isHost);
+        castedAbility = true;
+        GameManager.Singleton.CreatureOptionButtons(this, GameManager.Singleton.isHost);
+    }
     public void AttackWithToken(Tile attackedToken) {
         if (!hasAttacked) {
             

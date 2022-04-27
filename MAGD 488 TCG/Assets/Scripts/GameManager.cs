@@ -56,7 +56,7 @@ public class GameManager : MonoBehaviour
     //When clicking on a creature, these buttons will appear. 
     public Shader defaultShader; //for tokens
 
-    public O_AttackToken attackTokenOption;
+        public O_AttackToken attackTokenOption;
         public O_AttackPlayer attackPlayerOption;
         public O_Ability abilityOption;
         [SerializeField] private Transform[] optionSpawnLocations;
@@ -379,6 +379,7 @@ public class GameManager : MonoBehaviour
         int counter = 0;
         attackTokenOption.token = token;
         attackPlayerOption.token = token;
+        abilityOption.token = token;
         token.GetComponent<Token>().ChangeMaterial(m_selected);
 
         attackTokenOption.gameObject.SetActive(false);
@@ -401,6 +402,15 @@ public class GameManager : MonoBehaviour
                 }
             }
 
+            if (token.creature.hasAbility) {
+                if (!token.castedAbility) {
+
+                    abilityOption.transform.position = optionSpawnLocations[counter].position;
+                    abilityOption.gameObject.SetActive(true);
+                    counter++;
+                }
+            }
+
             //ability
         } else {
             if (token.hasAttacked == false) {
@@ -414,6 +424,15 @@ public class GameManager : MonoBehaviour
 
                     attackPlayerOption.transform.position = optionSpawnLocations[counter].position;
                     attackPlayerOption.gameObject.SetActive(true);
+                    counter++;
+                }
+            }
+
+            if (token.creature.hasAbility) {
+                if (!token.castedAbility) {
+
+                    abilityOption.transform.position = optionSpawnLocations[counter].position;
+                    abilityOption.gameObject.SetActive(true);
                     counter++;
                 }
             }

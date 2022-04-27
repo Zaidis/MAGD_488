@@ -15961,6 +15961,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b10f2917e49d1dc4da3f1313a31f481d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  token: {fileID: 0}
 --- !u!1 &2143759108
 GameObject:
   m_ObjectHideFlags: 0
@@ -22552,11 +22553,11 @@ MonoBehaviour:
   yourName: 
   myHand: {fileID: 680024615}
   deck:
-  - {fileID: 11400000, guid: fab5adeae34a584419a1d285f728bfa3, type: 2}
-  - {fileID: 11400000, guid: 9eed4b3d0a384d44eb551f94316feaff, type: 2}
-  - {fileID: 11400000, guid: b1b1e8565a42f594884bd6a25e7c6b1e, type: 2}
+  - {fileID: 11400000, guid: 7419b0aa5f117464abdfc56f18189eb5, type: 2}
+  - {fileID: 11400000, guid: 65ffd39d347619d498aab6df5af5efa3, type: 2}
+  - {fileID: 11400000, guid: ab1888a86fb585f4b85b2637ed4f756f, type: 2}
   - {fileID: 11400000, guid: e0b0442256f5b2e408ce7a7cac31de3a, type: 2}
-  - {fileID: 11400000, guid: b1b1e8565a42f594884bd6a25e7c6b1e, type: 2}
+  - {fileID: 11400000, guid: 2c5aefb5b8033804e9409679686ab6a1, type: 2}
   - {fileID: 11400000, guid: be951353ef72541498a83ac184f831dc, type: 2}
   CreatureTokenPrefab:
   - {fileID: 6712927834341057234, guid: 2e219fe0c9a9db244ac0949123afd5af, type: 3}
