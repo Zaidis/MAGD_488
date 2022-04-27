@@ -29,6 +29,12 @@ public class CreatureToken : Token, IPointerClickHandler, IPointerEnterHandler, 
         Art = creature.cardArt;
     }
 
+
+    public void ResetToken() {
+        hasAttacked = false;
+        castedAbility = false;
+    }
+
     public override void OnPlay() {
         //throw new System.NotImplementedException();
     }
@@ -124,12 +130,17 @@ public class CreatureToken : Token, IPointerClickHandler, IPointerEnterHandler, 
         creature.OnAbility(GameManager.Singleton.hostBoard, GameManager.Singleton.clientBoard, null, GameManager.Singleton.isHost);
         castedAbility = true;
         GameManager.Singleton.CreatureOptionButtons(this, GameManager.Singleton.isHost);
+
+
     }
 
     public void UseTargetedAbility(Tile targetedToken) {
         if (!castedAbility) {
             creature.OnTargetedAbility(transform.parent.GetComponent<Tile>(), targetedToken, transform.parent.GetComponent<Tile>().hostTile);
             castedAbility = true;
+            
+            GameManager.Singleton.ResetAllTiles(GameManager.Singleton.hostBoard);
+            GameManager.Singleton.ResetAllTiles(GameManager.Singleton.clientBoard);
             GameManager.Singleton.CreatureOptionButtons(this, GameManager.Singleton.isHost);
         }
         

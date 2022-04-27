@@ -19,8 +19,7 @@ public class SPD : Creature
         //base.OnTargetedAbility(user, victim, isHostSide);
 
         if(victim.token.GetComponent<Token>() is CreatureToken c) {
-            c.currentAttack = 99;
-            c.UpdateStats();
+            c.hasAttacked = true;
         }
         
 

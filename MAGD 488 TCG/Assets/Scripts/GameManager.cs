@@ -299,8 +299,12 @@ public class GameManager : MonoBehaviour
     public void OnNextTurnPressed() {
         TurnStatus.text = "Other User's Turn";
         IsHostTurn = IsHostTurn ? false : true;
+
         Player player = _networkManager.SpawnManager.GetLocalPlayerObject().GetComponent<Player>();
         player.UpdateTurnServerRpc(IsHostTurn);
+
+        
+
     }    
     private IEnumerator ClearConnectingOnConnect() { //Guarentees that connecting screen is shown until all users are connected and it's safe to start gameplay
         if (_networkManager.IsServer) {
@@ -314,11 +318,15 @@ public class GameManager : MonoBehaviour
         BeginGame();
     }
 
-    /*public void TestCardPlace(int x) {
-        System.Random rand = new System.Random();
-        Player player = _networkManager.SpawnManager.GetLocalPlayerObject().GetComponent<Player>();
-        player.PlaceCard(x, rand.Next(5), rand.Next(2));
-    } */
+    public void ResetTokens(Tile[] board) {
+        for(int i = 0; i < 10; i++) {
+            if(board[i].token != null) {
+                if(board[i].token.GetComponent<CreatureToken>() is CreatureToken c) {
+                    c.ResetToken();
+                }
+            }
+        }
+    }
 
     public void TestDrawCard(Card card) {
         myHand.AddCardToHand(card);

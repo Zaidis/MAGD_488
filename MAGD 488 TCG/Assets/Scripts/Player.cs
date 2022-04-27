@@ -89,11 +89,13 @@ public class Player : NetworkBehaviour {
             if (isHostTurn) {
                 GameManager.Singleton.TurnStatus.text = "Your Turn!";
                 GameManager.Singleton.NextTurn.interactable = true;
+                GameManager.Singleton.ResetTokens(GameManager.Singleton.hostBoard);
             }
         } else {
             if (!isHostTurn) {
                 GameManager.Singleton.TurnStatus.text = "Your Turn!";
                 GameManager.Singleton.NextTurn.interactable = true;
+                GameManager.Singleton.ResetTokens(GameManager.Singleton.clientBoard);
             }                
         }
     }
