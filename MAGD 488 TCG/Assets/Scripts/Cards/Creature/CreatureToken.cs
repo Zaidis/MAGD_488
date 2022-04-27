@@ -16,9 +16,14 @@ public class CreatureToken : Token, IPointerClickHandler, IPointerEnterHandler, 
 
     public bool hasAbility;
     public bool castedAbility;
+
+    public List<attributes> myAttributes = new List<attributes>();
+
     public override void ApplyCard() {
         currentAttack = creature.defaultPowerAmount;
         currentHealth = creature.defaultHealthAmount;
+
+        myAttributes = creature.myAttributes;
        // Name.text = creature.cardName;
 
         AttackText.text = currentAttack.ToString();

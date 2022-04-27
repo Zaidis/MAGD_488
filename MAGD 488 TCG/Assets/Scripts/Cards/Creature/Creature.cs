@@ -27,16 +27,16 @@ public class Creature : Card
 
         //Attributes
 
-        if (myAttributes.Contains(attributes.cleave)) {
+        if (attacker.token.GetComponent<CreatureToken>().myAttributes.Contains(attributes.cleave)) {
             Cleave(hostBoard, clientBoard, attacker, isHost, attacked);
         }
-        if (myAttributes.Contains(attributes.pierce)) {
+        if (attacker.token.GetComponent<CreatureToken>().myAttributes.Contains(attributes.pierce)) {
             Pierce(hostBoard, clientBoard, attacker, isHost, attacked);
         }
-        if (myAttributes.Contains(attributes.lifesteal)) { //when this deals damage, heal your player
+        if (attacker.token.GetComponent<CreatureToken>().myAttributes.Contains(attributes.lifesteal)) { //when this deals damage, heal your player
             LifeSteal(attacker, attacked);
         }
-        if (myAttributes.Contains(attributes.taunt)) { //must be destroyed before attacking another tile
+        if (attacker.token.GetComponent<CreatureToken>().myAttributes.Contains(attributes.taunt)) { //must be destroyed before attacking another tile
 
         }
     }
