@@ -16,8 +16,8 @@ MonoBehaviour:
   type: 0
   manaCost: 6
   cardName: Paul Bunyan
-  cardArt: {fileID: 0}
-  cardBorder: {fileID: 0}
+  cardArt: {fileID: 21300000, guid: 17f8ac34376b4414e9384ca84c69c93a, type: 3}
+  cardBorder: {fileID: 21300000, guid: 90d1e6c3f21edfb45b759f3bcf9f6ddd, type: 3}
   cardFaction: 4
   description: Summon a Babe token (Blue Ox -> 2/2/1)
   lore: 

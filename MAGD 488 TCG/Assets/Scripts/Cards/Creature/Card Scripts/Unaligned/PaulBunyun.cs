@@ -16,6 +16,15 @@ public class PaulBunyun : Creature
 
     public override void OnPlay(Tile[] hostBoard, Tile[] clientBoard, Tile parent)
     {
-        GameManager.Singleton.myHand.AddCardToHand(babe);
+        if (GameManager.Singleton.isHost) {
+            if (parent.hostTile) {
+                GameManager.Singleton.myHand.AddCardToHand(babe);
+            }
+        } else {
+            if (!parent.hostTile) {
+                GameManager.Singleton.myHand.AddCardToHand(babe);
+            }
+        }
+        
     }
 }

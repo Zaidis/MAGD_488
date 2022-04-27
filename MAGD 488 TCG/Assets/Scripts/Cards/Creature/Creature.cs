@@ -60,7 +60,7 @@ public class Creature : Card
 
     public virtual void OnAttacked(Tile parent)
     {
-
+        //do nothing normally
     }
 
     /// <summary>

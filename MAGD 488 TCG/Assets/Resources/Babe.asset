@@ -16,8 +16,8 @@ MonoBehaviour:
   type: 0
   manaCost: 1
   cardName: Babe
-  cardArt: {fileID: 0}
-  cardBorder: {fileID: 0}
+  cardArt: {fileID: 21300000, guid: c2b91a25c248093429709e47efd02e2c, type: 3}
+  cardBorder: {fileID: 21300000, guid: 90d1e6c3f21edfb45b759f3bcf9f6ddd, type: 3}
   cardFaction: 4
   description: If Babe dies, if you control Paul Bunyan, give Paul +2/+2
   lore: 

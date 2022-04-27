@@ -42,7 +42,8 @@ public class CreatureToken : Token, IPointerClickHandler, IPointerEnterHandler, 
     }
 
     public override void OnPlay() {
-        //throw new System.NotImplementedException();
+        creature.OnPlay(GameManager.Singleton.hostBoard, GameManager.Singleton.clientBoard,
+            transform.parent.GetComponent<Tile>());
     }
     public override void UpdateStats() {
         //health

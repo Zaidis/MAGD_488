@@ -22559,6 +22559,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: e0b0442256f5b2e408ce7a7cac31de3a, type: 2}
   - {fileID: 11400000, guid: 2c5aefb5b8033804e9409679686ab6a1, type: 2}
   - {fileID: 11400000, guid: be951353ef72541498a83ac184f831dc, type: 2}
+  - {fileID: 11400000, guid: 45ad4e2283f83c549aa1c4abcfc354f0, type: 2}
   CreatureTokenPrefab:
   - {fileID: 6712927834341057234, guid: 2e219fe0c9a9db244ac0949123afd5af, type: 3}
   - {fileID: 1245056736076495558, guid: 71d536a57466f2445ae16bdf0e0f5bcf, type: 3}
@@ -22596,6 +22597,7 @@ MonoBehaviour:
   - {fileID: 4259038933341649690}
   needsToSelectTile: 0
   isAttecking: 0
+  isUsingAbility: 0
   selectedCreature: {fileID: 0}
   selectedCard: {fileID: 0}
   selectedCardNumber: 0

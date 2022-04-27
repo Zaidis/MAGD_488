@@ -23,18 +23,32 @@ public class Babe : Creature
             {
                 if (parent.hostTile)
                 {
-                    Tile[] tiles = GameManager.Singleton.hostBoard;
-                    for (int i = 0; i < tiles.Length; i++)
+                    for (int i = 0; i < GameManager.Singleton.hostBoard.Length; i++)
                     {
-                        if(tiles[i].token.GetComponent<Token>() is CreatureToken c2)
-                        {
-                            if(c2.creature == paulBunyon)
-                            {
-                                c2.currentAttack += attackMod;
-                                c2.currentHealth += healthMod;
-                                c2.UpdateStats();
+                        if(GameManager.Singleton.hostBoard[i].token != null) {
+                            if (GameManager.Singleton.hostBoard[i].token.GetComponent<Token>() is CreatureToken c2) {
+                                if (c2.creature == paulBunyon) {
+                                    c2.currentAttack += attackMod;
+                                    c2.currentHealth += healthMod;
+                                    c2.UpdateStats();
+                                }
                             }
                         }
+                       
+                    }
+                } else {
+                    for (int i = 0; i < GameManager.Singleton.clientBoard.Length; i++)
+                    {
+                        if(GameManager.Singleton.clientBoard[i].token != null) {
+                            if (GameManager.Singleton.clientBoard[i].token.GetComponent<Token>() is CreatureToken c2) {
+                                if (c2.creature == paulBunyon) {
+                                    c2.currentAttack += attackMod;
+                                    c2.currentHealth += healthMod;
+                                    c2.UpdateStats();
+                                }
+                            }
+                        }
+                       
                     }
                 }
             }
