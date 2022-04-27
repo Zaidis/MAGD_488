@@ -9,18 +9,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2db2d717dcd6e2f44a7a68b7f4c0c9a4, type: 3}
+  m_Script: {fileID: 11500000, guid: 4e5993529ed69274590a8d7b2adae6ec, type: 3}
   m_Name: Alvitr (leader)
   m_EditorClassIdentifier: 
-  ID: 2005
+  ID: 2001
   type: 0
   manaCost: 5
-  cardName: Alvitr (leader)
+  cardName: Alvitr
   cardArt: {fileID: 0}
-  description: 'needs endure
+  cardBorder: {fileID: 0}
+  cardFaction: 1
+  description: 'Area attack does half attack to surrounding (including sides and
+    back) enemies (2 Mana Cost)
 
-    Area attack does half attack to surrounding (including
-    sides and back) enemies (2 Mana Cost)'
+    Attribute should be Endure'
+  lore: 
+  artistName: 
   defaultHealthAmount: 4
   defaultPowerAmount: 4
   myAttributes: 00000000
+  isMelee: 1

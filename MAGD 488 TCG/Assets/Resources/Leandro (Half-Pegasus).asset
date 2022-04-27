@@ -9,15 +9,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2db2d717dcd6e2f44a7a68b7f4c0c9a4, type: 3}
+  m_Script: {fileID: 11500000, guid: 1c5ef7fac8e563d48a029decfab70bb2, type: 3}
   m_Name: Leandro (Half-Pegasus)
   m_EditorClassIdentifier: 
-  ID: 4001
+  ID: 4013
   type: 0
-  manaCost: 7
-  cardName: Leandro (Half-Pegasus)
+  manaCost: 6
+  cardName: 'Leandro '
   cardArt: {fileID: 0}
-  description: "4 Mana:Perm Buff Self or Ally: +1/+2\n need Parry"
-  defaultHealthAmount: 5
-  defaultPowerAmount: 7
+  cardBorder: {fileID: 0}
+  cardFaction: 3
+  description: 'Attribute shoiuld be Parry
+
+    4 Mana:Perm Buff Self or Ally: +1/+2'
+  lore: 
+  artistName: 
+  defaultHealthAmount: 4
+  defaultPowerAmount: 5
   myAttributes: 00000000
+  isMelee: 1

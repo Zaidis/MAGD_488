@@ -9,15 +9,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2db2d717dcd6e2f44a7a68b7f4c0c9a4, type: 3}
+  m_Script: {fileID: 11500000, guid: 7d74300033ddd3044b378ff1925d6b2c, type: 3}
   m_Name: Francesca (Hellhound)
   m_EditorClassIdentifier: 
-  ID: 3016
+  ID: 3007
   type: 0
   manaCost: 2
-  cardName: Francesca (Hellhound)
-  cardArt: {fileID: 21300000, guid: eaa03d4d7a026b24387bcff036ba5b7a, type: 3}
+  cardName: Francesca
+  cardArt: {fileID: 0}
+  cardBorder: {fileID: 0}
+  cardFaction: 0
   description: 
+  lore: 
+  artistName: 
   defaultHealthAmount: 3
   defaultPowerAmount: 1
   myAttributes: 
+  isMelee: 1

@@ -9,15 +9,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2db2d717dcd6e2f44a7a68b7f4c0c9a4, type: 3}
+  m_Script: {fileID: 11500000, guid: b804a3735c43ccd408eebff8dc3a63bb, type: 3}
   m_Name: Keaira (DarknessShadow)
   m_EditorClassIdentifier: 
-  ID: 4007
+  ID: 4011
   type: 0
   manaCost: 2
-  cardName: Keaira (Darkness/Shadow)
+  cardName: Keaira
   cardArt: {fileID: 0}
+  cardBorder: {fileID: 0}
+  cardFaction: 3
   description: Undetected - cannot be targeted for a turn (3 mana cost)
-  defaultHealthAmount: 3
+  lore: 
+  artistName: 
+  defaultHealthAmount: 2
   defaultPowerAmount: 2
   myAttributes: 
+  isMelee: 1

@@ -9,15 +9,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2db2d717dcd6e2f44a7a68b7f4c0c9a4, type: 3}
+  m_Script: {fileID: 11500000, guid: bf74af9c0f91ec1439d5596c883850dd, type: 3}
   m_Name: Naevys
   m_EditorClassIdentifier: 
-  ID: 2002
+  ID: 2011
   type: 0
   manaCost: 4
   cardName: Naevys
   cardArt: {fileID: 0}
-  description: needs endure
+  cardBorder: {fileID: 0}
+  cardFaction: 1
+  description: Pierce should be Endure
+  lore: 
+  artistName: 
   defaultHealthAmount: 7
   defaultPowerAmount: 2
   myAttributes: 0200000000000000
+  isMelee: 1

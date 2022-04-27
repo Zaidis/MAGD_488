@@ -9,15 +9,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2db2d717dcd6e2f44a7a68b7f4c0c9a4, type: 3}
+  m_Script: {fileID: 11500000, guid: 7cac65992e002f540a4823ec66fad2aa, type: 3}
   m_Name: Lenny (Giant Shark)
   m_EditorClassIdentifier: 
-  ID: 3008
+  ID: 3011
   type: 0
   manaCost: 6
-  cardName: Lenny (Giant Shark)
+  cardName: Lenny
   cardArt: {fileID: 0}
+  cardBorder: {fileID: 0}
+  cardFaction: 2
   description: 
+  lore: 
+  artistName: 
   defaultHealthAmount: 2
   defaultPowerAmount: 6
   myAttributes: 01000000
+  isMelee: 1

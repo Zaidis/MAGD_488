@@ -9,18 +9,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2db2d717dcd6e2f44a7a68b7f4c0c9a4, type: 3}
+  m_Script: {fileID: 11500000, guid: 782e3f58b27b623468b02a1335acf9eb, type: 3}
   m_Name: (Naiads - Water)
   m_EditorClassIdentifier: 
-  ID: 4012
+  ID: 4003
   type: 0
-  manaCost: 5
-  cardName: (Naiads - Water)
+  manaCost: 3
+  cardName: Naiads
   cardArt: {fileID: 0}
-  description: '20% chance to completely dodge attack but also do no damage
-
-    needs
-    taunt'
-  defaultHealthAmount: 6
-  defaultPowerAmount: 2
-  myAttributes: 00000000
+  cardBorder: {fileID: 0}
+  cardFaction: 3
+  description: 20% chance to completely dodge attack but also do no damage
+  lore: 
+  artistName: 
+  defaultHealthAmount: 4
+  defaultPowerAmount: 1
+  myAttributes: 05000000
+  isMelee: 1

@@ -9,15 +9,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2db2d717dcd6e2f44a7a68b7f4c0c9a4, type: 3}
+  m_Script: {fileID: 11500000, guid: c373b4f238afb9841a6750473babb4ff, type: 3}
   m_Name: Babe
   m_EditorClassIdentifier: 
-  ID: 5007
+  ID: 5002
   type: 0
   manaCost: 1
   cardName: Babe
   cardArt: {fileID: 0}
+  cardBorder: {fileID: 0}
+  cardFaction: 4
   description: If Babe dies, if you control Paul Bunyan, give Paul +2/+2
+  lore: 
+  artistName: 
   defaultHealthAmount: 2
   defaultPowerAmount: 2
   myAttributes: 
+  isMelee: 1

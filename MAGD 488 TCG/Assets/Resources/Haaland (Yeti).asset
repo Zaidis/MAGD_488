@@ -9,15 +9,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2db2d717dcd6e2f44a7a68b7f4c0c9a4, type: 3}
+  m_Script: {fileID: 11500000, guid: 618f0068b6b1d0540b60038cea9a403d, type: 3}
   m_Name: Haaland (Yeti)
   m_EditorClassIdentifier: 
-  ID: 3009
+  ID: 3008
   type: 0
   manaCost: 6
-  cardName: Haaland (Yeti)
+  cardName: Haaland
   cardArt: {fileID: 0}
-  description: needs endure
+  cardBorder: {fileID: 0}
+  cardFaction: 2
+  description: Attribute should be Endure
+  lore: 
+  artistName: 
   defaultHealthAmount: 7
   defaultPowerAmount: 4
   myAttributes: 00000000
+  isMelee: 1

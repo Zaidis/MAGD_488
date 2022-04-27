@@ -9,15 +9,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2db2d717dcd6e2f44a7a68b7f4c0c9a4, type: 3}
+  m_Script: {fileID: 11500000, guid: 0a00560862105624bb6ea9b63838b0f4, type: 3}
   m_Name: Oro (Gold)
   m_EditorClassIdentifier: 
-  ID: 5004
+  ID: 5013
   type: 0
   manaCost: 5
   cardName: Oro
   cardArt: {fileID: 0}
-  description: '2 Mana, Discard a card: Gain +2 attack'
+  cardBorder: {fileID: 0}
+  cardFaction: 4
+  description: '2 Mana, Discard a card: Gain +2 attack. '
+  lore: 
+  artistName: 
   defaultHealthAmount: 4
   defaultPowerAmount: 4
-  myAttributes: 04000000
+  myAttributes: 
+  isMelee: 1

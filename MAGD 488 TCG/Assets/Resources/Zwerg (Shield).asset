@@ -9,15 +9,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2db2d717dcd6e2f44a7a68b7f4c0c9a4, type: 3}
+  m_Script: {fileID: 11500000, guid: 9a46861b44e20444ea42798cbf5c2942, type: 3}
   m_Name: Zwerg (Shield)
   m_EditorClassIdentifier: 
-  ID: 5002
+  ID: 5017
   type: 0
   manaCost: 3
   cardName: Zwerg
   cardArt: {fileID: 0}
-  description: Taunt
+  cardBorder: {fileID: 0}
+  cardFaction: 4
+  description: 
+  lore: 
+  artistName: 
   defaultHealthAmount: 5
   defaultPowerAmount: 1
-  myAttributes: 0400000004000000
+  myAttributes: 05000000
+  isMelee: 1

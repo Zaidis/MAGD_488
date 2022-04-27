@@ -9,15 +9,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2db2d717dcd6e2f44a7a68b7f4c0c9a4, type: 3}
+  m_Script: {fileID: 11500000, guid: 5724ab9f41f4de44c808886ec80fa35e, type: 3}
   m_Name: Freida (Artic)
   m_EditorClassIdentifier: 
-  ID: 5003
+  ID: 5005
   type: 0
   manaCost: 2
   cardName: Freida
   cardArt: {fileID: 0}
+  cardBorder: {fileID: 0}
+  cardFaction: 4
   description: 
+  lore: 
+  artistName: 
   defaultHealthAmount: 2
   defaultPowerAmount: 2
-  myAttributes: 05000000
+  myAttributes: 
+  isMelee: 0

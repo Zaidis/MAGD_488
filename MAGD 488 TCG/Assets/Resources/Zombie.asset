@@ -9,18 +9,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2db2d717dcd6e2f44a7a68b7f4c0c9a4, type: 3}
+  m_Script: {fileID: 11500000, guid: 25b9c07f5175d7b419cc48be908513e9, type: 3}
   m_Name: Zombie
   m_EditorClassIdentifier: 
-  ID: 1012
+  ID: 1016
   type: 0
   manaCost: 2
   cardName: Zombie
   cardArt: {fileID: 0}
-  description: 'Need Endure add to atribute list
+  cardBorder: {fileID: 0}
+  cardFaction: 0
+  description: 'Create token zombie in hand with 1/1/0 <-- 0 mana (2 Mana Cost)
 
-    Create token zombie in hand
-    with 1/1/0 <-- 0 mana (2 Mana Cost)'
+    Attribute
+    should be Endure'
+  lore: 
+  artistName: 
   defaultHealthAmount: 3
   defaultPowerAmount: 1
   myAttributes: 00000000
+  isMelee: 1

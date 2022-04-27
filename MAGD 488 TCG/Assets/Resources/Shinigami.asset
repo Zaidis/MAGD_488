@@ -9,15 +9,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2db2d717dcd6e2f44a7a68b7f4c0c9a4, type: 3}
+  m_Script: {fileID: 11500000, guid: c857529b59a3f7543ad0d41042d6bc32, type: 3}
   m_Name: Shinigami
   m_EditorClassIdentifier: 
-  ID: 1003
+  ID: 1012
   type: 0
   manaCost: 5
   cardName: Shinigami
   cardArt: {fileID: 0}
-  description: 'Ability: Lifesteal 3 mana heals player same as atk '
+  cardBorder: {fileID: 0}
+  cardFaction: 0
+  description: 'Lifesteal 3 mana heals player same as atk '
+  lore: 
+  artistName: 
   defaultHealthAmount: 3
   defaultPowerAmount: 3
   myAttributes: 00000000
+  isMelee: 0

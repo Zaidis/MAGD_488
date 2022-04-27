@@ -9,15 +9,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2db2d717dcd6e2f44a7a68b7f4c0c9a4, type: 3}
+  m_Script: {fileID: 11500000, guid: e2fa395d8350ce8439b5565bfc4c1c13, type: 3}
   m_Name: Ogre
   m_EditorClassIdentifier: 
-  ID: 5010
+  ID: 5012
   type: 0
   manaCost: 4
   cardName: Ogre
   cardArt: {fileID: 0}
+  cardBorder: {fileID: 0}
+  cardFaction: 4
   description: 
+  lore: 
+  artistName: 
   defaultHealthAmount: 4
   defaultPowerAmount: 3
-  myAttributes: 04000000
+  myAttributes: 
+  isMelee: 1

@@ -9,16 +9,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2db2d717dcd6e2f44a7a68b7f4c0c9a4, type: 3}
+  m_Script: {fileID: 11500000, guid: 1521b10b54703134f99accccc18f9478, type: 3}
   m_Name: Arcane
   m_EditorClassIdentifier: 
-  ID: 3002
+  ID: 3005
   type: 0
   manaCost: 4
   cardName: 'Arcane '
   cardArt: {fileID: 0}
+  cardBorder: {fileID: 0}
+  cardFaction: 2
   description: If damaged, gain +2/+1 and Pierce. If you summoned Momo and Tauro,
     create a Celestial Token in hand.
+  lore: 
+  artistName: 
   defaultHealthAmount: 2
   defaultPowerAmount: 3
   myAttributes: 
+  isMelee: 0

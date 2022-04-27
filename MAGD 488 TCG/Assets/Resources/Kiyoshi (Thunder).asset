@@ -9,16 +9,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2db2d717dcd6e2f44a7a68b7f4c0c9a4, type: 3}
+  m_Script: {fileID: 11500000, guid: c9351171f1c80a74c98a130ffb01a0ce, type: 3}
   m_Name: Kiyoshi (Thunder)
   m_EditorClassIdentifier: 
-  ID: 5012
+  ID: 5009
   type: 0
   manaCost: 2
   cardName: Kiyoshi
   cardArt: {fileID: 0}
-  description: Electrifies an enemy - does 1 damage every other round to affected
-    enemies (2 mana)
+  cardBorder: {fileID: 0}
+  cardFaction: 4
+  description: Electrifies an enemy - does 1 dmg every other round to affected enemies
+    (2 mana)
+  lore: 
+  artistName: 
   defaultHealthAmount: 2
   defaultPowerAmount: 2
-  myAttributes: 05000000
+  myAttributes: 
+  isMelee: 0

@@ -9,20 +9,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2db2d717dcd6e2f44a7a68b7f4c0c9a4, type: 3}
+  m_Script: {fileID: 11500000, guid: a106e256f59c1c9499abea470984fbad, type: 3}
   m_Name: SPD
   m_EditorClassIdentifier: 
-  ID: 1001
+  ID: 1014
   type: 0
   manaCost: 3
   cardName: SPD
-  cardArt: {fileID: 21300000, guid: a79471d4d1ac4444396c6a3fb07751f4, type: 3}
-  cardBorder: {fileID: 21300000, guid: 50a19f21e799ebe429f8c3762fb0b38f, type: 3}
+  cardArt: {fileID: 0}
+  cardBorder: {fileID: 0}
   cardFaction: 0
-  description: 'Ability: Debuff Enemy Card: Fear Target Card (2 Mana Cost)'
+  description: 'Debuff Enemy Card: Fear Target Card (2 Mana Cost)'
   lore: 
   artistName: 
   defaultHealthAmount: 5
   defaultPowerAmount: 0
   myAttributes: 
-  isMelee: 0
+  isMelee: 1
