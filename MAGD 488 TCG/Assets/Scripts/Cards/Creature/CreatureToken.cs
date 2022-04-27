@@ -79,6 +79,17 @@ public class CreatureToken : Token, IPointerClickHandler, IPointerEnterHandler, 
                             Player p = GameManager.Singleton._networkManager.SpawnManager.GetLocalPlayerObject().GetComponent<Player>();
                             p.UpdateAttackServerRpc(GameManager.Singleton.selectedCreature.GetComponentInParent<Tile>().GetTileID(), transform.parent.GetComponent<Tile>().GetTileID(), true);
                         }
+                    } else if (GameManager.Singleton.isUsingAbility) {
+
+                        if (transform.parent.GetComponent<Tile>().active) {
+                            /*GameManager.Singleton.selectedCreature.AttackWithToken(transform.parent.GetComponent<Tile>());
+                            GameManager.Singleton.selectedCreature = null;
+                            GameManager.Singleton.isAttecking = false;*/
+
+                            Player p = GameManager.Singleton._networkManager.SpawnManager.GetLocalPlayerObject().GetComponent<Player>();
+                            p.UpdateTargetedAbilityServerRpc(GameManager.Singleton.selectedCreature.GetComponentInParent<Tile>().GetTileID(), transform.parent.GetComponent<Tile>().GetTileID(), true);
+                        }
+
                     }
                 } 
             }
@@ -113,6 +124,15 @@ public class CreatureToken : Token, IPointerClickHandler, IPointerEnterHandler, 
         creature.OnAbility(GameManager.Singleton.hostBoard, GameManager.Singleton.clientBoard, null, GameManager.Singleton.isHost);
         castedAbility = true;
         GameManager.Singleton.CreatureOptionButtons(this, GameManager.Singleton.isHost);
+    }
+
+    public void UseTargetedAbility(Tile targetedToken) {
+        if (!castedAbility) {
+            creature.OnTargetedAbility(transform.parent.GetComponent<Tile>(), targetedToken, transform.parent.GetComponent<Tile>().hostTile);
+            castedAbility = true;
+            GameManager.Singleton.CreatureOptionButtons(this, GameManager.Singleton.isHost);
+        }
+        
     }
     public void AttackWithToken(Tile attackedToken) {
         if (!hasAttacked) {

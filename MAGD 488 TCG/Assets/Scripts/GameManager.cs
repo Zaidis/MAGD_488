@@ -37,6 +37,7 @@ public class GameManager : MonoBehaviour
 
     public bool needsToSelectTile;
     public bool isAttecking;
+    public bool isUsingAbility;
     public CreatureToken selectedCreature;
 
     public Card selectedCard; //for placement and making a token
@@ -258,6 +259,32 @@ public class GameManager : MonoBehaviour
     }
 
 
+    public void UseAbility(int userID, bool isHostSide) {
+        if (isHostSide) {
+            Token t = hostBoard[userID].token.GetComponent<Token>();
+
+            if (t is CreatureToken c) {
+                c.UseAbility();
+                
+            }
+        }
+        else {
+
+        }
+    }
+
+    public void UseTargetedAbility(int userID, int victimID, bool isHostSide) {
+        if (isHostSide) {
+            Token t = hostBoard[userID].token.GetComponent<Token>();
+
+            if(t is CreatureToken c) {
+                //c.UseAbility();
+                c.UseTargetedAbility(clientBoard[victimID]);
+            }
+        } else {
+
+        }
+    }
 
     public void Attack(int attackerID, int attackedID, bool attackingFromHostSide) {
         if (attackingFromHostSide) {
@@ -323,6 +350,20 @@ public class GameManager : MonoBehaviour
                     t.ChangeMaterial(m_active);
                     t.active = true;
                 }
+            }
+        }
+    }
+
+    /// <summary>
+    /// Activates all tiles with tokens on them on a specific board. 
+    /// </summary>
+    /// <param name="board"></param>
+    public void ActivateTilesWithTokens(Tile[] board) {
+        for (int i = 0; i < board.Length; i++) {
+            Tile t = board[i].GetComponent<Tile>();
+            if (t.token != null) {
+                t.ChangeMaterial(m_active);
+                t.active = true;
             }
         }
     }

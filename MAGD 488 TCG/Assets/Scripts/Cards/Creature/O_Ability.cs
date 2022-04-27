@@ -10,8 +10,21 @@ public class O_Ability : MonoBehaviour, IPointerClickHandler {
     public void OnPointerClick(PointerEventData eventData) {
 
 
+        if (token.creature.hasTargetedAbility) {
+
+            if (GameManager.Singleton.isHost) {
+                GameManager.Singleton.ActivateTilesWithTokens(GameManager.Singleton.clientBoard);
+            }
+            else {
+                GameManager.Singleton.ActivateTilesWithTokens(GameManager.Singleton.hostBoard);
+            }
+
+            GameManager.Singleton.isUsingAbility = true;
+            GameManager.Singleton.selectedCreature = token;
+        } else {
+            token.UseAbility();
+        }
         
-        token.UseAbility();
         
 
     }

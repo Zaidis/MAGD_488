@@ -11,6 +11,7 @@ public class Creature : Card
     public List<attributes> myAttributes;
     public bool isMelee;
     public bool hasAbility;
+    public bool hasTargetedAbility;
     public virtual void OnAttack(Tile[] hostBoard, Tile[] clientBoard, Tile attacker, bool isHost, Tile attacked)
     {
 
@@ -46,6 +47,12 @@ public class Creature : Card
 
     public virtual void OnAbility(Tile[] hostBoard, Tile[] clientBoard, Tile attacker, bool isHost)
     {
+
+
+
+    }
+    
+    public virtual void OnTargetedAbility(Tile user, Tile victim, bool isHostSide) {
 
 
 

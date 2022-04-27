@@ -46,6 +46,29 @@ public class Player : NetworkBehaviour {
         UpdateAttackClientRpc(attackerID, attackedID, attackingFromHostSide);
     }
 
+
+    [ClientRpc]
+    public void UpdateAbilityClientRpc(int userID, bool isHostSide) {
+        GameManager.Singleton.UseAbility(userID, isHostSide);
+    }
+    [ServerRpc]
+    public void UpdateAbilityServerRpc(int userID, bool isHostSide) {
+        UpdateAbilityClientRpc(userID, isHostSide);
+    }
+
+
+    [ClientRpc]
+    public void UpdateTargetedAbilityClientRpc(int userID, int victimID, bool isHostSide) {
+        GameManager.Singleton.UseTargetedAbility(userID, victimID, isHostSide);
+    }
+    [ServerRpc]
+    public void UpdateTargetedAbilityServerRpc(int userID, int victimID, bool isHostSide) {
+        UpdateTargetedAbilityClientRpc(userID, victimID, isHostSide);
+    }
+
+
+
+
     [ClientRpc]
     public void UpdateHealthClientRpc(int hostAmount, int clientAmount) {
         GameManager.Singleton.AffectHealthValues(hostAmount, clientAmount);

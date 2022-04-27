@@ -14,4 +14,15 @@ public class SPD : Creature
     {
         //Debuff Enemy card, fear target card - 2mana cost
     }
+
+    public override void OnTargetedAbility(Tile user, Tile victim, bool isHostSide) {
+        //base.OnTargetedAbility(user, victim, isHostSide);
+
+        if(victim.token.GetComponent<Token>() is CreatureToken c) {
+            c.currentAttack = 99;
+            c.UpdateStats();
+        }
+        
+
+    }
 }
