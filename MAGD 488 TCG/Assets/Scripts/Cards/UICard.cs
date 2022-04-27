@@ -9,7 +9,8 @@ public class UICard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
     public Card myCard;
     public float defaultRotation_Z;
     public float defaultPosition_Y;
-    public int sortingOrder;
+    public int sortingOrder; //UI canvas sorting order
+    public int handID; //place in hand array
 
     private RectTransform myTransform;
     [Header("UI Information")]
@@ -37,6 +38,9 @@ public class UICard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
             Creature c = (Creature)card;
             cardAttack.text = c.defaultPowerAmount.ToString();
             cardHealth.text = c.defaultHealthAmount.ToString();
+        } else if (card.type == cardType.artifact) {
+            Artifact a = (Artifact)card;
+            cardHealth.text = a.defaultHealthAmount.ToString();
         }
     }
 
@@ -52,13 +56,14 @@ public class UICard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
                     //we need to select a place to put the card. 
                     GameManager.Singleton.needsToSelectTile = true;
                     GameManager.Singleton.selectedCard = myCard;
-                    GameManager.Singleton.selectedCardNumber = sortingOrder;
+                    GameManager.Singleton.selectedCardNumber = handID;
+
                 }
             }
         } else if (eventData.button == PointerEventData.InputButton.Right) {
             Debug.Log("Updating popup");
             //will bring up a pop up to see the card more closely and also read lore. 
-            GameManager.Singleton.popup.UpdatePopup(myCard);
+            GameManager.Singleton.panelPopup.UpdatePopup(myCard);
             
         }
 

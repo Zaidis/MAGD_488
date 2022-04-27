@@ -5,7 +5,9 @@ using UnityEngine.EventSystems;
 
 public class Tile : MonoBehaviour, IPointerClickHandler {
     public GameObject token;
-    public Transform spawnLocation;
+    public Transform hostSpawnLocation;
+    public Transform clientSpawnLocation;
+    public Transform AttackLocation; //where the animation of tokens will go to
     public bool hostTile;
     public bool meleeTile;
     public bool active;
@@ -24,9 +26,21 @@ public class Tile : MonoBehaviour, IPointerClickHandler {
         r.material = new Material(GameManager.Singleton.defaultShader);
         r.material.mainTexture = token.GetComponent<Token>().Art.texture;
 
-        token.transform.position = spawnLocation.position;
+        if (GameManager.Singleton.isHost) {
+            token.transform.position = hostSpawnLocation.position;
+        } else {
+            token.transform.position = clientSpawnLocation.position;
+            token.transform.rotation = Quaternion.Euler(270, 0, 0);
+        }
+        
         token.transform.parent = transform;
         token.transform.localScale = new Vector3(0.4f, 0.4f, 0.4f);
+
+        //after setting the token, check to see if there are any OnPlay calls from the creature/artifact
+
+        token.GetComponent<Token>().OnPlay();
+
+
     }
 
     public int GetTileID() {
@@ -34,7 +48,7 @@ public class Tile : MonoBehaviour, IPointerClickHandler {
     }
 
     public void DealtDamage(int damageAmount) {
-        Token t = token.GetComponent<CreatureToken>();
+        Token t = token.GetComponent<Token>();
         t.currentHealth -= damageAmount;
         if(t is CreatureToken c){
             Player p = GameManager.Singleton._networkManager.SpawnManager.GetLocalPlayerObject().GetComponent<Player>();
@@ -57,19 +71,21 @@ public class Tile : MonoBehaviour, IPointerClickHandler {
                     
                 }
             }
-        }
+        } 
         if(t.currentHealth <= 0) {
             //destroy token
             Destroy(token);
         } else {
-            token.GetComponent<CreatureToken>().UpdateStats();
+            t.UpdateStats();
         }
         
 
     }
 
     public void ChangeMaterial(Material mat) {
-        GetComponent<MeshRenderer>().material = mat;
+        if(token != null)
+            token.GetComponent<Token>().ChangeMaterial(mat);
+        //GetComponent<MeshRenderer>().material = mat;
     }
     public void OnPointerClick(PointerEventData eventData) {
         Debug.Log("I clicked on a tile!");

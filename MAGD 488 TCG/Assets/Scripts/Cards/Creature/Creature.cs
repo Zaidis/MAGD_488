@@ -10,14 +10,19 @@ public class Creature : Card
     public int defaultPowerAmount; //attack damage
     public List<attributes> myAttributes;
     public bool isMelee;
+
     public virtual void OnAttack(Tile[] hostBoard, Tile[] clientBoard, Tile attacker, bool isHost, Tile attacked)
     {
 
         //first attacker will hit the attecked token
         attacker.token.GetComponent<CreatureToken>().hasAttacked = true;
         GameManager.Singleton.CreatureOptionButtons(attacker.token.GetComponent<CreatureToken>(), GameManager.Singleton.isHost);
+
         attacked.DealtDamage(attacker.token.GetComponent<CreatureToken>().currentAttack);
-        attacker.DealtDamage(attacked.token.GetComponent<CreatureToken>().currentAttack);
+
+        if (attacked.token.GetComponent<Token>() is CreatureToken c) {
+            attacker.DealtDamage(c.currentAttack);
+        }
 
         //Attributes
 
@@ -33,8 +38,12 @@ public class Creature : Card
         if (myAttributes.Contains(attributes.taunt)) { //must be destroyed before attacking another tile
 
         }
-        
     }
+
+    public virtual void OnPlay(Tile[] hostBoard, Tile clientBoard) {
+        //do nothing normally
+    }
+
     public virtual void OnAbility(Tile[] hostBoard, Tile[] clientBoard, Tile attacker, bool isHost)
     {
 

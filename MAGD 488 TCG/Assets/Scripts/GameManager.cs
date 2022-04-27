@@ -28,7 +28,7 @@ public class GameManager : MonoBehaviour
     
     public GameObject[] CreatureTokenPrefab;
     public GameObject SpellTokenPrefab;
-    public GameObject ArtifactTokenPrefab;
+    public GameObject[] ArtifactTokenPrefab;
 
     public Tile[] hostBoard = new Tile[2*5];
     public Tile[] clientBoard = new Tile[2*5];
@@ -44,8 +44,8 @@ public class GameManager : MonoBehaviour
 
     public bool isHost;
 
-    public Card_Popup popup; //when you right click a card
-
+    public Card_Popup panelPopup; //when you right click a card
+    public Hover_Popup cardPopup; //when you hover over a token
     #region Mana
         public int maxMana;
         public int currentMana;
@@ -74,6 +74,7 @@ public class GameManager : MonoBehaviour
     public Material m_default;
     public Material m_active;
     public Material m_deactive;
+    public Material m_selected;
     #endregion
     private void Awake() {
         if(_singleton == null) {
@@ -215,7 +216,24 @@ public class GameManager : MonoBehaviour
             creatureToken.creature = creature;
             creatureToken.ApplyCard();
         } else if (card is Artifact artifact) {
-            tokenObject = Instantiate(ArtifactTokenPrefab);
+            //tokenObject = Instantiate(ArtifactTokenPrefab);
+
+            if (card.cardFaction == faction.empire) {
+                tokenObject = Instantiate(ArtifactTokenPrefab[0]);
+            }
+            else if (card.cardFaction == faction.beasts) {
+                tokenObject = Instantiate(ArtifactTokenPrefab[1]);
+            }
+            else if (card.cardFaction == faction.guidingLight) {
+                tokenObject = Instantiate(ArtifactTokenPrefab[2]);
+            }
+            else if (card.cardFaction == faction.hunted) {
+                tokenObject = Instantiate(ArtifactTokenPrefab[3]);
+            }
+            else if (card.cardFaction == faction.unaligned) {
+                tokenObject = Instantiate(ArtifactTokenPrefab[4]);
+            }
+
             ArtifactToken artifactToken = tokenObject.GetComponent<ArtifactToken>();
             artifactToken.artifact = artifact;
             artifactToken.ApplyCard();
@@ -353,9 +371,15 @@ public class GameManager : MonoBehaviour
     /// When I click on a creature, these buttons will apear for what is available.
     /// </summary>
     public void CreatureOptionButtons(CreatureToken token, bool isHost) {
+        if (isHost) {
+            ResetAllTiles(hostBoard);
+        } else {
+            ResetAllTiles(clientBoard);
+        }
         int counter = 0;
         attackTokenOption.token = token;
         attackPlayerOption.token = token;
+        token.GetComponent<Token>().ChangeMaterial(m_selected);
 
         attackTokenOption.gameObject.SetActive(false);
         attackPlayerOption.gameObject.SetActive(false);
