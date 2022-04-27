@@ -29,3 +29,5 @@ MonoBehaviour:
   defaultPowerAmount: 1
   myAttributes: 00000000
   isMelee: 1
+  zombieToken: {fileID: 11400000}
+  abilityCost: 0
