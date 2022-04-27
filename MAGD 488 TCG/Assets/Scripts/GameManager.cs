@@ -139,6 +139,9 @@ public class GameManager : MonoBehaviour
 
         hostHealthText.text = hostHealth.ToString();
         clientHealthText.text = clientHealth.ToString();
+
+        Player p = Singleton._networkManager.SpawnManager.GetLocalPlayerObject().GetComponent<Player>();
+        p.UpdateHealthServerRpc(hostHealth, clientHealth);
     }
 
     public void ResetSelectedCard() {
