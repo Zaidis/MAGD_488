@@ -26,3 +26,8 @@ MonoBehaviour:
   defaultPowerAmount: 7
   myAttributes: 01000000
   isMelee: 1
+  hasAbility: 0
+  hasTargetedAbility: 0
+  momo: {fileID: 11400000, guid: 614a938cad802224698f35a94f6db7c7, type: 2}
+  arcane: {fileID: 11400000, guid: df60778d43aaccf41a598647147d65da, type: 2}
+  celestial: {fileID: 11400000, guid: e18fbea00a1378140b364cff7e1493d7, type: 2}

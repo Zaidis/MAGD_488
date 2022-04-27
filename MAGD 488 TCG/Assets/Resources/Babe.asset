@@ -26,3 +26,8 @@ MonoBehaviour:
   defaultPowerAmount: 2
   myAttributes: 
   isMelee: 1
+  hasAbility: 0
+  hasTargetedAbility: 0
+  paulBunyon: {fileID: 11400000, guid: 45ad4e2283f83c549aa1c4abcfc354f0, type: 2}
+  attackMod: 2
+  healthMod: 2

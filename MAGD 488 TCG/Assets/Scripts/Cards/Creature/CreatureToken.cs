@@ -16,12 +16,13 @@ public class CreatureToken : Token, IPointerClickHandler, IPointerEnterHandler, 
 
     public bool hasAbility;
     public bool castedAbility;
-
+    public int maxHealth;
     public List<attributes> myAttributes = new List<attributes>();
 
     public override void ApplyCard() {
+        maxHealth = creature.defaultHealthAmount;
         currentAttack = creature.defaultPowerAmount;
-        currentHealth = creature.defaultHealthAmount;
+        currentHealth = maxHealth;
 
         myAttributes = creature.myAttributes;
        // Name.text = creature.cardName;
@@ -45,10 +46,10 @@ public class CreatureToken : Token, IPointerClickHandler, IPointerEnterHandler, 
     }
     public override void UpdateStats() {
         //health
-        if(currentHealth > creature.defaultHealthAmount) {
+        if(currentHealth > maxHealth) {
             //green text because its bigger
             HealthText.color = Color.green;
-        } else if (currentHealth == creature.defaultHealthAmount) {
+        } else if (currentHealth == maxHealth) {
             HealthText.color = Color.white;
         } else {
             HealthText.color = Color.red;
@@ -149,6 +150,11 @@ public class CreatureToken : Token, IPointerClickHandler, IPointerEnterHandler, 
             GameManager.Singleton.CreatureOptionButtons(this, GameManager.Singleton.isHost);
         }
         
+    }
+
+    public void OnAttacked()
+    {
+        creature.OnAttacked(transform.parent.GetComponent<Tile>());
     }
     public void AttackWithToken(Tile attackedToken) {
         if (!hasAttacked) {

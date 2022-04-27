@@ -26,3 +26,6 @@ MonoBehaviour:
   defaultPowerAmount: 4
   myAttributes: 02000000
   isMelee: 1
+  hasAbility: 0
+  hasTargetedAbility: 0
+  babe: {fileID: 11400000, guid: 1e7621d09eddd5548a1a0f7a7be6e1f0, type: 2}

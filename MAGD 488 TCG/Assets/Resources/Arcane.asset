@@ -27,3 +27,10 @@ MonoBehaviour:
   defaultPowerAmount: 3
   myAttributes: 
   isMelee: 0
+  hasAbility: 0
+  hasTargetedAbility: 0
+  momo: {fileID: 11400000, guid: 614a938cad802224698f35a94f6db7c7, type: 2}
+  tauro: {fileID: 11400000, guid: bc8d94fa98e454b4fa9d51e4b73dfca8, type: 2}
+  celestial: {fileID: 11400000, guid: e18fbea00a1378140b364cff7e1493d7, type: 2}
+  attackMod: 2
+  healthMod: 1

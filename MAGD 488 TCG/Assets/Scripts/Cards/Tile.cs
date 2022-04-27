@@ -51,6 +51,7 @@ public class Tile : MonoBehaviour, IPointerClickHandler {
         Token t = token.GetComponent<Token>();
         t.currentHealth -= damageAmount;
         if(t is CreatureToken c){
+            c.OnAttacked();
             Player p = GameManager.Singleton._networkManager.SpawnManager.GetLocalPlayerObject().GetComponent<Player>();
             if (c.creature.myAttributes.Contains(attributes.lifesteal)) {
                 //make this later

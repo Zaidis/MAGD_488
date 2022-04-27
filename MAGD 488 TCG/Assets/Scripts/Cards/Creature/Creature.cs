@@ -41,7 +41,7 @@ public class Creature : Card
         }
     }
 
-    public virtual void OnPlay(Tile[] hostBoard, Tile clientBoard) {
+    public virtual void OnPlay(Tile[] hostBoard, Tile[] clientBoard, Tile parent) {
         //do nothing normally
     }
 
@@ -55,6 +55,11 @@ public class Creature : Card
     public virtual void OnTargetedAbility(Tile user, Tile victim, bool isHostSide) {
 
 
+
+    }
+
+    public virtual void OnAttacked(Tile parent)
+    {
 
     }
 

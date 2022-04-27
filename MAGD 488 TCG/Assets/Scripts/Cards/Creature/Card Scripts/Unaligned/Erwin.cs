@@ -6,6 +6,7 @@ public class Erwin : Creature
 {
     public override void OnAttack(Tile[] hostBoard, Tile[] clientBoard, Tile attacker, bool isHost, Tile attacked)
     {
+        GameManager.Singleton.DrawTopCard();
         base.OnAttack(hostBoard, clientBoard, attacker, isHost, attacked);
     }
     public override void OnAbility(Tile[] hostBoard, Tile[] clientBoard, Tile attacker, bool isHost)

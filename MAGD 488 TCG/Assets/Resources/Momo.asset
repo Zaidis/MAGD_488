@@ -29,3 +29,8 @@ MonoBehaviour:
   defaultPowerAmount: 4
   myAttributes: 0000000003000000
   isMelee: 0
+  hasAbility: 0
+  hasTargetedAbility: 0
+  tauro: {fileID: 11400000, guid: bc8d94fa98e454b4fa9d51e4b73dfca8, type: 2}
+  arcane: {fileID: 11400000, guid: df60778d43aaccf41a598647147d65da, type: 2}
+  celestial: {fileID: 11400000, guid: e18fbea00a1378140b364cff7e1493d7, type: 2}
