@@ -105,8 +105,13 @@ public class GameManager : MonoBehaviour
         } else {
             TurnStatus.text = "Other Player's Turn.";
         }
-        opponentName = MythosClient.instance.opponentUserName;
-        opponent.text = "Opponent: " + opponentName;
+        if (!MythosClient.instance.opponentUserName.Equals("")) {
+            opponentName = MythosClient.instance.opponentUserName;
+            opponent.text = "Opponent: " + opponentName;
+        } else {
+            opponent.text = "Join Code: " + MythosClient.instance.joinCode;
+        }
+        
         StartCoroutine(ClearConnectingOnConnect());
 
         isHost = NetworkManager.Singleton.IsHost;

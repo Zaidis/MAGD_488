@@ -5,12 +5,10 @@ using UnityEngine.UI;
 using TMPro;
 using System.Linq;
 
-public class DeckEditor : MonoBehaviour
-{
+public class DeckEditor : MonoBehaviour {
     #region Singleton
     public static DeckEditor instance;
-    private void Awake()
-    {
+    private void Awake() {
         if (instance != null)
             Destroy(instance.gameObject);
         instance = this;
@@ -27,9 +25,9 @@ public class DeckEditor : MonoBehaviour
     GridLayoutGroup layoutDL;
 
     [Header("Card List Layout")]
-    [SerializeField] [Range(1, 10)] int columnCount = 3;
-    [SerializeField] [Range(0, 99)] int padding = 20;
-    [SerializeField] [Range(1, 2)] float aspectRation = 1.4f; // 1.4 is a 3.5 by 2.5 aspect ratio
+    [SerializeField][Range(1, 10)] int columnCount = 3;
+    [SerializeField][Range(0, 99)] int padding = 20;
+    [SerializeField][Range(1, 2)] float aspectRation = 1.4f; // 1.4 is a 3.5 by 2.5 aspect ratio
 
     [Header("UI")]
     [SerializeField] TMP_InputField IFsearch;
@@ -44,10 +42,9 @@ public class DeckEditor : MonoBehaviour
     [SerializeField] Image cardArt;
 
     [Header("Prefabs")]
-    public GameObject PrefabDL;
+    public GameObject PrefabDL;    
 
-    private void OnEnable()
-    {
+    private void OnEnable() {
         layoutCL = cardList.GetComponent<GridLayoutGroup>();
         layoutDL = deckList.GetComponent<GridLayoutGroup>();
         Resize();
@@ -57,21 +54,18 @@ public class DeckEditor : MonoBehaviour
             Destroy(child.gameObject);
 
         MythosClient.OnDeckContentLoaded += LoadDeckContentHandler;
-        MythosClient.instance.OnRetrieveDeckContent(deckName);
+        MythosClient.instance.OnRetrieveDeckContent(deckName);        
     }
-    public void SetDeckName(string str)
-    {
+    public void SetDeckName(string str) {
         deckName = str;
         Text_name.text = deckName;
     }
-    private void Update()
-    {
+    private void Update() {
         Resize();
         Button_save.interactable = (deckID.Count > 0);
     }
     public void Search() => FillDeckEditorPannel();
-    public void Sort(int sortType)
-    {
+    public void Sort(int sortType) {
         Debug.Log(sortType);
         if (sortType == 0)
             cards = cards.OrderBy(x => x.cardName).ToArray();
@@ -79,8 +73,7 @@ public class DeckEditor : MonoBehaviour
             cards = cards.OrderBy(x => x.manaCost).ToArray();
         FillDeckEditorPannel();
     }
-    void FillDeckEditorPannel()
-    {
+    void FillDeckEditorPannel() {
         string str = IFsearch.text;
         foreach (Transform child in cardList)
             Destroy(child.gameObject);
@@ -89,8 +82,7 @@ public class DeckEditor : MonoBehaviour
             if (cards[i].cardName.ToLower().Contains(str.ToLower()) || str.Equals(""))
                 CreateCard(cards[i]);
     }
-    void ResizeCL()
-    {
+    void ResizeCL() {
         layoutCL.constraintCount = columnCount;
         layoutCL.padding.left = padding;
         layoutCL.padding.right = padding;
@@ -108,8 +100,7 @@ public class DeckEditor : MonoBehaviour
         cardList.sizeDelta = new Vector2(cardList.sizeDelta.x, (padding * (numOfRows + 1)) + (height * numOfRows));
 
     }
-    void ResizeDL()
-    {
+    void ResizeDL() {
         float width = deckList.rect.width - (2 * padding);
         float height = width / 5;
 
@@ -119,19 +110,16 @@ public class DeckEditor : MonoBehaviour
         layoutDL.spacing = new Vector2(0, padding);
         layoutDL.cellSize = new Vector2(width, height);
     }
-    void Resize()
-    {
+    void Resize() {
         ResizeCL();
         ResizeDL();
     }
 
-    private void LoadDeckContentHandler(List<int> deck)
-    {
+    private void LoadDeckContentHandler(List<int> deck) {
         deckID = deck;
     }
 
-    SelectCL CreateCard(Card card)
-    {
+    SelectCL CreateCard(Card card) {
         GameObject selector = new GameObject("Card " + card.name, typeof(Image), typeof(SelectCL));
         selector.transform.SetParent(cardList);
 
@@ -141,24 +129,22 @@ public class DeckEditor : MonoBehaviour
 
         return selectCL;
     }
-    public void ButtonSave()
-    {
+    public void ButtonSave() {
         Debug.Log("Saving Deck");
 
-        if (deckID.Count == 0)
-        {
+        if (deckID.Count == 0) {
             Debug.Log("cannot be empty");
             return;
         }
 
         MythosClient.instance.OnSaveDeck(deckName, deckID.ToArray());
+
     }
-    public void DisplayCard(Card card)
-    {
+    public void DisplayCard(Card card) {
         GOcard.SetActive(true);
         cardName.text = card.cardName;
         description.text = card.description;
         manaCost.text = card.manaCost.ToString();
         cardArt.sprite = card.cardArt;
-    }
+    }    
 }

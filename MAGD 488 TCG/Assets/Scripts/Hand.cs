@@ -130,7 +130,7 @@ public class Hand : MonoBehaviour
             maxRotation -= rotateCardAmount; //if the amount is odd, then the middle should be taken out of the equation. 
         }
 
-        Debug.Log(maxRotation);
+        //Debug.Log(maxRotation);
         RectTransform t;
         UICard c;
         //rotate to the left
@@ -163,7 +163,7 @@ public class Hand : MonoBehaviour
         UICard c;
         //rotate to the left
         float temp = (50 + maxPositionChange) * -1f; //everything begins at 50
-        Debug.Log("+++" + temp);
+        //Debug.Log("+++" + temp);
         for (int i = 0; i <= mid; i++) {
             c = uiCards[i].GetComponent<UICard>();
             c.defaultPosition_Y = temp;
