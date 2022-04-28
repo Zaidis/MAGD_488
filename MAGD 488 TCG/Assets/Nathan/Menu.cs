@@ -11,6 +11,7 @@ public class Menu : MonoBehaviour
     [SerializeField] GameObject deckSelect;
     [SerializeField] GameObject settings;
     [SerializeField] GameObject deckEditor;
+    [SerializeField] GameObject direct;
 
     private void Start() => ButtonSetFalse();
     private void Update()
@@ -24,6 +25,7 @@ public class Menu : MonoBehaviour
         deckSelect.SetActive(false);
         deckEditor.SetActive(false);
         settings.SetActive(false);
+        direct.SetActive(false);
     }
 
 
@@ -32,6 +34,10 @@ public class Menu : MonoBehaviour
         MythosClient.instance.OnMatchMake();
         ButtonSetFalse();
         play.SetActive(true);
+    }
+    public void ButtonDirect() {        
+        ButtonSetFalse();
+        direct.SetActive(true);
     }
     public void ButtonDeck()
     {

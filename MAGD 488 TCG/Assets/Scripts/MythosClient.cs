@@ -36,6 +36,7 @@ public class MythosClient : MonoBehaviour {
     public TMP_InputField pass;
     public string userName;
     public string opponentUserName;
+    public string joinCode;
     public TMP_Text status;
     public UnityEngine.UI.Button LoginButton;
     public UnityEngine.UI.Button CreateButton;
@@ -49,6 +50,7 @@ public class MythosClient : MonoBehaviour {
     public static event Action<List<int>> OnDeckContentLoaded;
     private List<string> deckNames;
     private List<int> currentDeck;
+    SavedDecks savedDecks;
 
     private static RSACryptoServiceProvider csp;
     private static RSAParameters pubKey;
@@ -184,16 +186,14 @@ public class MythosClient : MonoBehaviour {
                     CreateButton.interactable = true;
                 });
             } 
-            else if (messageArgArr[0].Equals("decknames", StringComparison.OrdinalIgnoreCase)) {
-                deckNames.Clear();
+            else if (messageArgArr[0].Equals("decknames", StringComparison.OrdinalIgnoreCase)) {                
                 for (int i = 1; i < messageArgArr.Length; i++)
                     deckNames.Add(messageArgArr[i]);
                 syncFunctions.Enqueue(() => {
                     if (OnDecknamesLoaded != null)
                         OnDecknamesLoaded(deckNames);
                 });                
-            } else if (messageArgArr[0].Equals("deckcontent", StringComparison.OrdinalIgnoreCase) && !messageArgArr[1].Equals("", StringComparison.OrdinalIgnoreCase)) {
-                currentDeck.Clear();
+            } else if (messageArgArr[0].Equals("deckcontent", StringComparison.OrdinalIgnoreCase) && !messageArgArr[1].Equals("", StringComparison.OrdinalIgnoreCase)) {           
                 string[] splitIntsAsStrings = messageArgArr[1].Split(',');
                 foreach (string intString in splitIntsAsStrings)
                     currentDeck.Add(Convert.ToInt32(intString));
@@ -247,20 +247,47 @@ public class MythosClient : MonoBehaviour {
         connection.Send(EncryptStringToBase64Bytes("newaccount\r\n" + user.text + "\r\n" + Convert.ToBase64String(salt) + "\r\n" + hash));
     }
     public void OnRetrieveDeckNames() { //subscribe to OnDecknamesLoaded to get List<string> back
-        if (!connection.Connected)
+        deckNames.Clear();
+        if (File.Exists(Application.dataPath + "/save.json")) {
+            string saveString = File.ReadAllText(Application.dataPath + "/save.json");
+            savedDecks = JsonUtility.FromJson<SavedDecks>(saveString);
+        } else
+            savedDecks = new SavedDecks();
+        if (!connection.Connected) {
+            List<string> list = new List<string>();
+            foreach (SavedDeck sd in savedDecks.decks)
+                list.Add(sd.name);
+            OnDecknamesLoaded(list);
             return;
+        }            
         Debug.Log("Sent Deck Names Request");
         connection.Send(EncryptStringToBase64Bytes("getdecknames\r\n"));
     }
     public void OnRetrieveDeckContent(string name) { //subscribe to OnDeckContentLoaded to get List<int> back
-        if (!connection.Connected)
+        currentDeck.Clear();
+        if (!connection.Connected) {
+            SavedDeck csd = savedDecks.decks.First(d => d.name == name);
+            currentDeck.AddRange(csd.cardIds);
             return;
+        }            
         Debug.Log("Sent Deck Content Request");
         connection.Send(EncryptStringToBase64Bytes("getdeckcontent\r\n" + name));
     }
 
     public void OnSaveDeck(string name, int[] cards)
     {
+        SavedDeck savedDeck = new SavedDeck();
+        savedDeck.name = name;
+        savedDeck.cardIds.AddRange(cards);
+        if(savedDecks.decks.Exists(d => d.name == name)){
+            var old = savedDecks.decks.Where(d => d.name == name).First();
+            int index = savedDecks.decks.IndexOf(old);
+            if(index != -1)
+                savedDecks.decks[index] = savedDeck;
+        } else
+            savedDecks.decks.Add(savedDeck);
+        string json = JsonUtility.ToJson(savedDecks);
+        File.WriteAllText(Application.dataPath + "/save.json", json);
         if (!connection.Connected)
             return;
         string message = "savedeck\r\n" + name + "\r\n";
@@ -289,6 +316,9 @@ public class MythosClient : MonoBehaviour {
             return;
         Debug.Log("Sent Outcome Message");
         connection.Send(EncryptStringToBase64Bytes("outcome\r\n" + (outcome ? "hostvictory" : "clientvictory")));
+    }
+    public void OnOfflinePlay() {
+        SceneManager.LoadScene(menuScene);
     }
     public static async Task<(string ipv4address, ushort port, byte[] allocationIdBytes, byte[] connectionData, byte[] key, string joinCode)> AllocateRelayServerAndGetJoinCode(int maxConnections, string region = null) {
         Allocation allocation;
@@ -370,5 +400,12 @@ public class MythosClient : MonoBehaviour {
             }
         }
         return plaintext;
+    }
+    private class SavedDecks {
+        public List<SavedDeck> decks;
+    }
+    private class SavedDeck {
+        public string name;
+        public List<int> cardIds;
     }
 }
