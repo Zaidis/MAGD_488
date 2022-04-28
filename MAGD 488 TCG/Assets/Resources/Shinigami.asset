@@ -16,8 +16,8 @@ MonoBehaviour:
   type: 0
   manaCost: 5
   cardName: Shinigami
-  cardArt: {fileID: 0}
-  cardBorder: {fileID: 0}
+  cardArt: {fileID: 21300000, guid: b00be29438ad64f489b82a7bbb948286, type: 3}
+  cardBorder: {fileID: 21300000, guid: 50a19f21e799ebe429f8c3762fb0b38f, type: 3}
   cardFaction: 0
   description: 'Lifesteal 3 mana heals player same as atk '
   lore: 

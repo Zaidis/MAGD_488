@@ -12,12 +12,13 @@ public class O_Ability : MonoBehaviour, IPointerClickHandler {
 
         if (token.creature.hasTargetedAbility) {
 
-            if (GameManager.Singleton.isHost) {
-                GameManager.Singleton.ActivateTilesWithTokens(GameManager.Singleton.clientBoard);
-            }
-            else {
-                GameManager.Singleton.ActivateTilesWithTokens(GameManager.Singleton.hostBoard);
-            }
+            /* if (GameManager.Singleton.isHost) {
+                 GameManager.Singleton.ActivateTilesWithTokensInBoard(GameManager.Singleton.clientBoard);
+             }
+             else {
+                 GameManager.Singleton.ActivateTilesWithTokensInBoard(GameManager.Singleton.hostBoard);
+             } */
+            GameManager.Singleton.ActivateAllTilesWithTokens();
 
             GameManager.Singleton.isUsingAbility = true;
             GameManager.Singleton.selectedCreature = token;

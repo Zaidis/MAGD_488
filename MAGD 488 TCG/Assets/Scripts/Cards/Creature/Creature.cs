@@ -126,13 +126,19 @@ public class Creature : Card
     }
 
     public void LifeSteal(Tile attacker, Tile attacked) {
+        Debug.Log("Gaining Life!!!");
 
         Player p = GameManager.Singleton._networkManager.SpawnManager.GetLocalPlayerObject().GetComponent<Player>();
-        if (attacker.hostTile) {
-            p.UpdateHealthServerRpc(attacker.token.GetComponent<CreatureToken>().currentAttack, 0);
+        if (GameManager.Singleton.isHost) {
+            if (attacker.hostTile) {
+                p.UpdateHealthServerRpc(attacker.token.GetComponent<CreatureToken>().currentAttack, 0);
+            }
         } else {
-            p.UpdateHealthServerRpc(0, attacker.token.GetComponent<CreatureToken>().currentAttack);
+            if (!attacker.hostTile) {
+                p.UpdateHealthServerRpc(0, attacker.token.GetComponent<CreatureToken>().currentAttack);
+            }
         }
+         
         
     }
 }

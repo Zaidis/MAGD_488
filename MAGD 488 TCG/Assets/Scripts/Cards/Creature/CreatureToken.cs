@@ -75,19 +75,64 @@ public class CreatureToken : Token, IPointerClickHandler, IPointerEnterHandler, 
     /// <param name="eventData"></param>
     public void OnPointerClick(PointerEventData eventData) {
         if (eventData.button == PointerEventData.InputButton.Left) {
-            if (GameManager.Singleton.isHost) {
+
+            if (transform.parent.GetComponent<Tile>().active) {
+                if (GameManager.Singleton.isAttecking) {
+
+                    if (GameManager.Singleton.isHost) {
+                        if (!transform.GetComponentInParent<Tile>().hostTile) { //you clicked on a client tile
+                            Player p = GameManager.Singleton._networkManager.SpawnManager.GetLocalPlayerObject().GetComponent<Player>();
+                            p.UpdateAttackServerRpc(GameManager.Singleton.selectedCreature.GetComponentInParent<Tile>().GetTileID(), transform.parent.GetComponent<Tile>().GetTileID(), true);
+
+                        }
+
+                    } else {
+                        if (transform.GetComponentInParent<Tile>().hostTile) { //you clicked on a host tile
+                            Player p = GameManager.Singleton._networkManager.SpawnManager.GetLocalPlayerObject().GetComponent<Player>();
+                            p.UpdateAttackServerRpc(GameManager.Singleton.selectedCreature.GetComponentInParent<Tile>().GetTileID(), transform.parent.GetComponent<Tile>().GetTileID(), false);
+
+                        }
+                    }
+
+                } else if (GameManager.Singleton.isUsingAbility) {
+
+                    Player p = GameManager.Singleton._networkManager.SpawnManager.GetLocalPlayerObject().GetComponent<Player>();
+                    p.UpdateTargetedAbilityServerRpc(GameManager.Singleton.selectedCreature.GetComponentInParent<Tile>().GetTileID(), transform.parent.GetComponent<Tile>().GetTileID(),
+                        transform.parent.GetComponent<Tile>().hostTile);
+
+                }
+
+                
+            } else { //NOT AN ACTIVE TILE
+
+                if (GameManager.Singleton.isHost) {
+                    if (GameManager.Singleton.CheckIfMyCreature(GameManager.Singleton.hostBoard, transform.parent.GetComponent<Tile>())) {
+                        //this is my creature
+
+                        GameManager.Singleton.CreatureOptionButtons(this, GameManager.Singleton.isHost);
+                    }
+                } else {
+                    if (GameManager.Singleton.CheckIfMyCreature(GameManager.Singleton.clientBoard, transform.parent.GetComponent<Tile>())) {
+                        //this is my creature
+
+                        GameManager.Singleton.CreatureOptionButtons(this, GameManager.Singleton.isHost);
+
+                    }
+                }
+
+                
+            }
+
+            /*if (GameManager.Singleton.isHost) {
                 if (GameManager.Singleton.CheckIfMyCreature(GameManager.Singleton.hostBoard, transform.parent.GetComponent<Tile>())) {
                     //this is my creature
 
                     GameManager.Singleton.CreatureOptionButtons(this, GameManager.Singleton.isHost);
-                   
                 }
                 else {
                     if (GameManager.Singleton.isAttecking) {
                         if (transform.parent.GetComponent<Tile>().active) {
-                            /*GameManager.Singleton.selectedCreature.AttackWithToken(transform.parent.GetComponent<Tile>());
-                            GameManager.Singleton.selectedCreature = null;
-                            GameManager.Singleton.isAttecking = false;*/
+                            
 
                             Player p = GameManager.Singleton._networkManager.SpawnManager.GetLocalPlayerObject().GetComponent<Player>();
                             p.UpdateAttackServerRpc(GameManager.Singleton.selectedCreature.GetComponentInParent<Tile>().GetTileID(), transform.parent.GetComponent<Tile>().GetTileID(), true);
@@ -95,9 +140,7 @@ public class CreatureToken : Token, IPointerClickHandler, IPointerEnterHandler, 
                     } else if (GameManager.Singleton.isUsingAbility) {
 
                         if (transform.parent.GetComponent<Tile>().active) {
-                            /*GameManager.Singleton.selectedCreature.AttackWithToken(transform.parent.GetComponent<Tile>());
-                            GameManager.Singleton.selectedCreature = null;
-                            GameManager.Singleton.isAttecking = false;*/
+                            
 
                             Player p = GameManager.Singleton._networkManager.SpawnManager.GetLocalPlayerObject().GetComponent<Player>();
                             p.UpdateTargetedAbilityServerRpc(GameManager.Singleton.selectedCreature.GetComponentInParent<Tile>().GetTileID(), transform.parent.GetComponent<Tile>().GetTileID(), true);
@@ -117,16 +160,14 @@ public class CreatureToken : Token, IPointerClickHandler, IPointerEnterHandler, 
                 else {
                     if (GameManager.Singleton.isAttecking) {
                         if (transform.parent.GetComponent<Tile>().active) {
-                            /*GameManager.Singleton.selectedCreature.AttackWithToken(transform.parent.GetComponent<Tile>());
-                            GameManager.Singleton.selectedCreature = null;
-                            GameManager.Singleton.isAttecking = false;*/
+                            
 
                             Player p = GameManager.Singleton._networkManager.SpawnManager.GetLocalPlayerObject().GetComponent<Player>();
                             p.UpdateAttackServerRpc(GameManager.Singleton.selectedCreature.GetComponentInParent<Tile>().GetTileID(), transform.parent.GetComponent<Tile>().GetTileID(), false);
                         }
                     }
                 }
-            }
+            } */
         } else if (eventData.button == PointerEventData.InputButton.Right) {
             GameManager.Singleton.panelPopup.UpdatePopup(creature);
         }
@@ -134,7 +175,7 @@ public class CreatureToken : Token, IPointerClickHandler, IPointerEnterHandler, 
     }
 
     public void UseAbility() {
-        creature.OnAbility(GameManager.Singleton.hostBoard, GameManager.Singleton.clientBoard, null, GameManager.Singleton.isHost);
+        creature.OnAbility(GameManager.Singleton.hostBoard, GameManager.Singleton.clientBoard, transform.parent.GetComponent<Tile>(), GameManager.Singleton.isHost);
         castedAbility = true;
         GameManager.Singleton.CreatureOptionButtons(this, GameManager.Singleton.isHost);
 

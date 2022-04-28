@@ -271,20 +271,37 @@ public class GameManager : MonoBehaviour
             }
         }
         else {
+            Token t = clientBoard[userID].token.GetComponent<Token>();
 
+            if (t is CreatureToken c) {
+                c.UseAbility();
+
+            }
         }
     }
 
     public void UseTargetedAbility(int userID, int victimID, bool isHostSide) {
-        if (isHostSide) {
-            Token t = hostBoard[userID].token.GetComponent<Token>();
 
+        if (selectedCreature.GetComponentInParent<Tile>().hostTile) {
+            Token t = hostBoard[userID].token.GetComponent<Token>();
             if(t is CreatureToken c) {
-                //c.UseAbility();
-                c.UseTargetedAbility(clientBoard[victimID]);
+                if (isHostSide) {
+                    c.UseTargetedAbility(hostBoard[victimID]);
+                }
+                else {
+                    c.UseTargetedAbility(clientBoard[victimID]);
+                }
             }
         } else {
-
+            Token t = clientBoard[userID].token.GetComponent<Token>();
+            if (t is CreatureToken c) {
+                if (isHostSide) {
+                    c.UseTargetedAbility(hostBoard[victimID]);
+                }
+                else {
+                    c.UseTargetedAbility(clientBoard[victimID]);
+                }
+            }
         }
     }
 
@@ -368,9 +385,29 @@ public class GameManager : MonoBehaviour
     /// Activates all tiles with tokens on them on a specific board. 
     /// </summary>
     /// <param name="board"></param>
-    public void ActivateTilesWithTokens(Tile[] board) {
+    public void ActivateTilesWithTokensInBoard(Tile[] board) {
         for (int i = 0; i < board.Length; i++) {
             Tile t = board[i].GetComponent<Tile>();
+            if (t.token != null) {
+                t.ChangeMaterial(m_active);
+                t.active = true;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Activates all tiles with tokens on both boards.
+    /// </summary>
+    public void ActivateAllTilesWithTokens() {
+        for (int i = 0; i < hostBoard.Length; i++) {
+            Tile t = hostBoard[i].GetComponent<Tile>();
+            if (t.token != null) {
+                t.ChangeMaterial(m_active);
+                t.active = true;
+            }
+        }
+        for (int i = 0; i < clientBoard.Length; i++) {
+            Tile t = clientBoard[i].GetComponent<Tile>();
             if (t.token != null) {
                 t.ChangeMaterial(m_active);
                 t.active = true;

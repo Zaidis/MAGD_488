@@ -36,16 +36,17 @@ public class Momo : Creature
         bool tFound = false, aFound = false;
         for (int i = 0; i < board.Length; i++)
         {
-            if(board[i].token.GetComponent<Token>() is CreatureToken c)
-            {
-                if(c.creature == tauro)
-                {
-                    tFound = true;
-                }else if(c.creature == arcane)
-                {
-                    aFound = true;
+            if(board[i].token != null) {
+                if (board[i].token.GetComponent<Token>() is CreatureToken c) {
+                    if (c.creature == tauro) {
+                        tFound = true;
+                    }
+                    else if (c.creature == arcane) {
+                        aFound = true;
+                    }
                 }
             }
+            
         }
 
         if (tFound && aFound)

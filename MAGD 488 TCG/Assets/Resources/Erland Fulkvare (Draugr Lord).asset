@@ -16,8 +16,8 @@ MonoBehaviour:
   type: 0
   manaCost: 5
   cardName: Erland Fulkvare
-  cardArt: {fileID: 0}
-  cardBorder: {fileID: 0}
+  cardArt: {fileID: 21300000, guid: 61951c544aebe7247947dbddbbc869e5, type: 3}
+  cardBorder: {fileID: 21300000, guid: 50a19f21e799ebe429f8c3762fb0b38f, type: 3}
   cardFaction: 0
   description: 'All Cards (ally side - for one turn): 0/+2 and Taunt (4 Mana Cost)'
   lore: 

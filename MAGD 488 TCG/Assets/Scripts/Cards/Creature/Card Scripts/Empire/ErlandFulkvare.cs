@@ -27,24 +27,28 @@ public class ErlandFulkvare : Creature
             for (int i = 0; i < 10; i++)
             {
                 Tile tile = hostBoard[i];
-                Token t = tile.token.GetComponent<Token>();
-                if(t is CreatureToken c)
-                {
-                    c.currentHealth += healthMod;
-                    c.UpdateStats();
+                if(tile.token != null) {
+                    Token t = tile.token.GetComponent<Token>();
+                    if (t is CreatureToken c) {
+                        c.currentHealth += healthMod;
+                        c.UpdateStats();
+                    }
                 }
+                
             }
         } else
         {
             for (int i = 0; i < 10; i++)
             {
                 Tile tile = clientBoard[i];
-                Token t = tile.token.GetComponent<Token>();
-                if (t is CreatureToken c)
-                {
-                    c.currentHealth += healthMod;
-                    c.UpdateStats();
+                if(tile.token != null) {
+                    Token t = tile.token.GetComponent<Token>();
+                    if (t is CreatureToken c) {
+                        c.currentHealth += healthMod;
+                        c.UpdateStats();
+                    }
                 }
+                
             }
         }
         

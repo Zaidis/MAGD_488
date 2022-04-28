@@ -16,8 +16,8 @@ MonoBehaviour:
   type: 0
   manaCost: 4
   cardName: 'Arcane '
-  cardArt: {fileID: 0}
-  cardBorder: {fileID: 0}
+  cardArt: {fileID: 21300000, guid: 458da14e8aab26245bf4922940306a81, type: 3}
+  cardBorder: {fileID: 21300000, guid: b684ef2707edd2643a9a053886bd2d40, type: 3}
   cardFaction: 2
   description: If damaged, gain +2/+1 and Pierce. If you summoned Momo and Tauro,
     create a Celestial Token in hand.

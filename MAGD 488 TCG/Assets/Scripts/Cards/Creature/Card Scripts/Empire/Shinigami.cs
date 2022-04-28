@@ -29,7 +29,9 @@ public class Shinigami : Creature
             Token t = attacker.token.GetComponent<Token>();
             if(t is CreatureToken c)
             {
-                GameManager.Singleton.AffectHealthValues(c.currentAttack, 0);
+                //GameManager.Singleton.AffectHealthValues(c.currentAttack, 0);
+                Player p = GameManager.Singleton._networkManager.SpawnManager.GetLocalPlayerObject().GetComponent<Player>();
+                p.UpdateHealthServerRpc(c.currentAttack, 0);
             }
 
         }
@@ -38,7 +40,9 @@ public class Shinigami : Creature
             Token t = attacker.token.GetComponent<Token>();
             if (t is CreatureToken c)
             {
-                GameManager.Singleton.AffectHealthValues(0, c.currentAttack);
+               // GameManager.Singleton.AffectHealthValues(0, c.currentAttack);
+                Player p = GameManager.Singleton._networkManager.SpawnManager.GetLocalPlayerObject().GetComponent<Player>();
+                p.UpdateHealthServerRpc(0, c.currentAttack);
             }
         }
     }

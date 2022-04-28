@@ -27,15 +27,15 @@ public class Tile : MonoBehaviour, IPointerClickHandler {
         r.material.mainTexture = token.GetComponent<Token>().Art.texture;
 
         if (GameManager.Singleton.isHost) {
-            token.transform.position = hostSpawnLocation.position;
+            token.transform.position = new Vector3(hostSpawnLocation.position.x, 0.006f, hostSpawnLocation.position.z);
         } else {
-            token.transform.position = clientSpawnLocation.position;
+            token.transform.position = new Vector3(clientSpawnLocation.position.x, 0.006f, clientSpawnLocation.position.z);
             token.transform.rotation = Quaternion.Euler(270, 0, 0);
         }
         
         token.transform.parent = transform;
-        token.transform.localScale = new Vector3(0.4f, 0.4f, 0.4f);
-
+        //token.transform.localScale = new Vector3(0.4f, 0.4f, 0.4f);
+        StartCoroutine(ScaleToken(token.transform.localScale, new Vector3(0.4f, 0.4f, 0.4f)));
         //after setting the token, check to see if there are any OnPlay calls from the creature/artifact
 
         token.GetComponent<Token>().OnPlay();
@@ -43,6 +43,34 @@ public class Tile : MonoBehaviour, IPointerClickHandler {
 
     }
 
+    private IEnumerator ScaleToken(Vector3 startScale, Vector3 targetScale) {
+
+        float speed = 3f;
+        var i = 0f;
+
+        while(i < 1f) {
+            i += Time.deltaTime * speed;
+            token.transform.localScale = Vector3.Lerp(startScale, targetScale, i);
+            yield return null;
+        }
+
+        StartCoroutine(MoveTokenDown(token.transform.localPosition, new Vector3(token.transform.localPosition.x,
+            AttackLocation.transform.localPosition.y, token.transform.localPosition.z)));
+    }
+
+    private IEnumerator MoveTokenDown(Vector3 startPosition, Vector3 endPosition) {
+        yield return new WaitForSeconds(0.3f);
+        float speed = 7f;
+        float y = 0.004f;
+
+        var i = 0f;
+        //var rate = 1f / 2f;
+        while (i < 1f) {
+            i += Time.deltaTime * speed;
+            token.transform.localPosition = Vector3.Lerp(startPosition, endPosition, i);
+            yield return null;
+        }
+    }
     public int GetTileID() {
         return tileID;
     }
@@ -53,16 +81,8 @@ public class Tile : MonoBehaviour, IPointerClickHandler {
         if(t is CreatureToken c){
             c.OnAttacked();
             Player p = GameManager.Singleton._networkManager.SpawnManager.GetLocalPlayerObject().GetComponent<Player>();
-            if (c.creature.myAttributes.Contains(attributes.lifesteal)) {
-                //make this later
-                if (hostTile) { //host health goes up
-                    p.UpdateHealthServerRpc(c.currentAttack, 0);
-
-                } else { //client health goes up
-                    p.UpdateHealthServerRpc(0, c.currentAttack);
-                }
-            }
-            if (c.creature.myAttributes.Contains(attributes.thorn)) { //when attacked, deals damage to attacker
+            
+            if (c.myAttributes.Contains(attributes.thorn)) { //when attacked, deals damage to attacker
                 if (hostTile) { //deals 1 damage to the opponent
 
                     p.UpdateHealthServerRpc(0, c.currentAttack * -1);
