@@ -48,16 +48,20 @@ public class UICard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
 
         //if you LEFT CLICK
         if(eventData.button == PointerEventData.InputButton.Left) {
-            if(GameManager.Singleton.currentMana >= myCard.manaCost) {
-                //we can use the card. now we need to select a place to put it
-                if(myCard.type == cardType.spell) {
-                    //we do not need a place to put the spell. it just works.
-                } else {
-                    //we need to select a place to put the card. 
-                    GameManager.Singleton.needsToSelectTile = true;
-                    GameManager.Singleton.selectedCard = myCard;
-                    GameManager.Singleton.selectedCardNumber = handID;
 
+            if ((GameManager.Singleton.isHost && GameManager.Singleton.IsHostTurn) || (!GameManager.Singleton.isHost && !GameManager.Singleton.IsHostTurn)) {
+                if (GameManager.Singleton.currentMana >= myCard.manaCost) {
+                    //we can use the card. now we need to select a place to put it
+                    if (myCard.type == cardType.spell) {
+                        //we do not need a place to put the spell. it just works.
+                    }
+                    else {
+                        //we need to select a place to put the card. 
+                        GameManager.Singleton.needsToSelectTile = true;
+                        GameManager.Singleton.selectedCard = myCard;
+                        GameManager.Singleton.selectedCardNumber = handID;
+
+                    }
                 }
             }
         } else if (eventData.button == PointerEventData.InputButton.Right) {

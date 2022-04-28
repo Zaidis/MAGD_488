@@ -49,7 +49,7 @@ public class Hand : MonoBehaviour
 
 
     public void AddCardToHand(Card card) {
-        cardGroup.enabled = true;
+        
         myCards.Add(card);
 
         GameObject newCard = Instantiate(emptyCard, transform.position, Quaternion.identity);
@@ -71,7 +71,7 @@ public class Hand : MonoBehaviour
             newCard.GetComponent<Canvas>().sortingOrder = 0;
         }
 
-
+        cardGroup.enabled = true;
         uiCards.Add(newCard);
         //move hand to the left when adding card
         if(myCards.Count > 1) {
@@ -148,7 +148,8 @@ public class Hand : MonoBehaviour
         uiCards[mid].GetComponent<RectTransform>().Rotate(Vector3.zero);
     }
 
-    private void PositionCards() {
+    public void PositionCards() {
+        
         int left = 0, right = uiCards.Count - 1;
         int mid = (left + right) / 2;
 
@@ -161,6 +162,7 @@ public class Hand : MonoBehaviour
         
         RectTransform t;
         UICard c;
+        
         //rotate to the left
         float temp = (50 + maxPositionChange) * -1f; //everything begins at 50
         Debug.Log("+++" + temp);
@@ -187,7 +189,7 @@ public class Hand : MonoBehaviour
         }
     }
     private void DisableGridLayoutGroup() {
-        cardGroup.enabled = false; //so we can move cards
+       // cardGroup.enabled = false; //so we can move cards
 
         if(uiCards.Count > 1)
             PositionCards();

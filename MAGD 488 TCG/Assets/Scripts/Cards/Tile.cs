@@ -80,18 +80,9 @@ public class Tile : MonoBehaviour, IPointerClickHandler {
         t.currentHealth -= damageAmount;
         if(t is CreatureToken c){
             c.OnAttacked();
-            Player p = GameManager.Singleton._networkManager.SpawnManager.GetLocalPlayerObject().GetComponent<Player>();
+           
             
-            if (c.myAttributes.Contains(attributes.thorn)) { //when attacked, deals damage to attacker
-                if (hostTile) { //deals 1 damage to the opponent
-
-                    p.UpdateHealthServerRpc(0, c.currentAttack * -1);
-                }
-                else { //client health goes up
-                    p.UpdateHealthServerRpc(c.currentAttack * -1, 0);
-                    
-                }
-            }
+            
         } 
         if(t.currentHealth <= 0) {
             //destroy token
@@ -118,34 +109,9 @@ public class Tile : MonoBehaviour, IPointerClickHandler {
                 p.UpdatePlaceCardServerRpc(GameManager.Singleton._networkManager.IsHost, GetTileID(), GameManager.Singleton.selectedCard.ID);
                 Hand.instance.RemoveCardFromHand();
                 GameManager.Singleton.ResetSelectedCard();
-                /*if (GameManager.Singleton.selectedCard.type == cardType.creature) {
+                
 
-                    Creature c = (Creature)GameManager.Singleton.selectedCard;
-                    GameObject t = Instantiate(GameManager.Singleton.CreatureTokenPrefab);
-                    t.GetComponent<CreatureToken>().creature = c;
-                    t.GetComponent<CreatureToken>().ApplyCard();
-                    SetToken(t);
 
-                    GameManager.Singleton.AffectCurrentMana(c.manaCost * -1);
-
-                    Hand.instance.RemoveCardFromHand();
-
-                    GameManager.Singleton.ResetSelectedCard();
-
-                }
-                else if (GameManager.Singleton.selectedCard.type == cardType.artifact) {
-                    Artifact a = (Artifact)GameManager.Singleton.selectedCard;
-                    GameObject t = Instantiate(GameManager.Singleton.ArtifactTokenPrefab);
-                    t.GetComponent<ArtifactToken>().artifact = a;
-                    t.GetComponent<ArtifactToken>().ApplyCard();
-                    SetToken(t);
-
-                    GameManager.Singleton.AffectCurrentMana(a.manaCost * -1);
-
-                    Hand.instance.RemoveCardFromHand();
-
-                    GameManager.Singleton.ResetSelectedCard();
-                } */
             }
         }
     }

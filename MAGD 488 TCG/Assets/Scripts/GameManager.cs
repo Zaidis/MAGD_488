@@ -158,8 +158,11 @@ public class GameManager : MonoBehaviour
         int drawCardAmount = _networkManager.IsHost ? 3 : 4; //adam did this
 
         for (int i = 0; i < drawCardAmount; i++) {
+            Debug.Log("Drawing Initial Card");
             DrawTopCard(deck);
         }
+
+        myHand.PositionCards();
         //mulligan
 
     }

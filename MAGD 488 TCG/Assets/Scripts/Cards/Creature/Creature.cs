@@ -20,8 +20,27 @@ public class Creature : Card
         GameManager.Singleton.CreatureOptionButtons(attacker.token.GetComponent<CreatureToken>(), GameManager.Singleton.isHost);
 
         attacked.DealtDamage(attacker.token.GetComponent<CreatureToken>().currentAttack);
+        
 
         if (attacked.token.GetComponent<Token>() is CreatureToken c) {
+            Player p = GameManager.Singleton._networkManager.SpawnManager.GetLocalPlayerObject().GetComponent<Player>();
+            if ((GameManager.Singleton.isHost && GameManager.Singleton.IsHostTurn) || (!GameManager.Singleton.isHost && !GameManager.Singleton.IsHostTurn)) {
+
+                if (c.myAttributes.Contains(attributes.thorn)) { //when attacked, deals damage to attacker
+                    if (attacker.hostTile) { //deals 1 damage to the opponent
+                        Debug.LogError("THORNS -> HOST AFFECTED");
+                        p.UpdateHealthServerRpc(c.currentAttack * -1, 0);
+                    }
+                    else { //client health goes up
+                        Debug.LogError("THORNS -> CLIENT AFFECTED");
+                        p.UpdateHealthServerRpc(0, c.currentAttack * -1);
+
+
+                    }
+                }
+            }
+
+
             attacker.DealtDamage(c.currentAttack);
         }
 
