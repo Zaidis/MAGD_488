@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 using System.Linq;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -34,7 +35,8 @@ public class GameManager : MonoBehaviour
     public Tile[] hostBoard = new Tile[2*5];
     public Tile[] clientBoard = new Tile[2*5];
 
-   
+    public int winScene;
+    public int loseScene;
 
     public bool needsToSelectTile;
     public bool isAttecking;
@@ -151,22 +153,28 @@ public class GameManager : MonoBehaviour
 
         if(hostHealth <= 0) {
             Debug.LogError("Host has died!");
-
+            NetworkManager.Singleton.Shutdown();
             if (isHost) {
                 
                 Debug.LogError("You Lost!");
+                
+                SceneManager.LoadScene(loseScene);
             } else {
                 Debug.LogError("You Win!");
+                SceneManager.LoadScene(winScene);
             }
 
         } else if(clientHealth <= 0) {
             Debug.LogError("Client has died!");
+            NetworkManager.Singleton.Shutdown();
 
             if (!isHost) {
                 Debug.LogError("You Lost!");
+                SceneManager.LoadScene(loseScene);
             }
             else {
                 Debug.LogError("You Win!");
+                SceneManager.LoadScene(winScene);
             }
         }
     }

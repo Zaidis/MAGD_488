@@ -23012,6 +23012,8 @@ MonoBehaviour:
   - {fileID: 6949536030520309351}
   - {fileID: 5176038934511598644}
   - {fileID: 4259038933341649690}
+  winScene: 4
+  loseScene: 3
   needsToSelectTile: 0
   isAttecking: 0
   isUsingAbility: 0
