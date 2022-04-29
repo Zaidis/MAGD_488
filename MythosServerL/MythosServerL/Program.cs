@@ -9,8 +9,8 @@ using Microsoft.Data.Sqlite;
 namespace MythosServer {    
     class Program {
         public static readonly string[] StringSeparators = { "\r\n" };
-        //private static string KLocalIp = "10.0.3.201"; //Local IP
-        private static string KLocalIp = "127.0.0.1"; //Local IP
+        private static string KLocalIp = "10.0.3.201"; //Local IP
+        //private static string KLocalIp = "127.0.0.1"; //Local IP
         private const int KPort = 2552; //Port selected
 
         private static List<User> Users = new List<User>();
@@ -236,6 +236,7 @@ namespace MythosServer {
                     match.Hostoutcome = outcome;
                 else
                     match.Clientoutcome = outcome;
+                comm.Match = null;
                 EvaluateOutcome(match);
             }
         }
