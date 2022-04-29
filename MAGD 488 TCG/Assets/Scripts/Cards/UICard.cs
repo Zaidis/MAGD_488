@@ -80,8 +80,8 @@ public class UICard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
         Debug.Log("Hovering over card");
         GetComponent<Canvas>().sortingOrder = 20;
 
-        myTransform.anchoredPosition = new Vector2(myTransform.anchoredPosition.x, 130); //fix later
-
+       // myTransform.anchoredPosition = new Vector2(myTransform.anchoredPosition.x, GameManager.Singleton.myHand.cardHover.GetComponent<RectTransform>().position.y); //fix later
+        myTransform.position = new Vector2(myTransform.position.x, GameManager.Singleton.myHand.cardHover.GetComponent<RectTransform>().position.y);
         myTransform.rotation = Quaternion.Euler(0, 0, 0);
 
 
@@ -93,7 +93,7 @@ public class UICard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
         GetComponent<Canvas>().sortingOrder = sortingOrder;
         myTransform.rotation = Quaternion.Euler(0, 0, defaultRotation_Z);
 
-        myTransform.anchoredPosition = new Vector2(myTransform.anchoredPosition.x, defaultPosition_Y);
-
+        myTransform.position = new Vector2(myTransform.position.x, defaultPosition_Y);
+       // myTransform.anchoredPosition = new Vector2(myTransform.anchoredPosition.x, defaultPosition_Y);
     }
 }

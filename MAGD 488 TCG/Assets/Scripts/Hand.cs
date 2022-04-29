@@ -7,7 +7,8 @@ public class Hand : MonoBehaviour
 
     public static Hand instance;
 
-    private GridLayoutGroup cardGroup;
+    // private GridLayoutGroup cardGroup;
+    private HorizontalLayoutGroup cardGroup;
     private RectTransform myTransform;
     //holds scriptable objects
     public List<Card> myCards = new List<Card>();
@@ -19,10 +20,12 @@ public class Hand : MonoBehaviour
     public float handCenteringAmount;
     public float rotateCardAmount;
 
+    public Transform cardHover; //for when you hover over a card
+
     private Vector3 cursorPosition;
     [SerializeField] private Transform cursor_to_hand;
-    private float hand_away_y = -700; //the y value when you are not hovering over the hand
-    private float hand_show_y = -490; //the y value when you are hovering over the hand. 
+    [SerializeField] private float hand_away_y; //the y value when you are not hovering over the hand 700
+    [SerializeField] private float hand_show_y; //the y value when you are hovering over the hand. -490
 
     public void Awake() {
         if(instance == null) {
@@ -33,11 +36,11 @@ public class Hand : MonoBehaviour
     }
 
     private void Start() {
-        cardGroup = GetComponent<GridLayoutGroup>();
+        cardGroup = GetComponent<HorizontalLayoutGroup>();
         myTransform = GetComponent<RectTransform>();
     }
 
-    private void FixedUpdate() {
+   /* private void FixedUpdate() {
         cursorPosition = Input.mousePosition;
         if(cursorPosition.y <= cursor_to_hand.position.y) {
             //Debug.Log("IT WORKS!!!");
@@ -45,7 +48,7 @@ public class Hand : MonoBehaviour
         } else {
             myTransform.anchoredPosition = new Vector2(myTransform.anchoredPosition.x, hand_away_y);
         }
-    }
+    }*/
 
 
     public void AddCardToHand(Card card) {
@@ -57,6 +60,7 @@ public class Hand : MonoBehaviour
         UICard c = newCard.GetComponent<UICard>();
         c.ConjureCard(card);
         newCard.transform.parent = this.transform;
+        newCard.transform.localScale = Vector3.one;
         //newCard.GetComponent<Canvas>().sortingOrder = uiCards.Count - 1;
         c.handID = uiCards.Count;
 
@@ -76,11 +80,13 @@ public class Hand : MonoBehaviour
         //move hand to the left when adding card
         if(myCards.Count > 1) {
             //myTransform.position = new Vector3(myTransform.rect.xMin - handCenteringAmount, myTransform.rect.yMin, myTransform.rect.xMax);
-            myTransform.anchoredPosition = new Vector2(myTransform.anchoredPosition.x - handCenteringAmount, myTransform.anchoredPosition.y);
+            //myTransform.position = new Vector2(myTransform.position.x - handCenteringAmount, myTransform.position.y);
+            cardGroup.padding.left -= (int)handCenteringAmount;
             //Debug.Log(myTransform.anchoredPosition);
             RotateCards();
         }
 
+        GameManager.Singleton.OpponentDrawCard();
         Invoke("DisableGridLayoutGroup", 0.2f);
         
     }
@@ -95,8 +101,8 @@ public class Hand : MonoBehaviour
         uiCards.RemoveAt(GameManager.Singleton.selectedCardNumber);
 
         Destroy(c);
-        myTransform.anchoredPosition = new Vector2(myTransform.anchoredPosition.x + handCenteringAmount, myTransform.anchoredPosition.y);
-
+        // myTransform.position = new Vector2(myTransform.position.x + handCenteringAmount, myTransform.position.y);
+        cardGroup.padding.left += (int)handCenteringAmount;
         if (uiCards.Count != 0) {
             if (uiCards.Count > 1) {
                 int j = uiCards.Count;
@@ -172,7 +178,7 @@ public class Hand : MonoBehaviour
             t = uiCards[i].GetComponent<RectTransform>();
 
             //t.Rotate(new Vector3(0, 0, temp));
-            t.anchoredPosition = new Vector2(t.anchoredPosition.x, temp);
+            t.position = new Vector2(t.position.x, temp);
             temp += 2;
 
         }
@@ -183,7 +189,7 @@ public class Hand : MonoBehaviour
             t = uiCards[i].GetComponent<RectTransform>();
 
             //t.Rotate(new Vector3(0, 0, temp));
-            t.anchoredPosition = new Vector2(t.anchoredPosition.x, temp);
+            t.position = new Vector2(t.position.x, temp);
             temp += 2;
 
         }

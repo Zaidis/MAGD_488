@@ -66,7 +66,14 @@ public class Player : NetworkBehaviour {
         UpdateTargetedAbilityClientRpc(userID, victimID, isHostSide);
     }
 
-
+    [ClientRpc]
+    public void UpdateDrawCardClientRpc(bool isHost) {
+        GameManager.Singleton.OpponentHandAddCard(isHost);
+    }
+    [ServerRpc]
+    public void UpdateDrawCardServerRpc(bool isHost) {
+        UpdateDrawCardClientRpc(isHost);
+    }
 
 
     [ClientRpc]

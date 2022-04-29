@@ -23,6 +23,7 @@ public class GameManager : MonoBehaviour
     private string opponentName; //TODO IMPLEMENT
 
     public Hand myHand;
+    public OpponentHand opponentHand;
     public List<Card> deck;
     private List<Card> cards;
     
@@ -65,9 +66,11 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region Player Variables
-        public int hostHealth = 20;
-        public int clientHealth = 20;
-        [SerializeField] TextMeshPro hostHealthText;
+        public int hostHealth;
+        public int clientHealth;
+        public int maxHostHealth = 20;
+        public int maxClientHealth = 20;
+    [SerializeField] TextMeshPro hostHealthText;
         [SerializeField] TextMeshPro clientHealthText;
     #endregion
 
@@ -121,6 +124,7 @@ public class GameManager : MonoBehaviour
             clientHealthText.transform.rotation = Quaternion.Euler(90, 180, 0);
         }
 
+        AffectHealthValues(maxHostHealth, maxClientHealth);
     }
 
     /// <summary>
@@ -145,7 +149,26 @@ public class GameManager : MonoBehaviour
         hostHealthText.text = hostHealth.ToString();
         clientHealthText.text = clientHealth.ToString();
 
-        
+        if(hostHealth <= 0) {
+            Debug.LogError("Host has died!");
+
+            if (isHost) {
+                
+                Debug.LogError("You Lost!");
+            } else {
+                Debug.LogError("You Win!");
+            }
+
+        } else if(clientHealth <= 0) {
+            Debug.LogError("Client has died!");
+
+            if (!isHost) {
+                Debug.LogError("You Lost!");
+            }
+            else {
+                Debug.LogError("You Win!");
+            }
+        }
     }
 
     public void ResetSelectedCard() {
@@ -338,10 +361,11 @@ public class GameManager : MonoBehaviour
             while (_networkManager.ConnectedClients.Count < 2)
                 yield return null;
         } else {
-            while(!_networkManager.IsClient)
+            while(!_networkManager.IsConnectedClient)
                 yield return null;
         }
         Connecting.SetActive(false);
+
         BeginGame();
     }
 
@@ -353,6 +377,29 @@ public class GameManager : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void OpponentHandAddCard(bool t) {
+        if (isHost) {
+            if (!t) {
+                //if you are the host, and the drawn card was from the client...
+
+                opponentHand.AddCardToHand();
+
+            }
+        } else {
+            if (t) {
+                //if you are the host, and the drawn card was from the client...
+
+                opponentHand.AddCardToHand();
+
+            }
+        }
+    }
+
+    public void OpponentDrawCard() {
+        Player player = _networkManager.SpawnManager.GetLocalPlayerObject().GetComponent<Player>();
+        player.UpdateDrawCardServerRpc(isHost);
     }
 
     public void TestDrawCard(Card card) {
