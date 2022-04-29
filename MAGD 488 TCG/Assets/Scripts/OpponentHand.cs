@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 public class OpponentHand : MonoBehaviour
 {
     public List<GameObject> uiCards = new List<GameObject>();
@@ -10,14 +10,16 @@ public class OpponentHand : MonoBehaviour
     public float rotateCardAmount;
 
     private RectTransform myTransform;
+    private HorizontalLayoutGroup cardGroup;
     private void Start() {
         myTransform = GetComponent<RectTransform>();
+        cardGroup = GetComponent<HorizontalLayoutGroup>();
     }
     public void AddCardToHand() {
 
         GameObject newCard = Instantiate(emptyCard, transform.position, Quaternion.identity);
         newCard.transform.parent = this.transform;
-
+        newCard.transform.localScale = Vector3.one;
         if (uiCards.Count != 0) {
             int j = uiCards.Count;
             for (int i = 0; i < uiCards.Count; i++) {
@@ -32,9 +34,10 @@ public class OpponentHand : MonoBehaviour
 
         if (uiCards.Count > 1) {
             //myTransform.position = new Vector3(myTransform.rect.xMin - handCenteringAmount, myTransform.rect.yMin, myTransform.rect.xMax);
-            myTransform.anchoredPosition = new Vector2(myTransform.anchoredPosition.x - handCenteringAmount, myTransform.anchoredPosition.y);
+            //myTransform.anchoredPosition = new Vector2(myTransform.anchoredPosition.x - handCenteringAmount, myTransform.anchoredPosition.y);
             //Debug.Log(myTransform.anchoredPosition);
-            RotateCards();
+            cardGroup.padding.left -= (int)handCenteringAmount;
+           // RotateCards();
         }
     }
 
@@ -47,7 +50,8 @@ public class OpponentHand : MonoBehaviour
         uiCards.RemoveAt(GameManager.Singleton.selectedCardNumber);
 
         Destroy(c);
-        myTransform.anchoredPosition = new Vector2(myTransform.anchoredPosition.x + handCenteringAmount, myTransform.anchoredPosition.y);
+        cardGroup.padding.left += (int)handCenteringAmount;
+        //myTransform.anchoredPosition = new Vector2(myTransform.anchoredPosition.x + handCenteringAmount, myTransform.anchoredPosition.y);
     }
 
     private void RotateCards() {
