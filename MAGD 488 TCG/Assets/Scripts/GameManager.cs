@@ -7,15 +7,18 @@ using UnityEngine.UI;
 using System;
 using System.Linq;
 using UnityEngine.SceneManagement;
-
-public class GameManager : MonoBehaviour
-{
+using UnityEngine.Playables;
+public class GameManager : MonoBehaviour {
     private static System.Random rng = new System.Random();
 
     private static GameManager _singleton;
     public static GameManager Singleton { get { return _singleton; } }
     public TextMeshProUGUI TurnStatus;
+
+    public PlayableDirector turnAnim;
+
     public TextMeshProUGUI opponent;
+    public TextMeshProUGUI username;
     public GameObject Connecting;
     public Button NextTurn;
     public NetworkManager _networkManager;
@@ -27,13 +30,13 @@ public class GameManager : MonoBehaviour
     public OpponentHand opponentHand;
     public List<Card> deck;
     private List<Card> cards;
-    
+
     public GameObject[] CreatureTokenPrefab;
     public GameObject SpellTokenPrefab;
     public GameObject[] ArtifactTokenPrefab;
 
-    public Tile[] hostBoard = new Tile[2*5];
-    public Tile[] clientBoard = new Tile[2*5];
+    public Tile[] hostBoard = new Tile[2 * 5];
+    public Tile[] clientBoard = new Tile[2 * 5];
 
     public string winScene;
     public string loseScene;
@@ -50,13 +53,27 @@ public class GameManager : MonoBehaviour
 
     public Card_Popup panelPopup; //when you right click a card
     public Hover_Popup cardPopup; //when you hover over a token
+
     #region Mana
-        public int maxMana;
-        public int currentMana;
-        [SerializeField] private TextMeshProUGUI manaText;
+    [Header("Mana Values")]
+    public GameObject hostManaParent;
+    public GameObject clientManaParent;
+
+    public int hostMaxMana;
+    public int hostCurrentMana;
+    public int clientMaxMana;
+    public int clientCurrentMana;
+    [SerializeField] private TextMeshPro hostCurrentManaText;
+    [SerializeField] private TextMeshPro clientCurrentManaText;
+
+    [SerializeField] private TextMeshPro hostMaxManaText;
+    [SerializeField] private TextMeshPro clientMaxManaText;
     #endregion
 
     #region Creature Options
+
+    [Header("Creature Values")]
+
     //When clicking on a creature, these buttons will appear. 
     public Shader defaultShader; //for tokens
 
@@ -92,7 +109,7 @@ public class GameManager : MonoBehaviour
 
     private void Start() {
         
-        AffectCurrentMana(20);
+        AffectManaValues(1, 0, 1, 0); //INITIAL MANA
         
         //isHost = true;
         _networkManager = NetworkManager.Singleton;
@@ -101,18 +118,20 @@ public class GameManager : MonoBehaviour
 
         cards = new List<Card>(Resources.LoadAll("", typeof(Card)).Cast<Card>().ToArray());
 
-        TurnStatus = GameObject.Find("TurnStatus").GetComponent<TextMeshProUGUI>();
+        //TurnStatus = GameObject.Find("TurnStatus").GetComponent<TextMeshProUGUI>();
         NextTurn = GameObject.Find("NextTurn").GetComponent<Button>();
         if (_networkManager.IsHost) {
             TurnStatus.text = "Your Turn!";
             NextTurn.interactable = true;
-            
+            YourTurnAnimation();
         } else {
-            TurnStatus.text = "Other Player's Turn.";
+            //TurnStatus.text = "Other Player's Turn.";
         }
         if (!MythosClient.instance.opponentUserName.Equals("")) {
             opponentName = MythosClient.instance.opponentUserName;
-            opponent.text = "Opponent: " + opponentName;
+
+            opponent.text = opponentName;
+            username.text = MythosClient.instance.userName;
         } else {
             opponent.text = "Join Code: " + MythosClient.instance.joinCode;
         }
@@ -124,18 +143,39 @@ public class GameManager : MonoBehaviour
             //flip text 180
             hostHealthText.transform.rotation = Quaternion.Euler(90, 180, 0);
             clientHealthText.transform.rotation = Quaternion.Euler(90, 180, 0);
+            hostManaParent.transform.rotation = Quaternion.Euler(0, 180, 0);
+            clientManaParent.transform.rotation = Quaternion.Euler(0, 180, 0);
         }
 
         AffectHealthValues(maxHostHealth, maxClientHealth);
     }
 
+    public void YourTurnAnimation() {
+        turnAnim.Play();
+    }
+
+
     /// <summary>
     /// Add or remove mana. 
     /// </summary>
-    public void AffectCurrentMana(int amount) {
-        
-        currentMana += amount;
-        manaText.text = "Current Mana: " + currentMana.ToString();
+    public void AffectManaValues(int hostAmount, int clientAmount, int hostMax, int clientMax) {
+
+        //currentMana += amount;
+        //manaText.text = "Current Mana: " + currentMana.ToString();
+
+        hostMaxMana = hostMax;
+        hostCurrentMana = hostAmount;
+
+        clientMaxMana = clientMax;
+        clientCurrentMana = clientAmount;
+
+        hostMaxManaText.text = hostMaxMana.ToString();
+        clientMaxManaText.text = clientMaxMana.ToString();
+
+        hostCurrentManaText.text = hostCurrentMana.ToString();
+        clientCurrentManaText.text = clientCurrentMana.ToString();
+
+
 
     }
     

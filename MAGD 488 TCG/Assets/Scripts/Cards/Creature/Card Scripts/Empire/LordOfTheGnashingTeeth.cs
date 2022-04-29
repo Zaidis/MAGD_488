@@ -14,14 +14,35 @@ public class LordOfTheGnashingTeeth : Creature
     {
         //self-buff add thorns for the next 2 turns + -2/0 - 2 mana cost
         //TODO: Rn we just git thorns boi. We ned thyme tuh orc.
-        if (GameManager.Singleton.currentMana >= abilityCost)
-        {
-            Token t = attacker.token.GetComponent<Token>();
-            if(t is CreatureToken c)
-            {
-                c.myAttributes.Add(attributes.thorn);
+
+        if (GameManager.Singleton.isHost) {
+            if (GameManager.Singleton.hostCurrentMana >= abilityCost) {
+                int newMana = GameManager.Singleton.hostCurrentMana - abilityCost;
+
+                GameManager.Singleton.AffectManaValues(newMana, GameManager.Singleton.clientCurrentMana,
+                    GameManager.Singleton.hostMaxMana, GameManager.Singleton.clientMaxMana);
             }
-            GameManager.Singleton.AffectCurrentMana(-abilityCost);
+            else {
+                return;
+            }
         }
+        else {
+            if (GameManager.Singleton.clientCurrentMana >= abilityCost) {
+                int newMana = GameManager.Singleton.clientCurrentMana - abilityCost;
+
+                GameManager.Singleton.AffectManaValues(GameManager.Singleton.hostCurrentMana, newMana,
+                    GameManager.Singleton.hostMaxMana, GameManager.Singleton.clientMaxMana);
+            }
+            else {
+                return;
+            }
+        }
+
+        Token t = attacker.token.GetComponent<Token>();
+        if (t is CreatureToken c) {
+            c.myAttributes.Add(attributes.thorn);
+        }
+
+        
     }
 }

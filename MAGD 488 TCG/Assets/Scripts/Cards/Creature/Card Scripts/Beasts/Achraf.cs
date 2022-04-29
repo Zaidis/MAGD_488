@@ -16,13 +16,27 @@ public class Achraf : Creature
 
     public override void OnTargetedAbility(Tile user, Tile victim, bool isHostSide)
     {
-        if (GameManager.Singleton.currentMana >= abilityCost)
-        {
-            GameManager.Singleton.AffectCurrentMana(-abilityCost);
+        if (GameManager.Singleton.isHost) {
+            if (GameManager.Singleton.hostCurrentMana >= abilityCost) {
+                int newMana = GameManager.Singleton.hostCurrentMana - abilityCost;
+
+                GameManager.Singleton.AffectManaValues(newMana, GameManager.Singleton.clientCurrentMana,
+                    GameManager.Singleton.hostMaxMana, GameManager.Singleton.clientMaxMana);
+            }
+            else {
+                return;
+            }
         }
-        else
-        {
-            return;
+        else {
+            if (GameManager.Singleton.clientCurrentMana >= abilityCost) {
+                int newMana = GameManager.Singleton.clientCurrentMana - abilityCost;
+
+                GameManager.Singleton.AffectManaValues(GameManager.Singleton.hostCurrentMana, newMana,
+                    GameManager.Singleton.hostMaxMana, GameManager.Singleton.clientMaxMana);
+            }
+            else {
+                return;
+            }
         }
 
         if (victim.token.GetComponent<Token>() is CreatureToken c)

@@ -75,6 +75,16 @@ public class Player : NetworkBehaviour {
         UpdateDrawCardClientRpc(isHost);
     }
 
+    [ClientRpc]
+    public void UpdateManaClientRpc(int hostCurrent, int clientCurrent, int hostMax, int clientMax) {
+        GameManager.Singleton.AffectManaValues(hostCurrent, clientCurrent, hostMax, clientMax);
+    }
+
+    [ServerRpc]
+    public void UpdateManaServerRpc(int hostCurrent, int clientCurrent, int hostMax, int clientMax) {
+        UpdateManaClientRpc(hostCurrent, clientCurrent, hostMax, clientMax);
+    }
+
 
     [ClientRpc]
     public void UpdateHealthClientRpc(int hostAmount, int clientAmount) {
@@ -97,13 +107,51 @@ public class Player : NetworkBehaviour {
                 GameManager.Singleton.TurnStatus.text = "Your Turn!";
                 GameManager.Singleton.NextTurn.interactable = true;
                 GameManager.Singleton.ResetTokens(GameManager.Singleton.hostBoard);
+
+                int max = GameManager.Singleton.hostMaxMana;
+                if(max < 10) {
+                    max++;
+                }
+
+                GameManager.Singleton.YourTurnAnimation();
+                GameManager.Singleton.AffectManaValues(max, GameManager.Singleton.clientCurrentMana, max, GameManager.Singleton.clientMaxMana);
+                GameManager.Singleton.DrawTopCard(GameManager.Singleton.deck);
+               // GameManager.Singleton.OpponentDrawCard();
+            } else {
+                int max = GameManager.Singleton.clientMaxMana;
+                if (max < 10) {
+                    max++;
+                }
+
+                
+                GameManager.Singleton.AffectManaValues(GameManager.Singleton.hostCurrentMana, max, GameManager.Singleton.hostMaxMana, max);
             }
         } else {
             if (!isHostTurn) {
                 GameManager.Singleton.TurnStatus.text = "Your Turn!";
                 GameManager.Singleton.NextTurn.interactable = true;
                 GameManager.Singleton.ResetTokens(GameManager.Singleton.clientBoard);
-            }                
+
+
+                int max = GameManager.Singleton.clientMaxMana;
+                if (max < 10) {
+                    max++;
+                }
+
+                GameManager.Singleton.DrawTopCard(GameManager.Singleton.deck);
+                //GameManager.Singleton.OpponentDrawCard();
+                GameManager.Singleton.YourTurnAnimation();
+                GameManager.Singleton.AffectManaValues(GameManager.Singleton.hostCurrentMana, max, GameManager.Singleton.hostMaxMana, max);
+
+            } else {
+                int max = GameManager.Singleton.hostMaxMana;
+                if (max < 10) {
+                    max++;
+                }
+
+
+                GameManager.Singleton.AffectManaValues(max, GameManager.Singleton.clientCurrentMana, max, GameManager.Singleton.clientMaxMana);
+            }             
         }
     }
 }
