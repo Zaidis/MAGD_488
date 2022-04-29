@@ -35,8 +35,8 @@ public class GameManager : MonoBehaviour
     public Tile[] hostBoard = new Tile[2*5];
     public Tile[] clientBoard = new Tile[2*5];
 
-    public int winScene;
-    public int loseScene;
+    public string winScene;
+    public string loseScene;
 
     public bool needsToSelectTile;
     public bool isAttecking;
@@ -151,31 +151,16 @@ public class GameManager : MonoBehaviour
         hostHealthText.text = hostHealth.ToString();
         clientHealthText.text = clientHealth.ToString();
 
-        if(hostHealth <= 0) {
-            Debug.LogError("Host has died!");
-            NetworkManager.Singleton.Shutdown();
-            if (isHost) {
-                
-                Debug.LogError("You Lost!");
-                
-                SceneManager.LoadScene(loseScene);
-            } else {
-                Debug.LogError("You Win!");
-                SceneManager.LoadScene(winScene);
-            }
-
-        } else if(clientHealth <= 0) {
-            Debug.LogError("Client has died!");
-            NetworkManager.Singleton.Shutdown();
-
-            if (!isHost) {
-                Debug.LogError("You Lost!");
-                SceneManager.LoadScene(loseScene);
-            }
-            else {
-                Debug.LogError("You Win!");
-                SceneManager.LoadScene(winScene);
-            }
+        if(hostHealth <= 0) {    //Check for eitherplayer death, load respective scene on either with a safe, delayed, scene change
+            if (isHost)
+                StartCoroutine(SafeSceneChange(2, loseScene));
+            else
+                StartCoroutine(SafeSceneChange(2, winScene));
+        } else if(clientHealth <= 0) {       
+            if (!isHost)
+                StartCoroutine(SafeSceneChange(2, loseScene));
+            else
+                StartCoroutine(SafeSceneChange(2, winScene));
         }
     }
 
@@ -592,6 +577,10 @@ public class GameManager : MonoBehaviour
 
         
     }
+    IEnumerator SafeSceneChange(float time, string scene) {
+        yield return new WaitForSeconds(time);
+        NetworkManager.Singleton.Shutdown();
+        SceneManager.LoadScene(scene);
+    }
 
-    
 }
