@@ -4,7 +4,7 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "New Creature/ErlandFulkvare", fileName = "Card")]
 public class ErlandFulkvare : Creature
 {
-    [SerializeField] int abilityCost, healthMod;
+    [SerializeField] int healthMod;
     public override void OnAttack(Tile[] hostBoard, Tile[] clientBoard, Tile attacker, bool isHost, Tile attacked)
     {
         base.OnAttack(hostBoard, clientBoard, attacker, isHost, attacked);

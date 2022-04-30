@@ -12,6 +12,10 @@ public class O_AttackPlayer : MonoBehaviour, IPointerClickHandler
         Player p = GameManager.Singleton._networkManager.SpawnManager.GetLocalPlayerObject().GetComponent<Player>();
         //we already know this token has NOT attacked yet
 
+        //token.AttackPlayer(); //animation
+
+        p.UpdateAttackPlayerAnimationServerRpc(token.GetComponentInParent<Tile>().GetTileID(), token.GetComponentInParent<Tile>().hostTile);
+
         if (GameManager.Singleton.isHost) {
             //GameManager.Singleton.AffectClientCurrentHealth(token.currentAttack * -1);
             p.UpdateHealthServerRpc(0, token.currentAttack * -1);
@@ -21,6 +25,7 @@ public class O_AttackPlayer : MonoBehaviour, IPointerClickHandler
         }
 
         token.hasAttacked = true;
-        GameManager.Singleton.CreatureOptionButtons(token, GameManager.Singleton.isHost);
+        GameManager.Singleton.TurnOffOptionsAndUnselect();
+        //GameManager.Singleton.CreatureOptionButtons(token, GameManager.Singleton.isHost);
     }
 }

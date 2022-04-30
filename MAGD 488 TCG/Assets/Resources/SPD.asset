@@ -28,3 +28,4 @@ MonoBehaviour:
   isMelee: 1
   hasAbility: 1
   hasTargetedAbility: 1
+  abilityCost: 2

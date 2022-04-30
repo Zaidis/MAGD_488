@@ -12,6 +12,7 @@ public class O_AttackToken : MonoBehaviour, IPointerClickHandler
 
         //we already know this token has NOT attacked yet
         if (GameManager.Singleton.isHost) {
+            GameManager.Singleton.ResetAllTiles(GameManager.Singleton.clientBoard);
             if (token.creature.isMelee) {
                 GameManager.Singleton.ChangeTilesMaterial(GameManager.Singleton.clientBoard, true, token.transform.parent.GetComponent<Tile>().GetTileID());
             }

@@ -140,7 +140,9 @@ public class CreatureToken : Token, IPointerClickHandler, IPointerEnterHandler, 
     public void UseAbility() {
         creature.OnAbility(GameManager.Singleton.hostBoard, GameManager.Singleton.clientBoard, transform.parent.GetComponent<Tile>(), GameManager.Singleton.isHost);
         castedAbility = true;
-        GameManager.Singleton.CreatureOptionButtons(this, GameManager.Singleton.isHost);
+
+        GameManager.Singleton.TurnOffOptionsAndUnselect();
+        //GameManager.Singleton.CreatureOptionButtons(this, GameManager.Singleton.isHost);
 
 
     }
@@ -152,7 +154,9 @@ public class CreatureToken : Token, IPointerClickHandler, IPointerEnterHandler, 
             
             GameManager.Singleton.ResetAllTiles(GameManager.Singleton.hostBoard);
             GameManager.Singleton.ResetAllTiles(GameManager.Singleton.clientBoard);
-            GameManager.Singleton.CreatureOptionButtons(this, GameManager.Singleton.isHost);
+
+            GameManager.Singleton.TurnOffOptionsAndUnselect();
+            //GameManager.Singleton.CreatureOptionButtons(this, GameManager.Singleton.isHost);
         }
         
     }
@@ -177,10 +181,23 @@ public class CreatureToken : Token, IPointerClickHandler, IPointerEnterHandler, 
 
             GameManager.Singleton.ResetAllTiles(GameManager.Singleton.hostBoard);
             GameManager.Singleton.ResetAllTiles(GameManager.Singleton.clientBoard);
+            GameManager.Singleton.TurnOffOptionsAndUnselect();
            // hasAttacked = true;
             GameManager.Singleton.isAttecking = false;
             GameManager.Singleton.selectedCreature = null;
         }
+    }
+
+    /// <summary>
+    /// Called for animation
+    /// </summary>
+    public void AttackPlayer() {
+
+        
+         StartCoroutine(MoveUp(transform.localPosition, new Vector3(transform.localPosition.x, 0.006f, transform.localPosition.z)));
+      
+        
+
     }
     
     public void OnPointerEnter(PointerEventData eventData) {
@@ -197,6 +214,45 @@ public class CreatureToken : Token, IPointerClickHandler, IPointerEnterHandler, 
         StartCoroutine(MoveUp(transform.localPosition, new Vector3(transform.localPosition.x, 0.006f, transform.localPosition.z), attackedPosition, a));
     }
 
+
+    private IEnumerator MoveUp(Vector3 startPosition, Vector3 endPosition) {
+        float speed = 2f;
+        float y = 0.004f;
+
+        var i = 0f;
+        //var rate = 1f / 2f;
+        while (i < 1f) {
+            i += Time.deltaTime * speed;
+            transform.localPosition = Vector3.Lerp(startPosition, endPosition, i);
+            yield return null;
+        }
+
+        if (transform.GetComponentInParent<Tile>().hostTile) {
+            StartCoroutine(MoveTowardsGem(endPosition, GameManager.Singleton.clientHealthGemPosition.localPosition));
+        } else {
+            StartCoroutine(MoveTowardsGem(endPosition, GameManager.Singleton.hostHealthGemPosition.localPosition));
+        }
+            
+    }
+
+    private IEnumerator MoveTowardsGem(Vector3 startLocation, Vector3 targetLocation) {
+
+        float speed = 4f;
+        var i = 0f;
+
+
+        while (i < 1f) {
+            i += Time.deltaTime * speed;
+            transform.localPosition = Vector3.Lerp(startLocation, targetLocation, i);
+            yield return null;
+        }
+
+        StartCoroutine(MoveBack(startLocation, targetLocation));
+
+    }
+
+    // ---------------------
+    #region ANIMATION FOR ATTACKING A TOKEN
     private IEnumerator MoveUp(Vector3 startPosition, Vector3 endPosition, Vector3 loc, Tile a) {
         float speed = 2f;
         float y = 0.004f;
@@ -262,4 +318,5 @@ public class CreatureToken : Token, IPointerClickHandler, IPointerEnterHandler, 
             yield return null;
         }
     }
+    #endregion
 }

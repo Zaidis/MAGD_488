@@ -4,7 +4,7 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "New Creature/Oni", fileName = "Card")]
 public class Oni : Creature
 {
-    [SerializeField] int abilityCost;
+   // [SerializeField] int abilityCost;
     public override void OnAttack(Tile[] hostBoard, Tile[] clientBoard, Tile attacker, bool isHost, Tile attacked)
     {
         base.OnAttack(hostBoard, clientBoard, attacker, isHost, attacked);

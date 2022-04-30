@@ -87,6 +87,18 @@ public class Player : NetworkBehaviour {
 
 
     [ClientRpc]
+    public void UpdateAttackPlayerAnimationClientRpc(int id, bool isHostTile) {
+        GameManager.Singleton.AttackPlayerAnimation(id, isHostTile);
+    }
+    [ServerRpc]
+    public void UpdateAttackPlayerAnimationServerRpc(int id, bool isHostTile) {
+        UpdateAttackPlayerAnimationClientRpc(id, isHostTile);
+    }
+
+
+
+
+    [ClientRpc]
     public void UpdateHealthClientRpc(int hostAmount, int clientAmount) {
         GameManager.Singleton.AffectHealthValues(hostAmount, clientAmount);
     }
@@ -110,7 +122,7 @@ public class Player : NetworkBehaviour {
         }
 
         GameManager.Singleton.compass.TurnCompass();
-
+        GameManager.Singleton.TurnOffOptionsAndUnselect();
         if (_networkManager.IsHost) {
             if (isHostTurn) {
                 GameManager.Singleton.TurnStatus.text = "Your Turn!";

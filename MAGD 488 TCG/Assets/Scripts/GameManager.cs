@@ -91,11 +91,17 @@ public class GameManager : MonoBehaviour {
     //When clicking on a creature, these buttons will appear. 
     public Shader defaultShader; //for tokens
 
-        public O_AttackToken attackTokenOption;
-        public O_AttackPlayer attackPlayerOption;
-        public O_Ability abilityOption;
-        [SerializeField] private Transform[] optionSpawnLocations;
-        [SerializeField] private GameObject optionsParent;
+    public O_AttackToken attackTokenOption;
+    public O_AttackPlayer attackPlayerOption;
+    public O_Ability abilityOption;
+    [SerializeField] private Transform[] hostOptionSpawnLocations;
+    [SerializeField] private Transform[] clientOptionSpawnLocations;
+    [SerializeField] private GameObject optionsParent;
+
+
+
+
+
     #endregion
 
     #region Player Variables
@@ -105,6 +111,9 @@ public class GameManager : MonoBehaviour {
         public int maxClientHealth = 20;
     [SerializeField] TextMeshPro hostHealthText;
         [SerializeField] TextMeshPro clientHealthText;
+
+    public Transform hostHealthGemPosition;
+    public Transform clientHealthGemPosition;
     #endregion
 
     #region Tile Materials
@@ -159,6 +168,11 @@ public class GameManager : MonoBehaviour {
             clientHealthText.transform.rotation = Quaternion.Euler(90, 180, 0);
             hostManaParent.transform.rotation = Quaternion.Euler(0, 180, 0);
             clientManaParent.transform.rotation = Quaternion.Euler(0, 180, 0);
+
+            attackPlayerOption.transform.rotation = Quaternion.Euler(0, 180, 0); 
+            attackTokenOption.transform.rotation = Quaternion.Euler(0, 180, 0);
+            abilityOption.transform.rotation = Quaternion.Euler(0, 180, 0);
+
         }
 
         
@@ -576,6 +590,14 @@ public class GameManager : MonoBehaviour {
         return false;
     }
 
+    public void TurnOffOptionsAndUnselect() {
+        attackTokenOption.gameObject.SetActive(false);
+        attackPlayerOption.gameObject.SetActive(false);
+        abilityOption.gameObject.SetActive(false);
+
+        ResetAllTiles(hostBoard);
+        ResetAllTiles(clientBoard);
+    }
     /// <summary>
     /// When I click on a creature, these buttons will apear for what is available.
     /// </summary>
@@ -598,51 +620,56 @@ public class GameManager : MonoBehaviour {
         if (isHost) {
             if (token.hasAttacked == false) {
                 //add attack button
-                attackTokenOption.transform.position = optionSpawnLocations[counter].position;
+                attackTokenOption.transform.position = hostOptionSpawnLocations[counter].position;
                 attackTokenOption.gameObject.SetActive(true);
                 counter++;
 
                 if (CheckIfCreatureCanAttackPlayer(clientBoard, token.transform.parent.GetComponent<Tile>().GetTileID())) {
                     //add attack player button
 
-                    attackPlayerOption.transform.position = optionSpawnLocations[counter].position;
+                    attackPlayerOption.transform.position = hostOptionSpawnLocations[counter].position;
                     attackPlayerOption.gameObject.SetActive(true);
                     counter++;
                 }
             }
 
             if (token.creature.hasAbility) {
-                if (!token.castedAbility) {
+                if(token.creature.abilityCost <= hostCurrentMana) {
+                    if (!token.castedAbility) {
 
-                    abilityOption.transform.position = optionSpawnLocations[counter].position;
-                    abilityOption.gameObject.SetActive(true);
-                    counter++;
+                        abilityOption.transform.position = hostOptionSpawnLocations[counter].position;
+                        abilityOption.gameObject.SetActive(true);
+                        counter++;
+                    }
                 }
+                
             }
 
             //ability
         } else {
             if (token.hasAttacked == false) {
                 //add attack button
-                attackTokenOption.transform.position = optionSpawnLocations[counter].position;
+                attackTokenOption.transform.position = clientOptionSpawnLocations[counter].position;
                 attackTokenOption.gameObject.SetActive(true);
                 counter++;
 
                 if (CheckIfCreatureCanAttackPlayer(hostBoard, token.transform.parent.GetComponent<Tile>().GetTileID())) {
                     //add attack player button
 
-                    attackPlayerOption.transform.position = optionSpawnLocations[counter].position;
+                    attackPlayerOption.transform.position = clientOptionSpawnLocations[counter].position;
                     attackPlayerOption.gameObject.SetActive(true);
                     counter++;
                 }
             }
 
             if (token.creature.hasAbility) {
-                if (!token.castedAbility) {
+                if(token.creature.abilityCost <= clientCurrentMana) {
+                    if (!token.castedAbility) {
 
-                    abilityOption.transform.position = optionSpawnLocations[counter].position;
-                    abilityOption.gameObject.SetActive(true);
-                    counter++;
+                        abilityOption.transform.position = clientOptionSpawnLocations[counter].position;
+                        abilityOption.gameObject.SetActive(true);
+                        counter++;
+                    }
                 }
             }
         }
@@ -657,7 +684,13 @@ public class GameManager : MonoBehaviour {
     }
 
 
-
+    public void AttackPlayerAnimation(int id, bool isHostTile) {
+        if (isHostTile) {
+            hostBoard[id].token.GetComponent<CreatureToken>().AttackPlayer();
+        } else {
+            clientBoard[id].token.GetComponent<CreatureToken>().AttackPlayer();
+        }
+    }
     
 
     
