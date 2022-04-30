@@ -102,6 +102,15 @@ public class Player : NetworkBehaviour {
     [ClientRpc]
     private void UpdateTurnClientRpc(bool isHostTurn) {
         GameManager.Singleton.IsHostTurn = isHostTurn;
+
+        if(GameManager.Singleton.compassYRotation == 0) {
+            GameManager.Singleton.compassYRotation = 180;
+        } else {
+            GameManager.Singleton.compassYRotation = 0;
+        }
+
+        GameManager.Singleton.compass.TurnCompass();
+
         if (_networkManager.IsHost) {
             if (isHostTurn) {
                 GameManager.Singleton.TurnStatus.text = "Your Turn!";

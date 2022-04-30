@@ -56,7 +56,7 @@ public class EndTurnButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
         if ((GameManager.Singleton.isHost && GameManager.Singleton.IsHostTurn) || (!GameManager.Singleton.isHost && !GameManager.Singleton.IsHostTurn)) {
 
-            //it is your turn
+            //end your turn here
 
             //gameObject.GetComponent<MeshRenderer>().material = m_onHover;
             GameManager.Singleton.OnNextTurnPressed();

@@ -54,6 +54,10 @@ public class GameManager : MonoBehaviour {
     public Card_Popup panelPopup; //when you right click a card
     public Hover_Popup cardPopup; //when you hover over a token
 
+    [Header("Compass Variables")]
+    public Compass compass;
+    public int compassYRotation;
+
     #region End Turn Buttons
     [Header("End Turn Buttons")]
     public GameObject hostButton;
@@ -155,13 +159,7 @@ public class GameManager : MonoBehaviour {
             clientManaParent.transform.rotation = Quaternion.Euler(0, 180, 0);
         }
 
-        if (isHost) {
-            hostButton.SetActive(true);
-            myEndTurnButton = hostButton.transform.GetChild(0).GetComponent<EndTurnButton>();
-        } else {
-            clientButton.SetActive(true);
-            myEndTurnButton = clientButton.transform.GetChild(0).GetComponent<EndTurnButton>();
-        }
+        
 
 
         AffectHealthValues(maxHostHealth, maxClientHealth);
@@ -245,6 +243,14 @@ public class GameManager : MonoBehaviour {
         myHand.PositionCards();
         //mulligan
 
+        if (isHost) {
+            hostButton.SetActive(true);
+            myEndTurnButton = hostButton.transform.GetChild(0).GetComponent<EndTurnButton>();
+        }
+        else {
+            clientButton.SetActive(true);
+            myEndTurnButton = clientButton.transform.GetChild(0).GetComponent<EndTurnButton>();
+        }
     }
 
     /// <summary>
@@ -642,4 +648,9 @@ public class GameManager : MonoBehaviour {
         SceneManager.LoadScene(scene);
     }
 
+
+
+    
+
+    
 }
