@@ -58,7 +58,7 @@ public class Creature : Card
         }
         if (attacker.token.GetComponent<CreatureToken>().myAttributes.Contains(attributes.taunt)) { //must be destroyed before attacking another tile
 
-        }
+        } 
     }
 
     public virtual void OnPlay(Tile[] hostBoard, Tile[] clientBoard, Tile parent) {

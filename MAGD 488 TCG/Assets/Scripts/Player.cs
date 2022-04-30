@@ -159,6 +159,7 @@ public class Player : NetworkBehaviour {
                     max++;
                 }
 
+                GameManager.Singleton.ResetTokens(GameManager.Singleton.clientBoard);
                 GameManager.Singleton.myEndTurnButton.DeactivateButton();
                 GameManager.Singleton.AffectManaValues(GameManager.Singleton.hostCurrentMana, max, GameManager.Singleton.hostMaxMana, max);
             }
@@ -184,7 +185,7 @@ public class Player : NetworkBehaviour {
                 if (max < 10) {
                     max++;
                 }
-
+                GameManager.Singleton.ResetTokens(GameManager.Singleton.hostBoard);
                 GameManager.Singleton.myEndTurnButton.DeactivateButton();
                 GameManager.Singleton.AffectManaValues(max, GameManager.Singleton.clientCurrentMana, max, GameManager.Singleton.clientMaxMana);
             }             

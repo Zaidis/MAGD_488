@@ -104,27 +104,27 @@ public class Tile : MonoBehaviour, IPointerClickHandler {
         if (token == null) {
             if (GameManager.Singleton.needsToSelectTile) { //if you need to select a tile (you are playing a card)
                                                            //we have selected the tile
+                if((GameManager.Singleton.isHost && hostTile) || (!GameManager.Singleton.isHost && !hostTile)) {
+                    int manaReductionAmount = GameManager.Singleton.selectedCard.manaCost;
+                    int newCurrentMana = 0;
+                    Player p = GameManager.Singleton._networkManager.SpawnManager.GetLocalPlayerObject().GetComponent<Player>();
+                    p.UpdatePlaceCardServerRpc(GameManager.Singleton._networkManager.IsHost, GetTileID(), GameManager.Singleton.selectedCard.ID);
 
-                int manaReductionAmount = GameManager.Singleton.selectedCard.manaCost;
-                int newCurrentMana = 0;
-                Player p = GameManager.Singleton._networkManager.SpawnManager.GetLocalPlayerObject().GetComponent<Player>();
-                p.UpdatePlaceCardServerRpc(GameManager.Singleton._networkManager.IsHost, GetTileID(), GameManager.Singleton.selectedCard.ID);
+                    if (GameManager.Singleton.isHost) { //reduce host mana
+                        newCurrentMana = GameManager.Singleton.hostCurrentMana - manaReductionAmount;
+                        p.UpdateManaServerRpc(newCurrentMana, GameManager.Singleton.clientCurrentMana,
+                            GameManager.Singleton.hostMaxMana, GameManager.Singleton.clientMaxMana);
+                    }
+                    else { //reduce client mana
+                        newCurrentMana = GameManager.Singleton.clientCurrentMana - manaReductionAmount;
+                        p.UpdateManaServerRpc(GameManager.Singleton.hostCurrentMana, newCurrentMana,
+                            GameManager.Singleton.hostMaxMana, GameManager.Singleton.clientMaxMana);
+                    }
 
-                if (GameManager.Singleton.isHost) { //reduce host mana
-                    newCurrentMana = GameManager.Singleton.hostCurrentMana - manaReductionAmount;
-                    p.UpdateManaServerRpc(newCurrentMana, GameManager.Singleton.clientCurrentMana,
-                        GameManager.Singleton.hostMaxMana, GameManager.Singleton.clientMaxMana);
-                } else { //reduce client mana
-                    newCurrentMana = GameManager.Singleton.clientCurrentMana - manaReductionAmount;
-                    p.UpdateManaServerRpc(GameManager.Singleton.hostCurrentMana, newCurrentMana,
-                        GameManager.Singleton.hostMaxMana, GameManager.Singleton.clientMaxMana);
+
+                    Hand.instance.RemoveCardFromHand();
+                    GameManager.Singleton.ResetSelectedCard();
                 }
-                
-                
-                Hand.instance.RemoveCardFromHand();
-                GameManager.Singleton.ResetSelectedCard();
-                
-
 
             }
         }
