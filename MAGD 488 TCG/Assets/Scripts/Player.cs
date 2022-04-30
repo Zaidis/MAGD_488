@@ -113,6 +113,7 @@ public class Player : NetworkBehaviour {
                     max++;
                 }
 
+                GameManager.Singleton.myEndTurnButton.ActivateButton();
                 GameManager.Singleton.YourTurnAnimation();
                 GameManager.Singleton.AffectManaValues(max, GameManager.Singleton.clientCurrentMana, max, GameManager.Singleton.clientMaxMana);
                 GameManager.Singleton.DrawTopCard(GameManager.Singleton.deck);
@@ -123,7 +124,7 @@ public class Player : NetworkBehaviour {
                     max++;
                 }
 
-                
+                GameManager.Singleton.myEndTurnButton.DeactivateButton();
                 GameManager.Singleton.AffectManaValues(GameManager.Singleton.hostCurrentMana, max, GameManager.Singleton.hostMaxMana, max);
             }
         } else {
@@ -137,7 +138,7 @@ public class Player : NetworkBehaviour {
                 if (max < 10) {
                     max++;
                 }
-
+                GameManager.Singleton.myEndTurnButton.ActivateButton();
                 GameManager.Singleton.DrawTopCard(GameManager.Singleton.deck);
                 //GameManager.Singleton.OpponentDrawCard();
                 GameManager.Singleton.YourTurnAnimation();
@@ -149,7 +150,7 @@ public class Player : NetworkBehaviour {
                     max++;
                 }
 
-
+                GameManager.Singleton.myEndTurnButton.DeactivateButton();
                 GameManager.Singleton.AffectManaValues(max, GameManager.Singleton.clientCurrentMana, max, GameManager.Singleton.clientMaxMana);
             }             
         }

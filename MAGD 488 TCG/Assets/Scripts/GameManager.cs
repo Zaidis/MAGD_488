@@ -54,6 +54,14 @@ public class GameManager : MonoBehaviour {
     public Card_Popup panelPopup; //when you right click a card
     public Hover_Popup cardPopup; //when you hover over a token
 
+    #region End Turn Buttons
+    [Header("End Turn Buttons")]
+    public GameObject hostButton;
+    public GameObject clientButton;
+    public EndTurnButton myEndTurnButton;
+    #endregion
+
+
     #region Mana
     [Header("Mana Values")]
     public GameObject hostManaParent;
@@ -119,7 +127,7 @@ public class GameManager : MonoBehaviour {
         cards = new List<Card>(Resources.LoadAll("", typeof(Card)).Cast<Card>().ToArray());
 
         //TurnStatus = GameObject.Find("TurnStatus").GetComponent<TextMeshProUGUI>();
-        NextTurn = GameObject.Find("NextTurn").GetComponent<Button>();
+       // NextTurn = GameObject.Find("NextTurn").GetComponent<Button>();
         if (_networkManager.IsHost) {
             TurnStatus.text = "Your Turn!";
             NextTurn.interactable = true;
@@ -146,6 +154,15 @@ public class GameManager : MonoBehaviour {
             hostManaParent.transform.rotation = Quaternion.Euler(0, 180, 0);
             clientManaParent.transform.rotation = Quaternion.Euler(0, 180, 0);
         }
+
+        if (isHost) {
+            hostButton.SetActive(true);
+            myEndTurnButton = hostButton.transform.GetChild(0).GetComponent<EndTurnButton>();
+        } else {
+            clientButton.SetActive(true);
+            myEndTurnButton = clientButton.transform.GetChild(0).GetComponent<EndTurnButton>();
+        }
+
 
         AffectHealthValues(maxHostHealth, maxClientHealth);
     }
