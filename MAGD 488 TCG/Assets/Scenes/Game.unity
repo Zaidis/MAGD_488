@@ -3824,7 +3824,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &485010588
 RectTransform:
   m_ObjectHideFlags: 0
@@ -25147,6 +25147,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TurnStatus: {fileID: 1594578613}
   turnAnim: {fileID: 485010590}
+  turnAnimObject: {fileID: 485010587}
   opponent: {fileID: 23749470}
   username: {fileID: 1444973123}
   Connecting: {fileID: 1750119549}

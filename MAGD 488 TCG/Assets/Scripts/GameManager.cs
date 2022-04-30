@@ -16,6 +16,8 @@ public class GameManager : MonoBehaviour {
     public TextMeshProUGUI TurnStatus;
 
     public PlayableDirector turnAnim;
+    public GameObject turnAnimObject;
+
 
     public TextMeshProUGUI opponent;
     public TextMeshProUGUI username;
@@ -166,7 +168,13 @@ public class GameManager : MonoBehaviour {
     }
 
     public void YourTurnAnimation() {
+        turnAnimObject.SetActive(true);
         turnAnim.Play();
+        Invoke("TurnOffAnimation", 5f);
+    }
+
+    public void TurnOffAnimation() {
+        turnAnimObject.SetActive(false);
     }
 
 
