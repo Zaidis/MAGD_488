@@ -141,8 +141,8 @@ public class CreatureToken : Token, IPointerClickHandler, IPointerEnterHandler, 
         creature.OnAbility(GameManager.Singleton.hostBoard, GameManager.Singleton.clientBoard, transform.parent.GetComponent<Tile>(), GameManager.Singleton.isHost);
         castedAbility = true;
 
-        GameManager.Singleton.TurnOffOptionsAndUnselect();
-        //GameManager.Singleton.CreatureOptionButtons(this, GameManager.Singleton.isHost);
+       // GameManager.Singleton.TurnOffOptionsAndUnselect();
+        GameManager.Singleton.CreatureOptionButtons(this, GameManager.Singleton.isHost);
 
 
     }
@@ -155,8 +155,8 @@ public class CreatureToken : Token, IPointerClickHandler, IPointerEnterHandler, 
             GameManager.Singleton.ResetAllTiles(GameManager.Singleton.hostBoard);
             GameManager.Singleton.ResetAllTiles(GameManager.Singleton.clientBoard);
 
-            GameManager.Singleton.TurnOffOptionsAndUnselect();
-            //GameManager.Singleton.CreatureOptionButtons(this, GameManager.Singleton.isHost);
+            //GameManager.Singleton.TurnOffOptionsAndUnselect();
+            GameManager.Singleton.CreatureOptionButtons(this, GameManager.Singleton.isHost);
         }
         
     }
@@ -181,7 +181,7 @@ public class CreatureToken : Token, IPointerClickHandler, IPointerEnterHandler, 
 
             GameManager.Singleton.ResetAllTiles(GameManager.Singleton.hostBoard);
             GameManager.Singleton.ResetAllTiles(GameManager.Singleton.clientBoard);
-            GameManager.Singleton.TurnOffOptionsAndUnselect();
+            //GameManager.Singleton.TurnOffOptionsAndUnselect();
            // hasAttacked = true;
             GameManager.Singleton.isAttecking = false;
             GameManager.Singleton.selectedCreature = null;

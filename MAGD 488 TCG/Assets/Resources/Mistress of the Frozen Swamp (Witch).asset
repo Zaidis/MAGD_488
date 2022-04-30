@@ -19,10 +19,7 @@ MonoBehaviour:
   cardArt: {fileID: 0}
   cardBorder: {fileID: 0}
   cardFaction: 0
-  description: 'One Card: Buff to everyone & Big Buff to Hunger Creature (3 mana
-    cost)
-
-    Two Card: Big Buff to a single creature (3 mana cost)'
+  description: '5 Mana: Give target creature +1/+4.'
   lore: 
   artistName: 
   defaultHealthAmount: 3
@@ -31,6 +28,6 @@ MonoBehaviour:
   isMelee: 0
   hasAbility: 1
   hasTargetedAbility: 1
+  abilityCost: 5
   attackMod: 1
   healthMod: 4
-  abilityCost: 3

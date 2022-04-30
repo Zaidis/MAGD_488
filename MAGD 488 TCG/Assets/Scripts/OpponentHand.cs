@@ -45,9 +45,9 @@ public class OpponentHand : MonoBehaviour
     public void RemoveCardFromHand() {
 
 
-        GameObject c = uiCards[GameManager.Singleton.selectedCardNumber];
+        GameObject c = uiCards[0];
 
-        uiCards.RemoveAt(GameManager.Singleton.selectedCardNumber);
+        uiCards.RemoveAt(0);
 
         Destroy(c);
         cardGroup.padding.left += (int)handCenteringAmount;

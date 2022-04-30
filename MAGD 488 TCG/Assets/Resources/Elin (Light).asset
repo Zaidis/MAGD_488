@@ -14,12 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 4010
   type: 0
-  manaCost: 4
+  manaCost: 3
   cardName: Elin
   cardArt: {fileID: 21300000, guid: cc6417464250bcb499c9d9acfb18029c, type: 3}
-  cardBorder: {fileID: 21300000, guid: cd82d8bc9b47f2846bc65f4d3de8a764, type: 3}
+  cardBorder: {fileID: 21300000, guid: 6e84f5d82359fb34cbd7b1833a4668db, type: 3}
   cardFaction: 3
-  description: Blind - opponent cannot target a specific creature next turn (3 mana)
+  description: Ranged
   lore: 
   artistName: 
   defaultHealthAmount: 3
@@ -27,3 +27,5 @@ MonoBehaviour:
   myAttributes: 
   isMelee: 0
   hasAbility: 0
+  hasTargetedAbility: 0
+  abilityCost: 0

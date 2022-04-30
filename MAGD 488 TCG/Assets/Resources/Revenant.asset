@@ -19,10 +19,15 @@ MonoBehaviour:
   cardArt: {fileID: 0}
   cardBorder: {fileID: 0}
   cardFaction: 0
-  description: 
-  lore: 
-  artistName: 
+  description: Thorn
+  lore: 'Now trapped in a place where the target of their vengeance is now impossible
+    to kill; their rage has now been turned towards any unfortunate bastard who they
+    are sent after. '
+  artistName: Jake Sefranek
   defaultHealthAmount: 1
   defaultPowerAmount: 5
   myAttributes: 02000000
   isMelee: 1
+  hasAbility: 0
+  hasTargetedAbility: 0
+  abilityCost: 0

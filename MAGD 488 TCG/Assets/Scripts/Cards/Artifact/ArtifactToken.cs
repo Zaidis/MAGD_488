@@ -7,7 +7,11 @@ public class ArtifactToken : Token, IPointerEnterHandler, IPointerExitHandler, I
     [Header("Artifact Token Variables")]
     public Artifact artifact;
     public TextMeshPro healthText;
-   // public int currentHealth;
+
+    public bool hasAbility;
+    public bool castedAbility;
+
+    // public int currentHealth;
     public override void ApplyCard() {
         currentHealth = artifact.defaultHealthAmount;
         healthText.text = currentHealth.ToString();
@@ -39,49 +43,58 @@ public class ArtifactToken : Token, IPointerEnterHandler, IPointerExitHandler, I
 
     public void OnPointerClick(PointerEventData eventData) {
 
-        if(eventData.button == PointerEventData.InputButton.Left) {
-            if (GameManager.Singleton.isHost) {
+        if (eventData.button == PointerEventData.InputButton.Left) {
+            if ((GameManager.Singleton.isHost && GameManager.Singleton.IsHostTurn) || (!GameManager.Singleton.isHost && !GameManager.Singleton.IsHostTurn)) {
+                if (transform.parent.GetComponent<Tile>().active) {
+                    
+                    /*if (GameManager.Singleton.isUsingAbility) {
 
-                if (GameManager.Singleton.CheckIfMyCreature(GameManager.Singleton.hostBoard, transform.parent.GetComponent<Tile>())) {
-                    //this is my creature
+                        Player p = GameManager.Singleton._networkManager.SpawnManager.GetLocalPlayerObject().GetComponent<Player>();
+                        p.UpdateTargetedAbilityServerRpc(GameManager.Singleton.selectedCreature.GetComponentInParent<Tile>().GetTileID(), transform.parent.GetComponent<Tile>().GetTileID(),
+                            transform.parent.GetComponent<Tile>().hostTile);
 
-                    //GameManager.Singleton.CreatureOptionButtons(this, GameManager.Singleton.isHost);
+                    } */
+
 
                 }
-                else {
-                    if (GameManager.Singleton.isAttecking) {
-                        if (transform.parent.GetComponent<Tile>().active) {
-                            
+                else { //NOT AN ACTIVE TILE
 
-                            Player p = GameManager.Singleton._networkManager.SpawnManager.GetLocalPlayerObject().GetComponent<Player>();
-                            p.UpdateAttackServerRpc(GameManager.Singleton.selectedCreature.GetComponentInParent<Tile>().GetTileID(), transform.parent.GetComponent<Tile>().GetTileID(), true);
+                    if (GameManager.Singleton.isHost) {
+                        if (GameManager.Singleton.CheckIfMyCreature(GameManager.Singleton.hostBoard, transform.parent.GetComponent<Tile>())) {
+                            //this is my creature
+
+                            GameManager.Singleton.ArtifactOptionButton(this);
                         }
                     }
-                }
+                    else {
+                        if (GameManager.Singleton.CheckIfMyCreature(GameManager.Singleton.clientBoard, transform.parent.GetComponent<Tile>())) {
+                            //this is my creature
 
-            } else {
-                //not the host 
-                if (GameManager.Singleton.CheckIfMyCreature(GameManager.Singleton.clientBoard, transform.parent.GetComponent<Tile>())) {
-                    //this is my creature
+                            GameManager.Singleton.ArtifactOptionButton(this);
 
-                    //GameManager.Singleton.CreatureOptionButtons(this, false);
-
-                }
-                else {
-                    if (GameManager.Singleton.isAttecking) {
-                        if (transform.parent.GetComponent<Tile>().active) {
-                            
-
-                            Player p = GameManager.Singleton._networkManager.SpawnManager.GetLocalPlayerObject().GetComponent<Player>();
-                            p.UpdateAttackServerRpc(GameManager.Singleton.selectedCreature.GetComponentInParent<Tile>().GetTileID(), transform.parent.GetComponent<Tile>().GetTileID(), false);
                         }
                     }
+
+
                 }
             }
+
+
+
         }
         else if (eventData.button == PointerEventData.InputButton.Right) {
             GameManager.Singleton.panelPopup.UpdatePopup(artifact);
         }
+    }
+
+    public void UseAbility() {
+        artifact.OnAbility(GameManager.Singleton.hostBoard, GameManager.Singleton.clientBoard, transform.parent.GetComponent<Tile>(), GameManager.Singleton.isHost);
+        castedAbility = true;
+
+        // GameManager.Singleton.TurnOffOptionsAndUnselect();
+        GameManager.Singleton.TurnOffOptionsAndUnselect();
+
+
     }
 
     public void OnPointerEnter(PointerEventData eventData) {

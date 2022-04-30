@@ -121,7 +121,7 @@ public class Hand : MonoBehaviour
                 uiCards[0].GetComponent<UICard>().handID = 0;
             }
         }
-
+        GameManager.Singleton.OpponentUsedCard();
         Invoke("DisableGridLayoutGroup", 0.2f);
     }
 

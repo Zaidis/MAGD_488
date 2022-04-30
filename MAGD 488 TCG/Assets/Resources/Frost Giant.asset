@@ -15,14 +15,21 @@ MonoBehaviour:
   ID: 5006
   type: 0
   manaCost: 5
-  cardName: Frost Giant
-  cardArt: {fileID: 0}
-  cardBorder: {fileID: 0}
+  cardName: "J\u01EBtunn"
+  cardArt: {fileID: 21300000, guid: 8c38f6cdefa6d5c44ae48c8ac7542bac, type: 3}
+  cardBorder: {fileID: 21300000, guid: 90d1e6c3f21edfb45b759f3bcf9f6ddd, type: 3}
   cardFaction: 4
-  description: 'If attacked, freeze the attacker. '
-  lore: 
+  description: 
+  lore: "While \u2018giant\u2019 isn\u2019t apt to physically describe the jotunn,
+    these creatures are truly tricky. Using illusions and magic to assault their
+    enemies, especially those from Asgard. Though at first they were caught off guard
+    from the shift, they have found themselves the cream of the crop due to their
+    former brawling with actual gods. "
   artistName: 
   defaultHealthAmount: 7
   defaultPowerAmount: 2
-  myAttributes: 05000000
+  myAttributes: 01000000
   isMelee: 1
+  hasAbility: 0
+  hasTargetedAbility: 0
+  abilityCost: 0

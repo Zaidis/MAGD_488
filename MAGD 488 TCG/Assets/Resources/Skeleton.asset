@@ -20,9 +20,13 @@ MonoBehaviour:
   cardBorder: {fileID: 0}
   cardFaction: 0
   description: 
-  lore: 
-  artistName: 
+  lore: 'While fragile the animated bones of foes either freshly killed or long dead
+    provide a good phalanx to support the heavy hitters on the battlefield. '
+  artistName: Jake Sefranek
   defaultHealthAmount: 1
   defaultPowerAmount: 1
   myAttributes: 
   isMelee: 0
+  hasAbility: 0
+  hasTargetedAbility: 0
+  abilityCost: 0

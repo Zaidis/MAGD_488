@@ -292,19 +292,25 @@ public class GameManager : MonoBehaviour {
 
     public void DrawTopCard(List<Card> deck) {
         //myHand.myCards.Add(deck[0]);
-        if(deck[0] != null) {
-            myHand.AddCardToHand(deck[0]);
-            deck.RemoveAt(0);
+        if(deck.Count >= 1) {
+            if (deck[0] != null) {
+                myHand.AddCardToHand(deck[0]);
+                deck.RemoveAt(0);
+            }
         }
+        
         
     }
 
     public void DrawTopCard() {
         //myHand.myCards.Add(deck[0]);
-        if (deck[0] != null) {
-            myHand.AddCardToHand(deck[0]);
-            deck.RemoveAt(0);
+        if(deck.Count >= 1) {
+            if (deck[0] != null) {
+                myHand.AddCardToHand(deck[0]);
+                deck.RemoveAt(0);
+            }
         }
+        
 
     }
     public GameObject NewToken(int cardID) //Creates Token based on card type and return gameObject
@@ -459,28 +465,9 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    public void OpponentHandAddCard(bool t) {
-        if (isHost) {
-            if (!t) {
-                //if you are the host, and the drawn card was from the client...
+    
 
-                opponentHand.AddCardToHand();
-
-            }
-        } else {
-            if (t) {
-                //if you are the host, and the drawn card was from the client...
-
-                opponentHand.AddCardToHand();
-
-            }
-        }
-    }
-
-    public void OpponentDrawCard() {
-        Player player = _networkManager.SpawnManager.GetLocalPlayerObject().GetComponent<Player>();
-        player.UpdateDrawCardServerRpc(isHost);
-    }
+    
 
     public void TestDrawCard(Card card) {
         myHand.AddCardToHand(card);
@@ -677,6 +664,44 @@ public class GameManager : MonoBehaviour {
 
         
     }
+
+    public void ArtifactOptionButton(ArtifactToken token) {
+
+        if (isHost) {
+            ResetAllTiles(hostBoard);
+        }
+        else {
+            ResetAllTiles(clientBoard);
+        }
+        int counter = 0;
+        abilityOption.token = token;
+        token.GetComponent<Token>().ChangeMaterial(m_selected);
+
+        attackTokenOption.gameObject.SetActive(false);
+        attackPlayerOption.gameObject.SetActive(false);
+        abilityOption.gameObject.SetActive(false);
+
+        if (Singleton.isHost) {
+            if (token.artifact.hasAbility) {
+                if(token.artifact.abilityCost <= hostCurrentMana) {
+                    if (!token.castedAbility) {
+                        abilityOption.transform.position = hostOptionSpawnLocations[counter].position;
+                        abilityOption.gameObject.SetActive(true);
+                    }
+                }
+            }
+        } else {
+            if (token.artifact.hasAbility) {
+                if (token.artifact.abilityCost <= clientCurrentMana) {
+                    if (!token.castedAbility) {
+                        abilityOption.transform.position = clientOptionSpawnLocations[counter].position;
+                        abilityOption.gameObject.SetActive(true);
+                    }
+                }
+            }
+        }
+    }
+
     IEnumerator SafeSceneChange(float time, string scene) {
         yield return new WaitForSeconds(time);
         NetworkManager.Singleton.Shutdown();
@@ -691,7 +716,47 @@ public class GameManager : MonoBehaviour {
             clientBoard[id].token.GetComponent<CreatureToken>().AttackPlayer();
         }
     }
-    
 
-    
+    public void OpponentDrawCard() {
+        Player player = _networkManager.SpawnManager.GetLocalPlayerObject().GetComponent<Player>();
+        player.UpdateDrawCardServerRpc(isHost);
+    }
+
+    public void OpponentHandAddCard(bool t) {
+        if (isHost) {
+            if (!t) {
+                //if you are the host, and the drawn card was from the client...
+                opponentHand.AddCardToHand();
+
+            }
+        }
+        else {
+            if (t) {
+                //if you are the host, and the drawn card was from the client...
+                opponentHand.AddCardToHand();
+
+            }
+        }
+    }
+    public void OpponentUsedCard() {
+        Player player = _networkManager.SpawnManager.GetLocalPlayerObject().GetComponent<Player>();
+        player.UpdateUseCardServerRpc(isHost);
+    }
+
+    public void OpponentHandRemoveCard(bool t) {
+        if (isHost) {
+            if (!t) {
+                //if you are the host, and the drawn card was from the client...
+                opponentHand.RemoveCardFromHand();
+
+            }
+        }
+        else {
+            if (t) {
+                //if you are the host, and the drawn card was from the client...
+                opponentHand.RemoveCardFromHand();
+
+            }
+        }
+    }
 }

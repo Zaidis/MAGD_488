@@ -19,8 +19,11 @@ MonoBehaviour:
   cardArt: {fileID: 21300000, guid: 17f8ac34376b4414e9384ca84c69c93a, type: 3}
   cardBorder: {fileID: 21300000, guid: 90d1e6c3f21edfb45b759f3bcf9f6ddd, type: 3}
   cardFaction: 4
-  description: Summon a Babe token (Blue Ox -> 2/2/1)
-  lore: 
+  description: 'Thorns
+
+    Create a Babe token to your hand'
+  lore: 'From the forests of North America to this unknown and dangerous place. Thought
+    has lost his lifelong friend Babe, he has found work as both a logger and sellsword. '
   artistName: 
   defaultHealthAmount: 4
   defaultPowerAmount: 4
@@ -28,4 +31,5 @@ MonoBehaviour:
   isMelee: 1
   hasAbility: 0
   hasTargetedAbility: 0
+  abilityCost: 0
   babe: {fileID: 11400000, guid: 1e7621d09eddd5548a1a0f7a7be6e1f0, type: 2}

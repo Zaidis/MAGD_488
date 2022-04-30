@@ -75,6 +75,20 @@ public class Player : NetworkBehaviour {
         UpdateDrawCardClientRpc(isHost);
     }
 
+
+
+    [ClientRpc]
+    public void UpdateUseCardClientRpc(bool isHost) {
+        GameManager.Singleton.OpponentHandRemoveCard(isHost);
+    }
+    [ServerRpc]
+    public void UpdateUseCardServerRpc(bool isHost) {
+        UpdateUseCardClientRpc(isHost);
+    }
+
+
+
+
     [ClientRpc]
     public void UpdateManaClientRpc(int hostCurrent, int clientCurrent, int hostMax, int clientMax) {
         GameManager.Singleton.AffectManaValues(hostCurrent, clientCurrent, hostMax, clientMax);

@@ -20,11 +20,14 @@ MonoBehaviour:
   cardBorder: {fileID: 21300000, guid: 50a19f21e799ebe429f8c3762fb0b38f, type: 3}
   cardFaction: 0
   description: 
-  lore: 
-  artistName: 
+  lore: 'Though they are more an ally by happenstance, due to the careful attention
+    of the few living beings, these spirits only pose a threat to those who try to
+    take the main tomb. '
+  artistName: Jake Sefranek
   defaultHealthAmount: 1
   defaultPowerAmount: 2
   myAttributes: 
   isMelee: 1
   hasAbility: 0
   hasTargetedAbility: 0
+  abilityCost: 0

@@ -19,10 +19,14 @@ MonoBehaviour:
   cardArt: {fileID: 0}
   cardBorder: {fileID: 0}
   cardFaction: 0
-  description: Attribute should be Parry
-  lore: 
+  description: Pierce
+  lore: 'To those who devote themselves to the dark god, they become willing servants
+    to their mistress. '
   artistName: 
   defaultHealthAmount: 2
   defaultPowerAmount: 1
   myAttributes: 00000000
   isMelee: 1
+  hasAbility: 0
+  hasTargetedAbility: 0
+  abilityCost: 0

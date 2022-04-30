@@ -20,9 +20,13 @@ MonoBehaviour:
   cardBorder: {fileID: 0}
   cardFaction: 0
   description: 
-  lore: 
+  lore: 'From the deepest pits of the realm of brass and blood and cut off of its
+    god, this red faced devil still thirsts for blood. '
   artistName: 
   defaultHealthAmount: 2
   defaultPowerAmount: 1
   myAttributes: 
   isMelee: 1
+  hasAbility: 0
+  hasTargetedAbility: 0
+  abilityCost: 0

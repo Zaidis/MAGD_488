@@ -19,8 +19,12 @@ MonoBehaviour:
   cardArt: {fileID: 21300000, guid: eaa03d4d7a026b24387bcff036ba5b7a, type: 3}
   cardBorder: {fileID: 21300000, guid: 50a19f21e799ebe429f8c3762fb0b38f, type: 3}
   cardFaction: 0
-  description: "\rSurrounding Melee Cards: +2/0"
-  lore: 
+  description: 'On Play: Surrounding creatures gain +2/0.'
+  lore: Carved from the bones of dark apostles, these whistles are a war cry that
+    spells mutilation for anyone who can hear its whine.
   artistName: 
   defaultHealthAmount: 2
   myAttributes: 
+  hasAbility: 0
+  hasTargetedAbility: 0
+  abilityCost: 0

@@ -19,11 +19,14 @@ MonoBehaviour:
   cardArt: {fileID: 21300000, guid: 298f0b89e00e6594da899848a73bc6c6, type: 3}
   cardBorder: {fileID: 21300000, guid: 50a19f21e799ebe429f8c3762fb0b38f, type: 3}
   cardFaction: 0
-  description: 'Self-Buff: Pierce OR Cleave (4 Mana Cost) (choose at every turn)'
-  lore: 
-  artistName: 
+  description: '4 Mana: Gain Pierce.'
+  lore: 'Those most devoted to the mistress are elevated in stature and are remade
+    into hulking warriors clad in black armor. '
+  artistName: Jake Sefranek
   defaultHealthAmount: 8
   defaultPowerAmount: 4
-  myAttributes: 05000000
+  myAttributes: 
   isMelee: 1
   hasAbility: 0
+  hasTargetedAbility: 0
+  abilityCost: 4

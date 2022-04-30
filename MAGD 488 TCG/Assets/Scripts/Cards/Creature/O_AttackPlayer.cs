@@ -25,7 +25,7 @@ public class O_AttackPlayer : MonoBehaviour, IPointerClickHandler
         }
 
         token.hasAttacked = true;
-        GameManager.Singleton.TurnOffOptionsAndUnselect();
-        //GameManager.Singleton.CreatureOptionButtons(token, GameManager.Singleton.isHost);
+        //GameManager.Singleton.TurnOffOptionsAndUnselect();
+        GameManager.Singleton.CreatureOptionButtons(token, GameManager.Singleton.isHost);
     }
 }

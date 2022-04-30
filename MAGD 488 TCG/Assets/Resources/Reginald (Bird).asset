@@ -16,13 +16,17 @@ MonoBehaviour:
   type: 0
   manaCost: 1
   cardName: Reginald
-  cardArt: {fileID: 0}
-  cardBorder: {fileID: 0}
+  cardArt: {fileID: 21300000, guid: 5abe4b1037d04f148a80959615907f33, type: 3}
+  cardBorder: {fileID: 21300000, guid: 6e84f5d82359fb34cbd7b1833a4668db, type: 3}
   cardFaction: 3
-  description: Draw a card (1 Mana)
-  lore: 
-  artistName: 
+  description: '1 Mana: Reginald'
+  lore: 'Not the brightest creature, affectionately labeled reginald; he and his
+    ilk are pivotal in the communication between tribes. '
+  artistName: Salem Radey
   defaultHealthAmount: 1
   defaultPowerAmount: 1
   myAttributes: 04000000
   isMelee: 0
+  hasAbility: 1
+  hasTargetedAbility: 0
+  abilityCost: 1

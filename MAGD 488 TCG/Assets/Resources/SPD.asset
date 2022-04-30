@@ -19,9 +19,11 @@ MonoBehaviour:
   cardArt: {fileID: 21300000, guid: a79471d4d1ac4444396c6a3fb07751f4, type: 3}
   cardBorder: {fileID: 21300000, guid: 50a19f21e799ebe429f8c3762fb0b38f, type: 3}
   cardFaction: 0
-  description: 'Debuff Enemy Card: Fear Target Card (2 Mana Cost)'
-  lore: 
-  artistName: 
+  description: '2 Mana: Target creature cannot attack next turn.'
+  lore: "Though the being doesn\u2019t appear to those in the faction, it lowers
+    the morale of those within the surrounding area of the tomb. It may not be an
+    ally in the normal sense, it has been a great help in securing many harvests."
+  artistName: Jake Sefranek
   defaultHealthAmount: 5
   defaultPowerAmount: 0
   myAttributes: 

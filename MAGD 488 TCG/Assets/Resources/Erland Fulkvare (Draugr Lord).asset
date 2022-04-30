@@ -19,9 +19,14 @@ MonoBehaviour:
   cardArt: {fileID: 21300000, guid: 61951c544aebe7247947dbddbbc869e5, type: 3}
   cardBorder: {fileID: 21300000, guid: 50a19f21e799ebe429f8c3762fb0b38f, type: 3}
   cardFaction: 0
-  description: 'All Cards (ally side - for one turn): 0/+2 and Taunt (4 Mana Cost)'
-  lore: 
-  artistName: 
+  description: 'Cleave
+
+    4 Mana Cost: All allied tokens get 0/+2'
+  lore: 'As the tomb of his family was brought into this strange and dangerous world,
+    Erland was content keeping him and his tomb guarded from interlopers. However
+    as more beings approached his tomb, he thought that now being detached from his
+    homeland, why not use this opportunity to conquer once again. '
+  artistName: Jake Sefranek
   defaultHealthAmount: 4
   defaultPowerAmount: 2
   myAttributes: 01000000

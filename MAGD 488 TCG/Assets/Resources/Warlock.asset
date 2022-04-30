@@ -19,8 +19,9 @@ MonoBehaviour:
   cardArt: {fileID: 21300000, guid: 56dd19c4451a02546abc82347f7dc11c, type: 3}
   cardBorder: {fileID: 21300000, guid: 50a19f21e799ebe429f8c3762fb0b38f, type: 3}
   cardFaction: 0
-  description: 
-  lore: 
+  description: Lifesteal
+  lore: "To those who\u2019ve shown their devotion to the mistress and her dark god,
+    they are imbued with powers beyond their wildest dreams."
   artistName: 
   defaultHealthAmount: 4
   defaultPowerAmount: 3
@@ -28,3 +29,4 @@ MonoBehaviour:
   isMelee: 0
   hasAbility: 0
   hasTargetedAbility: 0
+  abilityCost: 0

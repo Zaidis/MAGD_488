@@ -19,9 +19,14 @@ MonoBehaviour:
   cardArt: {fileID: 0}
   cardBorder: {fileID: 0}
   cardFaction: 0
-  description: 'Self-Buff + Surrounding: +1/-1 (2 Mana Cost)'
-  lore: 
-  artistName: 
+  description: 'Cleave
+
+    2 Mana Cost:  Surrounding creatures and this creature
+    gain +1/-1.'
+  lore: 'Though the scenery has changed, the day-to-day lives of the Oni have not.
+    Only really aligning with Erland out of convenience they are perfectly content
+    with spreading destruction whenever it pleases them. '
+  artistName: Jake Sefranek
   defaultHealthAmount: 4
   defaultPowerAmount: 2
   myAttributes: 01000000
