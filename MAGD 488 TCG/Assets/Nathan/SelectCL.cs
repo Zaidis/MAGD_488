@@ -1,6 +1,8 @@
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine;
+using System.Collections.Generic;
+using System.Linq;
 
 public class SelectCL : MonoBehaviour, IPointerClickHandler
 {
@@ -15,12 +17,15 @@ public class SelectCL : MonoBehaviour, IPointerClickHandler
         {
             if (count < limit)
             {
-                AddToDeck();
-                
+                AddToDeck();                
             }
         }
         if (eventData.button == PointerEventData.InputButton.Right)
             DeckEditor.instance.DisplayCard(card);
+    }
+    public void OnLoadDeckInteract() {
+        if(count < limit)
+            AddToDeck();
     }
 
     void AddToDeck()

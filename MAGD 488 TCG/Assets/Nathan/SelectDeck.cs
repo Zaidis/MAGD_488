@@ -16,8 +16,9 @@ public class SelectDeck : MonoBehaviour, IPointerClickHandler
         Text_name.text = name;
     }
     public void ButtonEdit()
-    {
+    {        
         Menu.instance.OpenEditor();
+        MythosClient.instance.OnRetrieveDeckContent(name);
         DeckEditor.instance.SetDeckName(name);
     }
     public void ButtonDelete()

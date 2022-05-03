@@ -44,6 +44,7 @@ public class Menu : MonoBehaviour
     {
         ButtonSetFalse();
         deckSelect.SetActive(true);
+        deckEditor.SetActive(true);
     }
     public void ButtonSettings()
     {

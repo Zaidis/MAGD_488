@@ -13,18 +13,17 @@ public class DeckSelector : MonoBehaviour
     [Space(30)]
     [SerializeField] TMP_InputField deckName;
     [SerializeField] GameObject PrefabDeck;
-
-    private void Start()
-    {
-        MythosClient.OnDecknamesLoaded += DeckNameLoadedEvent;
-    }
     private void OnEnable()
     {
+        MythosClient.OnDecknamesLoaded += DeckNameLoadedEvent;
         Resize();
         foreach (Transform child in deckList)
             Destroy(child.gameObject);
 
         MythosClient.instance.OnRetrieveDeckNames();
+    }
+    private void OnDisable() {
+        MythosClient.OnDecknamesLoaded -= DeckNameLoadedEvent;
     }
 
     private void DeckNameLoadedEvent(List<string> deckNames) {
