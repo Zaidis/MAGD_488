@@ -118,6 +118,7 @@ public class DeckEditor : MonoBehaviour {
     }
 
     private void LoadDeckContentHandler(List<int> deck) {
+        deckID.Clear();
         foreach(SelectCL cl in selectCLs)
             cl.count = 0;
         for (int i = 0; i < deck.Count; i++) {
