@@ -19,6 +19,8 @@ public class DeckEditor : MonoBehaviour {
     public List<int> deckID = new List<int>();
     public Card[] cards;
 
+    public int deckListPrefabAmount;
+
     [SerializeField] RectTransform cardList;
     GridLayoutGroup layoutCL;
     [SerializeField] RectTransform deckList;
@@ -45,6 +47,7 @@ public class DeckEditor : MonoBehaviour {
     public GameObject PrefabDL;    
 
     private void OnEnable() {
+        cards = Resources.LoadAll("", typeof(Card)).Cast<Card>().ToArray();
         layoutCL = cardList.GetComponent<GridLayoutGroup>();
         layoutDL = deckList.GetComponent<GridLayoutGroup>();
         Resize();
@@ -147,4 +150,34 @@ public class DeckEditor : MonoBehaviour {
         manaCost.text = card.manaCost.ToString();
         cardArt.sprite = card.cardArt;
     }    
+
+    public void IncreaseDeckListScale() { //gives more room
+
+        //affect the bottom
+        deckList.offsetMin = new Vector2(deckList.offsetMin.x, deckList.offsetMin.y - 100); 
+
+    }
+
+    public void DecreaseDeckListScale() {
+
+        //affect the bottom
+        deckList.offsetMin = new Vector2(deckList.offsetMin.x, deckList.offsetMin.y + 100);
+
+    }
+
+    public void SetDeckListButtonAmount(int num) {
+        int temp = deckListPrefabAmount;
+        deckListPrefabAmount += num;
+
+        if(temp > deckListPrefabAmount) {
+            //we removed a button
+            //DecreaseDeckListScale();
+            return;
+        }
+
+        if(deckListPrefabAmount > 6) {
+            IncreaseDeckListScale();
+        } 
+
+    }
 }

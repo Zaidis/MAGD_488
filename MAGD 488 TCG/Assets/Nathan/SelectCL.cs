@@ -8,6 +8,7 @@ public class SelectCL : MonoBehaviour, IPointerClickHandler
     public Card card;
     public int count;
 
+    private SelectDL selectDL;
     public void OnPointerClick(PointerEventData eventData)
     {
         if (eventData.button == PointerEventData.InputButton.Left)
@@ -15,7 +16,7 @@ public class SelectCL : MonoBehaviour, IPointerClickHandler
             if (count < limit)
             {
                 AddToDeck();
-                count++;
+                
             }
         }
         if (eventData.button == PointerEventData.InputButton.Right)
@@ -29,6 +30,13 @@ public class SelectCL : MonoBehaviour, IPointerClickHandler
             GameObject selected = Instantiate(DeckEditor.instance.PrefabDL);
             selected.transform.SetParent(GameObject.Find("DeckList").transform);
             selected.GetComponent<SelectDL>().card = this;
+            count++;
+            selected.GetComponent<SelectDL>().UpdateInfo();
+            selectDL = selected.GetComponent<SelectDL>();
+            DeckEditor.instance.SetDeckListButtonAmount(1);
+        } else {
+            count++;
+            selectDL.UpdateInfo();
         }
 
         DeckEditor.instance.deckID.Add(card.ID);
