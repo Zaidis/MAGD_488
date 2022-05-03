@@ -259,7 +259,7 @@ public class MythosClient : MonoBehaviour {
                 list.Add(sd.name);
             OnDecknamesLoaded(list);
             return;
-        }            
+        }
         Debug.Log("Sent Deck Names Request");
         connection.Send(EncryptStringToBase64Bytes("getdecknames\r\n"));
     }
@@ -268,6 +268,7 @@ public class MythosClient : MonoBehaviour {
         if (!connection.Connected) {
             SavedDeck csd = savedDecks.decks.First(d => d.name == name);
             currentDeck.AddRange(csd.cardIds);
+            OnDeckContentLoaded(currentDeck);
             return;
         }            
         Debug.Log("Sent Deck Content Request");
@@ -278,15 +279,17 @@ public class MythosClient : MonoBehaviour {
     {
         SavedDeck savedDeck = new SavedDeck();
         savedDeck.name = name;
-        savedDeck.cardIds.AddRange(cards);
-        if(savedDecks.decks.Exists(d => d.name == name)){
+        savedDeck.cardIds = new List<int>(cards);
+        if(savedDecks.decks == null)
+            savedDecks.decks = new List<SavedDeck>();
+        if (savedDecks.decks.Exists(d => d.name == name)){
             var old = savedDecks.decks.Where(d => d.name == name).First();
             int index = savedDecks.decks.IndexOf(old);
             if(index != -1)
                 savedDecks.decks[index] = savedDeck;
         } else
             savedDecks.decks.Add(savedDeck);
-        string json = JsonUtility.ToJson(savedDecks);
+        string json = JsonUtility.ToJson(savedDecks, true);
         File.WriteAllText(Application.dataPath + "/save.json", json);
         if (!connection.Connected)
             return;
@@ -318,6 +321,8 @@ public class MythosClient : MonoBehaviour {
         connection.Send(EncryptStringToBase64Bytes("outcome\r\n" + (outcome ? "hostvictory" : "clientvictory")));
     }
     public void OnOfflinePlay() {
+        connection.Shutdown(SocketShutdown.Both);
+        connection.Close();
         SceneManager.LoadScene(menuScene);
     }
     public static async Task<(string ipv4address, ushort port, byte[] allocationIdBytes, byte[] connectionData, byte[] key, string joinCode)> AllocateRelayServerAndGetJoinCode(int maxConnections, string region = null) {
@@ -401,11 +406,13 @@ public class MythosClient : MonoBehaviour {
         }
         return plaintext;
     }
-    private class SavedDecks {
-        public List<SavedDeck> decks;
+    [System.Serializable]
+    public class SavedDecks {
+        [SerializeField] public List<SavedDeck> decks;
     }
-    private class SavedDeck {
-        public string name;
-        public List<int> cardIds;
+    [System.Serializable]
+    public class SavedDeck {
+        [SerializeField] public string name;
+        [SerializeField] public List<int> cardIds;
     }
 }

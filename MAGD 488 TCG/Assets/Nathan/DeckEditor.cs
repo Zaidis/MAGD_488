@@ -9,6 +9,7 @@ public class DeckEditor : MonoBehaviour {
     #region Singleton
     public static DeckEditor instance;
     private void Awake() {
+        MythosClient.OnDeckContentLoaded += LoadDeckContentHandler;
         if (instance != null)
             Destroy(instance.gameObject);
         instance = this;
@@ -17,6 +18,7 @@ public class DeckEditor : MonoBehaviour {
 
     public new string deckName;
     public List<int> deckID = new List<int>();
+    private List<SelectCL> selectCLs = new List<SelectCL>();
     public Card[] cards;
 
     public int deckListPrefabAmount;
@@ -44,20 +46,17 @@ public class DeckEditor : MonoBehaviour {
     [SerializeField] Image cardArt;
     [SerializeField] TextMeshProUGUI attack, health;
     [Header("Prefabs")]
-    public GameObject PrefabDL;    
-
-    private void OnEnable() {
+    public GameObject PrefabDL;
+    private void Start() {        
         cards = Resources.LoadAll("", typeof(Card)).Cast<Card>().ToArray();
         layoutCL = cardList.GetComponent<GridLayoutGroup>();
         layoutDL = deckList.GetComponent<GridLayoutGroup>();
         Resize();
-
-        FillDeckEditorPannel();
+        FillDeckEditorPannel();               
+    }
+    private void OnEnable() {
         foreach (Transform child in deckList)
             Destroy(child.gameObject);
-
-        MythosClient.OnDeckContentLoaded += LoadDeckContentHandler;
-        MythosClient.instance.OnRetrieveDeckContent(deckName);        
     }
     public void SetDeckName(string str) {
         deckName = str;
@@ -83,7 +82,7 @@ public class DeckEditor : MonoBehaviour {
         // cards = Resources.FindObjectsOfTypeAll(typeof(Card)) as Card[];
         for (int i = 0; i < cards.Length; i++)
             if (cards[i].cardName.ToLower().Contains(str.ToLower()) || str.Equals(""))
-                CreateCard(cards[i]);
+                selectCLs.Add(CreateCard(cards[i]));
     }
     void ResizeCL() {
         layoutCL.constraintCount = columnCount;
@@ -119,7 +118,13 @@ public class DeckEditor : MonoBehaviour {
     }
 
     private void LoadDeckContentHandler(List<int> deck) {
-        deckID = deck;
+        deckID.Clear();
+        foreach(SelectCL cl in selectCLs)
+            cl.count = 0;
+        for (int i = 0; i < deck.Count; i++) {
+            SelectCL cl = selectCLs.First(cl => cl.card.ID == deck[i]);
+            cl.OnLoadDeckInteract();
+        }
     }
 
     SelectCL CreateCard(Card card) {
