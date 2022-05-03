@@ -20,9 +20,18 @@ MonoBehaviour:
   cardBorder: {fileID: 0}
   cardFaction: 4
   description: '2 Mana, Discard a card: Gain +2 attack. '
-  lore: 
+  lore: Greedy and will do anything to get his hands on more gold. The only thing
+    in the world this dwarf values is gold. Oro is a gold collector and does not
+    have a preference on how he obtains his gold. Whether he stumbles upon it or
+    swipes it he is always keeping an eye out for some precious gold. Oro, having
+    to spend some of his gold in order to protect himself from predators, is now
+    trying to make up the difference as quickly as possible by searching in places
+    he has never been to before.
   artistName: 
   defaultHealthAmount: 4
   defaultPowerAmount: 4
   myAttributes: 
   isMelee: 1
+  hasAbility: 0
+  hasTargetedAbility: 0
+  abilityCost: 0

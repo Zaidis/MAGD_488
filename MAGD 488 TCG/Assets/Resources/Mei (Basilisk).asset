@@ -20,9 +20,13 @@ MonoBehaviour:
   cardBorder: {fileID: 0}
   cardFaction: 0
   description: 
-  lore: 
+  lore: Mei is trying to prove her strength after being replaced by Achraf as the
+    strongest beast in the underworld.
   artistName: 
   defaultHealthAmount: 5
   defaultPowerAmount: 5
   myAttributes: 
   isMelee: 1
+  hasAbility: 0
+  hasTargetedAbility: 0
+  abilityCost: 0

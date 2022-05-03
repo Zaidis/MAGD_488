@@ -16,13 +16,19 @@ MonoBehaviour:
   type: 0
   manaCost: 3
   cardName: JerGnome
-  cardArt: {fileID: 0}
+  cardArt: {fileID: 21300000, guid: 6864acc258d44f147b0116f4278e1eb4, type: 3}
   cardBorder: {fileID: 0}
   cardFaction: 4
   description: 
-  lore: 
-  artistName: 
+  lore: The original lawn gnome. Now after being so popular in his neighborhood,
+    he has seen more and more houses with these fake ceramic gnomes. Absolutely flabbergasted,
+    JerGnome gathered up all the neighborhood gnomes at night and threw them into
+    a local river. JerGnome now must execute every imposter lawn gnome in the world.
+  artistName: Katie Pollock
   defaultHealthAmount: 3
   defaultPowerAmount: 3
   myAttributes: 
   isMelee: 1
+  hasAbility: 0
+  hasTargetedAbility: 0
+  abilityCost: 0

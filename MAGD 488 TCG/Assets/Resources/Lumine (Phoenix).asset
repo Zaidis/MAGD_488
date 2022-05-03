@@ -16,16 +16,33 @@ MonoBehaviour:
   type: 0
   manaCost: 3
   cardName: Lumine
-  cardArt: {fileID: 0}
+  cardArt: {fileID: 21300000, guid: cf6d0e6df4d39e745b847d16e1b5e670, type: 3}
   cardBorder: {fileID: 0}
   cardFaction: 1
   description: 'Heals 1 hp to target area (6 targets max) (4 mana cost)
 
     Attribute
     should be Endure'
-  lore: 
-  artistName: 
+  lore: Lumine is a 900 year old Phoenix. They are on their 3rd life and on their
+    current longest. Lumine has experienced many joys in their lives that they are
+    continuously grateful for. They love to be around children and in their home
+    realm they, and still in this realm, go to orphanages and hospitals and sing
+    songs for them. They have been present for multiple deaths and done their best
+    to make the passing as peaceful and loving as possible. During the times of war
+    their songs rang just as much as the battle sounds raged. For a couple decades
+    Lumine was unable to sing and their heart broke. They entered an era of seclusion
+    and reflected on their past. While it would have been easy to be angry and only
+    remember the hatred towards those that cause wars, become joyful at tragedy,
+    and harm the innocence, and for a time they did, Lumine chose to remember the
+    eyes of those that stared at them like their songs was a soothing balm against
+    the pain. The grips of those that clung to them as their bodies shook like Lumine
+    was the only stable thing around them. The warmth of the children that went to
+    sleep while smiling, listening to their song.
+  artistName: Katie Pollock
   defaultHealthAmount: 4
   defaultPowerAmount: 2
   myAttributes: 00000000
   isMelee: 0
+  hasAbility: 0
+  hasTargetedAbility: 0
+  abilityCost: 0

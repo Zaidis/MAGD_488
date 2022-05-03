@@ -20,9 +20,18 @@ MonoBehaviour:
   cardBorder: {fileID: 0}
   cardFaction: 3
   description: 
-  lore: 
+  lore: Atticus, a slightly older Centaur, has an exceptional talent for battle but
+    chooses not to participate in such activity. Atticus believes all battles can
+    be dueled with words. He has come to this conclusion after his rigorous battles
+    in the past. However despite this revelation, he will have to participate in
+    this war due to being drafted into the proud centaur army. Atticus has long flowing
+    white hair with a chic white coat. His tail hair is also very long and thick.
+    His skin is smooth with no scratches on it.
   artistName: 
   defaultHealthAmount: 3
   defaultPowerAmount: 2
   myAttributes: 00000000
   isMelee: 1
+  hasAbility: 0
+  hasTargetedAbility: 0
+  abilityCost: 0

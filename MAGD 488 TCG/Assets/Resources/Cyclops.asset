@@ -22,9 +22,13 @@ MonoBehaviour:
   description: 'Will attack a random enemy
 
     Attribute SHould be Endure'
-  lore: 
+  lore: What they lack in depth perception they make up for in bulk in the willingness
+    to work with anything as long as there is a benefit for them.
   artistName: 
   defaultHealthAmount: 3
   defaultPowerAmount: 5
   myAttributes: 00000000
   isMelee: 1
+  hasAbility: 0
+  hasTargetedAbility: 0
+  abilityCost: 0

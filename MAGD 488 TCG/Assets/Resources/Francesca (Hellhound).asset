@@ -16,13 +16,18 @@ MonoBehaviour:
   type: 0
   manaCost: 2
   cardName: Francesca
-  cardArt: {fileID: 0}
+  cardArt: {fileID: 21300000, guid: 5f6d09a5d3a0c4640b5a3000903bf657, type: 3}
   cardBorder: {fileID: 0}
   cardFaction: 0
   description: 
-  lore: 
-  artistName: 
+  lore: An energetic beast, Francesca is about as chaotic as they come. She is a
+    restless monster that relies heavily on her jaw strength. Her sharp fangs and
+    powerful bite makes her menacing to her enemies.
+  artistName: Kelsey Preisler
   defaultHealthAmount: 3
   defaultPowerAmount: 1
   myAttributes: 
   isMelee: 1
+  hasAbility: 0
+  hasTargetedAbility: 0
+  abilityCost: 0

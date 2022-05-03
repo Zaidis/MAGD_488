@@ -21,9 +21,21 @@ MonoBehaviour:
   cardFaction: 3
   description: fireball - area fire attack for atk and applies burn for one turn
     and does half damage next turn (3 mana)
-  lore: 
+  lore: 'Aodhan is a boisterous and loud fairy. He always seems to be the life of
+    a party. Always bringing good times and leaving happy memories with those that
+    interact with him. He is always preaching about not just living a long life,
+    but a good life. A good life filled with crazy memories and good friends. Aodhan
+    might seem like a pushover or gullible fairy but is actually very tactful. He
+    seems to be able to say a lot without saying anything; and can direct a conversation
+    any way he wishes. He just tends to wish to talk about fun things. He became
+    the leader of the fairies after much discussion and debate amongst them. He was
+    neck and neck with Elin but it ultimately went to him when Elin lost his composure
+    at the last debate. '
   artistName: 
   defaultHealthAmount: 4
   defaultPowerAmount: 3
   myAttributes: 
   isMelee: 0
+  hasAbility: 0
+  hasTargetedAbility: 0
+  abilityCost: 0

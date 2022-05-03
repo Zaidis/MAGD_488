@@ -20,7 +20,10 @@ MonoBehaviour:
   cardBorder: {fileID: 0}
   cardFaction: 0
   description: 'Self-Buff: Add Thorns for the next (2) turns + -2/0 (2 Mana Cost)'
-  lore: 
+  lore: 'Though this demon has no true form, it acts like an advisor to Erland. Assisting
+    in battle plans and taking what can be guessed as pleasure when it unleashes
+    itself upon targets of strategic import so the rabble can do what they do best,
+    cause chaos and take more for feeding and rituals. '
   artistName: 
   defaultHealthAmount: 6
   defaultPowerAmount: 3

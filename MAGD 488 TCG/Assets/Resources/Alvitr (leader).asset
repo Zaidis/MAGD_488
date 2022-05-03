@@ -23,9 +23,31 @@ MonoBehaviour:
     back) enemies (2 Mana Cost)
 
     Attribute should be Endure'
-  lore: 
+  lore: Alvtir spent many years training alongside her sister, Svanhvit, and their
+    dear friend Olrun. One day they were bathing in a spring and were found by three
+    brothers, and were married to them. They spent 8 years together and in their
+    ninth year the three Valkyries left to fulfill their destiny. The three of them
+    journeyed across the plains of their home realm until they were brought to the
+    Mythos realm. Surrounded by strange creatures they have never heard of before
+    and some they have never seen before. As the eldest of her trio, Alvitr saw it
+    fit to try and bring order to this chaotic realm they were thrust into. The three
+    of them gather like-minded individuals to try and bring order. There were creatures
+    that saw them as oppressors in their new realm, new life, and went against them;
+    and those that saw their efforts for its good and followed Alvtir. Alvitr led
+    her group of people and left towards the mountains. They came across a flat plain
+    surrounded by the mountains, waterfalls, and terraces with the sun shining on
+    it. Not wanting to disrupt the balance of nature she ordered that all buildings
+    and technology work with the nature surrounding them. She founded the government
+    and its cities. She still seeks to help bring order and balance to this realm.
+    When her people saw her they saw a glow of pure light of justice and righteousness
+    that made them feel safe, but also could not look at her for too long. Though
+    she seems unapproachable everyone knows how kind she is, blunt and cutting at
+    times, but gentle as well.
   artistName: 
   defaultHealthAmount: 4
   defaultPowerAmount: 4
   myAttributes: 00000000
   isMelee: 1
+  hasAbility: 0
+  hasTargetedAbility: 0
+  abilityCost: 0

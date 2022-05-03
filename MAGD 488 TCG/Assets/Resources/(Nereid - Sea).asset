@@ -20,9 +20,13 @@ MonoBehaviour:
   cardBorder: {fileID: 0}
   cardFaction: 3
   description: 
-  lore: 
+  lore: 'These nymphs have been rather helpful in both finding the best catches and
+    preventing fishermen from accidentally wandering into the territory of sea monsters. '
   artistName: 
   defaultHealthAmount: 4
   defaultPowerAmount: 3
   myAttributes: 
   isMelee: 0
+  hasAbility: 0
+  hasTargetedAbility: 0
+  abilityCost: 0

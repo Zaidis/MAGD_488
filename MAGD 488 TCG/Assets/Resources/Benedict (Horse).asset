@@ -20,9 +20,17 @@ MonoBehaviour:
   cardBorder: {fileID: 0}
   cardFaction: 3
   description: 
-  lore: 
+  lore: Benedict chooses not to participate in the barbaric ways of the rest of the
+    centaurs. Instead he Always in search of the next adventure. He wants to explore
+    the whole world and still has so much of it to see. Benedict does most of his
+    traveling during the night. His slick black coat and long black hair blends in
+    with the darkness of the night making him exceedingly stealthy. He makes a living
+    off of stealing from and scamming random civilians.
   artistName: 
   defaultHealthAmount: 6
   defaultPowerAmount: 3
   myAttributes: 0400000005000000
   isMelee: 1
+  hasAbility: 0
+  hasTargetedAbility: 0
+  abilityCost: 0

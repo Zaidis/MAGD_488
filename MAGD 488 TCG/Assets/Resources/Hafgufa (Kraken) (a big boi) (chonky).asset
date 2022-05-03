@@ -20,9 +20,23 @@ MonoBehaviour:
   cardBorder: {fileID: 0}
   cardFaction: 2
   description: '4 Mana: Sacrifice a friendly creature, create a 3/3/1 Token in hand'
-  lore: 
+  lore: "Ruler of the Ocean Biome, Hafgufa has punished everything that has stood
+    in his path. Dismantling the villages and other monsters in this biome, Hafgua
+    quickly became the most feared creature in the ocean. However, the path taken
+    by him has not been without cost. To Hafgufa, in order to achieve true power,
+    one must shed their weaknesses. To obtain his goal of taking over the ocean biome,
+    he had to eliminate all that was dear to him. Realizing his talents at a young
+    age, Hafgufa has had the time to plot and the next phase is soon to begin\u2026
+    Hafgufa uses the water to his advantage. He drags his opponents using his tentacles
+    to strangle and drown them until their will to live is no more. Legend says that
+    his tentacles are so strong and versatile that they can support his weight which
+    allows him to walk on land. Hafgufa has left lasting impressions on the few survivors
+    who have lived to tell his monstrous tale. "
   artistName: 
   defaultHealthAmount: 7
   defaultPowerAmount: 7
   myAttributes: 
   isMelee: 1
+  hasAbility: 0
+  hasTargetedAbility: 0
+  abilityCost: 0
