@@ -13,6 +13,9 @@ public abstract class Token : MonoBehaviour {
     public GameObject cardArtHolder;
     public Image artHolder;
     public GameObject activePartOfTile; //the part that changes material
+
+    public ParticleSystem particles;
+
     public abstract void ApplyCard();
 
     public abstract void OnPlay();

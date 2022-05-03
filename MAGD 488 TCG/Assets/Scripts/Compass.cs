@@ -40,7 +40,7 @@ public class Compass : MonoBehaviour
             transform.localRotation = Quaternion.Lerp(startRotation, endRotation, i);
             yield return null;
         }
-        StartCoroutine(MoveDown(transform.localPosition, new Vector3(transform.localPosition.x, 0f, transform.localPosition.z)));
+        StartCoroutine(MoveDown(transform.localPosition, new Vector3(transform.localPosition.x, -0.008f, transform.localPosition.z)));
     }
 
     private IEnumerator MoveDown(Vector3 startPosition, Vector3 endPosition) {

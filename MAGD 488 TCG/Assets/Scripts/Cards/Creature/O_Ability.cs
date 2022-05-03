@@ -25,6 +25,8 @@ public class O_Ability : MonoBehaviour, IPointerClickHandler {
             }
             else {
                 c.UseAbility();
+                Player p = GameManager.Singleton._networkManager.SpawnManager.GetLocalPlayerObject().GetComponent<Player>();
+                p.UpdateParticlesServerRpc(token.GetComponentInParent<Tile>().GetTileID(), token.GetComponentInParent<Tile>().hostTile);
             }
         } else if(token.GetComponent<Token>() is ArtifactToken a) {
 
@@ -34,6 +36,8 @@ public class O_Ability : MonoBehaviour, IPointerClickHandler {
                 
             } else {
                 a.UseAbility();
+                Player p = GameManager.Singleton._networkManager.SpawnManager.GetLocalPlayerObject().GetComponent<Player>();
+                p.UpdateParticlesServerRpc(token.GetComponentInParent<Tile>().GetTileID(), token.GetComponentInParent<Tile>().hostTile);
             }
 
         }

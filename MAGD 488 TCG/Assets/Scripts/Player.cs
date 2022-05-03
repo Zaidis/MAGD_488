@@ -46,6 +46,17 @@ public class Player : NetworkBehaviour {
         UpdateAttackClientRpc(attackerID, attackedID, attackingFromHostSide);
     }
 
+    [ClientRpc]
+    public void UpdateParticlesClientRpc(int ID, bool hostTile) {
+        GameManager.Singleton.TokenPlayParticles(ID, hostTile);
+    }
+
+    [ServerRpc]
+    public void UpdateParticlesServerRpc(int ID, bool hostTile) {
+        UpdateParticlesClientRpc(ID, hostTile);
+    }
+
+
 
     [ClientRpc]
     public void UpdateAbilityClientRpc(int userID, bool isHostSide) {

@@ -137,6 +137,11 @@ public class CreatureToken : Token, IPointerClickHandler, IPointerEnterHandler, 
 
     }
 
+    public void PlayParticles() {
+        Debug.Log("Playing particles");
+        particles.Play();
+    }
+
     public void UseAbility() {
         creature.OnAbility(GameManager.Singleton.hostBoard, GameManager.Singleton.clientBoard, transform.parent.GetComponent<Tile>(), GameManager.Singleton.isHost);
         castedAbility = true;

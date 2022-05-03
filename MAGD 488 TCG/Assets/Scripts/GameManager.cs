@@ -384,7 +384,10 @@ public class GameManager : MonoBehaviour {
 
             if (t is CreatureToken c) {
                 c.UseAbility();
-                
+                c.PlayParticles();
+            } else if (t is ArtifactToken a) {
+                a.UseAbility();
+                a.PlayParticles();
             }
         }
         else {
@@ -392,7 +395,11 @@ public class GameManager : MonoBehaviour {
 
             if (t is CreatureToken c) {
                 c.UseAbility();
-
+                c.PlayParticles();
+            }
+            else if (t is ArtifactToken a) {
+                a.UseAbility();
+                a.PlayParticles();
             }
         }
     }
@@ -404,9 +411,11 @@ public class GameManager : MonoBehaviour {
             if(t is CreatureToken c) {
                 if (isHostSide) {
                     c.UseTargetedAbility(hostBoard[victimID]);
+                    c.PlayParticles();
                 }
                 else {
                     c.UseTargetedAbility(clientBoard[victimID]);
+                    c.PlayParticles();
                 }
             }
         } else {
@@ -414,9 +423,11 @@ public class GameManager : MonoBehaviour {
             if (t is CreatureToken c) {
                 if (isHostSide) {
                     c.UseTargetedAbility(hostBoard[victimID]);
+                    c.PlayParticles();
                 }
                 else {
                     c.UseTargetedAbility(clientBoard[victimID]);
+                    c.PlayParticles();
                 }
             }
         }
@@ -841,6 +852,29 @@ public class GameManager : MonoBehaviour {
 
                 }
 
+            }
+        }
+    }
+
+
+    public void TokenPlayParticles(int ID, bool hostTile) {
+
+        if (hostTile) {
+            Token t = hostBoard[ID].token.GetComponent<Token>();
+
+            if(t is CreatureToken c) {
+                c.PlayParticles();
+            } else if (t is ArtifactToken a) {
+                a.PlayParticles();
+            }
+        } else {
+            Token t = clientBoard[ID].token.GetComponent<Token>();
+
+            if (t is CreatureToken c) {
+                c.PlayParticles();
+            }
+            else if (t is ArtifactToken a) {
+                a.PlayParticles();
             }
         }
     }

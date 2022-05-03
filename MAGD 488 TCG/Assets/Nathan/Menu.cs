@@ -12,7 +12,7 @@ public class Menu : MonoBehaviour
     [SerializeField] GameObject settings;
     [SerializeField] GameObject deckEditor;
     [SerializeField] GameObject direct;
-
+    [SerializeField] GameObject credits;
     private void Start() => ButtonSetFalse();
     private void Update()
     {
@@ -26,6 +26,7 @@ public class Menu : MonoBehaviour
         deckEditor.SetActive(false);
         settings.SetActive(false);
         direct.SetActive(false);
+        credits.SetActive(false);
     }
 
 
@@ -54,6 +55,12 @@ public class Menu : MonoBehaviour
         ButtonSetFalse();
         deckEditor.SetActive(true);
     }
+
+    public void ButtonCredits() {
+        ButtonSetFalse();
+        credits.SetActive(true);
+    }
+
     public void ButtonExit()
     {
         Application.Quit();
