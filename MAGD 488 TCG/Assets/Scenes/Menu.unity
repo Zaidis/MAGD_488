@@ -7372,7 +7372,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &868277111
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9375,7 +9375,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Derek Woodward
+  m_text: Derek Woodard
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: bd713563eff53f64b8239d4c3afddb87, type: 2}
   m_sharedMaterial: {fileID: 5090155605296946063, guid: bd713563eff53f64b8239d4c3afddb87, type: 2}
