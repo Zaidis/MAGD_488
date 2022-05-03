@@ -16,13 +16,15 @@ MonoBehaviour:
   type: 0
   manaCost: 6
   cardName: Momo
-  cardArt: {fileID: 21300000, guid: 2edcb084b8a41d943be41a620ff5214e, type: 3}
+  cardArt: {fileID: 21300000, guid: 7bea572f0548ae84eb26522f1e7dd022, type: 3}
   cardBorder: {fileID: 21300000, guid: b684ef2707edd2643a9a053886bd2d40, type: 3}
   cardFaction: 2
-  description: 'If you summoned Arcane and Tauro, create a Celestial Token in hand.
+  description: 'Ranged
 
-    Pierce
-    should be parry'
+    If you summoned Arcane and Tauro, create a Celestial
+    Token in hand.
+
+    Pierce should be parry'
   lore: 
   artistName: 
   defaultHealthAmount: 7
@@ -31,6 +33,7 @@ MonoBehaviour:
   isMelee: 0
   hasAbility: 0
   hasTargetedAbility: 0
+  abilityCost: 0
   tauro: {fileID: 11400000, guid: bc8d94fa98e454b4fa9d51e4b73dfca8, type: 2}
   arcane: {fileID: 11400000, guid: df60778d43aaccf41a598647147d65da, type: 2}
   celestial: {fileID: 11400000, guid: e18fbea00a1378140b364cff7e1493d7, type: 2}

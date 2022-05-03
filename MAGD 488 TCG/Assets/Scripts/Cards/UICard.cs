@@ -21,6 +21,9 @@ public class UICard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
     [SerializeField] private TextMeshProUGUI cardDescription;
     [SerializeField] private TextMeshProUGUI manaCost;
     [SerializeField] private Image cardBorderArt;
+
+    public Image selectedBorder; //when you click on a card, this shows that you selected the card
+
     private void Start() {
         myTransform = GetComponent<RectTransform>();
     }
@@ -48,12 +51,16 @@ public class UICard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
 
         //if you LEFT CLICK
         if(eventData.button == PointerEventData.InputButton.Left) {
-
+            GameManager.Singleton.myHand.UnSelectCards();
             if ((GameManager.Singleton.isHost && GameManager.Singleton.IsHostTurn) || (!GameManager.Singleton.isHost && !GameManager.Singleton.IsHostTurn)) {
 
                 if (GameManager.Singleton.isHost) {
                     if (GameManager.Singleton.hostCurrentMana >= myCard.manaCost) {
                         //we can use the card. now we need to select a place to put it
+                        
+                        selectedBorder.gameObject.SetActive(true);
+                        
+
                         if (myCard.type == cardType.spell) {
                             //we do not need a place to put the spell. it just works.
                         }
@@ -62,12 +69,17 @@ public class UICard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
                             GameManager.Singleton.needsToSelectTile = true;
                             GameManager.Singleton.selectedCard = myCard;
                             GameManager.Singleton.selectedCardNumber = handID;
+
+                            GameManager.Singleton.ShowAvailableTilesToPlaceCard(myCard);
 
                         }
                     }
                 } else {
                     if (GameManager.Singleton.clientCurrentMana >= myCard.manaCost) {
                         //we can use the card. now we need to select a place to put it
+
+                        selectedBorder.gameObject.SetActive(true);
+
                         if (myCard.type == cardType.spell) {
                             //we do not need a place to put the spell. it just works.
                         }
@@ -77,6 +89,7 @@ public class UICard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
                             GameManager.Singleton.selectedCard = myCard;
                             GameManager.Singleton.selectedCardNumber = handID;
 
+                            GameManager.Singleton.ShowAvailableTilesToPlaceCard(myCard);
                         }
                     }
                 }

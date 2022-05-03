@@ -19,7 +19,7 @@ MonoBehaviour:
   cardArt: {fileID: 21300000, guid: 8c38f6cdefa6d5c44ae48c8ac7542bac, type: 3}
   cardBorder: {fileID: 21300000, guid: 90d1e6c3f21edfb45b759f3bcf9f6ddd, type: 3}
   cardFaction: 4
-  description: 
+  description: Melee
   lore: "While \u2018giant\u2019 isn\u2019t apt to physically describe the jotunn,
     these creatures are truly tricky. Using illusions and magic to assault their
     enemies, especially those from Asgard. Though at first they were caught off guard

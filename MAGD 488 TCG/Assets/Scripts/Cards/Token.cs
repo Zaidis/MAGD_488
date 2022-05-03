@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-
+using UnityEngine.UI;
 public abstract class Token : MonoBehaviour {
     public int currentHealth;  
     //public TextMeshPro Description;    
@@ -11,7 +11,7 @@ public abstract class Token : MonoBehaviour {
     public TextMeshPro Name;
     public Sprite Art;
     public GameObject cardArtHolder;
-
+    public Image artHolder;
     public GameObject activePartOfTile; //the part that changes material
     public abstract void ApplyCard();
 

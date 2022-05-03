@@ -16,10 +16,12 @@ MonoBehaviour:
   type: 0
   manaCost: 1
   cardName: Babe
-  cardArt: {fileID: 21300000, guid: c2b91a25c248093429709e47efd02e2c, type: 3}
+  cardArt: {fileID: 21300000, guid: 7bea572f0548ae84eb26522f1e7dd022, type: 3}
   cardBorder: {fileID: 21300000, guid: 90d1e6c3f21edfb45b759f3bcf9f6ddd, type: 3}
   cardFaction: 4
-  description: If Babe dies, if you control Paul Bunyan, give Paul +2/+2
+  description: 'Melee
+
+    If Babe dies, if you control Paul Bunyan, give Paul +2/+2'
   lore: 
   artistName: 
   defaultHealthAmount: 2
@@ -28,6 +30,7 @@ MonoBehaviour:
   isMelee: 1
   hasAbility: 0
   hasTargetedAbility: 0
+  abilityCost: 0
   paulBunyon: {fileID: 11400000, guid: 45ad4e2283f83c549aa1c4abcfc354f0, type: 2}
   attackMod: 2
   healthMod: 2

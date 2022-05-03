@@ -485,10 +485,10 @@ public class GameManager : MonoBehaviour {
                 Tile t = board[i].GetComponent<Tile>();
                 Tile t2 = board[i - 5].GetComponent<Tile>();
                 if (t.token != null) {
-                    t.ChangeMaterial(m_active);
+                    t.ChangeTokenMaterial(m_active);
                     t.active = true;
                 } else if(t2.token != null) { //checks the tile behind
-                    t2.ChangeMaterial(m_active);
+                    t2.ChangeTokenMaterial(m_active);
                     t2.active = true;
                 }
             }
@@ -496,7 +496,7 @@ public class GameManager : MonoBehaviour {
             for(int i = 0; i < board.Length; i++) {
                 Tile t = board[i].GetComponent<Tile>();
                 if(t.token != null) {
-                    t.ChangeMaterial(m_active);
+                    t.ChangeTokenMaterial(m_active);
                     t.active = true;
                 }
             }
@@ -511,7 +511,7 @@ public class GameManager : MonoBehaviour {
         for (int i = 0; i < board.Length; i++) {
             Tile t = board[i].GetComponent<Tile>();
             if (t.token != null) {
-                t.ChangeMaterial(m_active);
+                t.ChangeTokenMaterial(m_active);
                 t.active = true;
             }
         }
@@ -524,14 +524,14 @@ public class GameManager : MonoBehaviour {
         for (int i = 0; i < hostBoard.Length; i++) {
             Tile t = hostBoard[i].GetComponent<Tile>();
             if (t.token != null) {
-                t.ChangeMaterial(m_active);
+                t.ChangeTokenMaterial(m_active);
                 t.active = true;
             }
         }
         for (int i = 0; i < clientBoard.Length; i++) {
             Tile t = clientBoard[i].GetComponent<Tile>();
             if (t.token != null) {
-                t.ChangeMaterial(m_active);
+                t.ChangeTokenMaterial(m_active);
                 t.active = true;
             }
         }
@@ -564,7 +564,7 @@ public class GameManager : MonoBehaviour {
     public void ResetAllTiles(Tile[] board) {
         for(int i = 0; i < board.Length; i++) {
             Tile t = board[i].GetComponent<Tile>();
-            t.ChangeMaterial(m_default);
+            t.ChangeTokenMaterial(m_default);
             t.active = false;
         }
     }
@@ -755,6 +755,91 @@ public class GameManager : MonoBehaviour {
             if (t) {
                 //if you are the host, and the drawn card was from the client...
                 opponentHand.RemoveCardFromHand();
+
+            }
+        }
+    }
+
+    
+    public void ChangeAllTileMaterials() {
+        if (isHost) {
+            for(int i = 0; i < hostBoard.Length; i++) {
+                hostBoard[i].ChangeTileMaterial(m_default);
+            } 
+        } else {
+            for (int i = 0; i < clientBoard.Length; i++) {
+                clientBoard[i].ChangeTileMaterial(m_default);
+            }
+        }
+    }
+    public void ShowAvailableTilesToPlaceCard(Card card) {
+        if (isHost) {
+            if (card is Creature c) {
+                if (c.isMelee) {
+                    for (int i = 5; i < 10; i++) {
+                        if (hostBoard[i].token != null) {
+                            continue;
+                        }
+                        else {
+                            hostBoard[i].ChangeTileMaterial(m_active);
+                        }
+                    }
+                }
+                else {
+                    for (int i = 0; i < 5; i++) {
+                        if (hostBoard[i].token != null) {
+                            continue;
+                        }
+                        else {
+                            hostBoard[i].ChangeTileMaterial(m_active);
+                        }
+                    }
+                }
+            }
+            else if (card is Artifact a) {
+                for (int i = 0; i < 10; i++) {
+                    if (hostBoard[i].token != null) {
+                        continue;
+                    }
+                    else {
+                        hostBoard[i].ChangeTileMaterial(m_active);
+                    }
+                }
+            }
+        }
+        else {
+            if (card is Creature c) {
+                if (c.isMelee) {
+                    for (int i = 5; i < 10; i++) {
+                        if (clientBoard[i].token != null) {
+                            continue;
+                        }
+                        else {
+                            clientBoard[i].ChangeTileMaterial(m_active);
+                        }
+                    }
+                }
+                else {
+                    for (int i = 0; i < 5; i++) {
+                        if (clientBoard[i].token != null) {
+                            continue;
+                        }
+                        else {
+                            clientBoard[i].ChangeTileMaterial(m_active);
+                        }
+                    }
+                }
+            }
+            else if (card is Artifact a) {
+                for (int i = 0; i < 10; i++) {
+                    if (clientBoard[i].token != null) {
+                        continue;
+                    }
+                    else {
+                        clientBoard[i].ChangeTileMaterial(m_active);
+                    }
+
+                }
 
             }
         }

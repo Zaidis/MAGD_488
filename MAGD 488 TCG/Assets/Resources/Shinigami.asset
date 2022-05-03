@@ -19,7 +19,7 @@ MonoBehaviour:
   cardArt: {fileID: 21300000, guid: b00be29438ad64f489b82a7bbb948286, type: 3}
   cardBorder: {fileID: 21300000, guid: 50a19f21e799ebe429f8c3762fb0b38f, type: 3}
   cardFaction: 0
-  description: 'Pierce
+  description: 'Ranged Pierce
 
     3 Mana: Heal up to this creature''s attack value. '
   lore: 'Though the job they have taken is a lowly grunt position, the shinigami

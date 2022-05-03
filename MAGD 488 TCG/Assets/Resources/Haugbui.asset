@@ -19,7 +19,7 @@ MonoBehaviour:
   cardArt: {fileID: 21300000, guid: 78e7e3c88663101439a3f76af611920c, type: 3}
   cardBorder: {fileID: 21300000, guid: 50a19f21e799ebe429f8c3762fb0b38f, type: 3}
   cardFaction: 0
-  description: 
+  description: Melee
   lore: 'Though they are more an ally by happenstance, due to the careful attention
     of the few living beings, these spirits only pose a threat to those who try to
     take the main tomb. '

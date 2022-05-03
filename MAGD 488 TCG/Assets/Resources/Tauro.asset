@@ -16,10 +16,13 @@ MonoBehaviour:
   type: 0
   manaCost: 8
   cardName: Tauro
-  cardArt: {fileID: 21300000, guid: 5abe4b1037d04f148a80959615907f33, type: 3}
+  cardArt: {fileID: 21300000, guid: 7bea572f0548ae84eb26522f1e7dd022, type: 3}
   cardBorder: {fileID: 21300000, guid: b684ef2707edd2643a9a053886bd2d40, type: 3}
   cardFaction: 2
-  description: 'If you summoned Arcane and Momo, create a Celestial Token in hand. '
+  description: 'Melee
+
+    If you summoned Arcane and Momo, create a Celestial Token
+    in hand. '
   lore: 
   artistName: 
   defaultHealthAmount: 8
@@ -28,6 +31,7 @@ MonoBehaviour:
   isMelee: 1
   hasAbility: 0
   hasTargetedAbility: 0
+  abilityCost: 0
   momo: {fileID: 11400000, guid: 614a938cad802224698f35a94f6db7c7, type: 2}
   arcane: {fileID: 11400000, guid: df60778d43aaccf41a598647147d65da, type: 2}
   celestial: {fileID: 11400000, guid: e18fbea00a1378140b364cff7e1493d7, type: 2}

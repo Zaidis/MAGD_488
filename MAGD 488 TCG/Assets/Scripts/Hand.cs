@@ -125,7 +125,16 @@ public class Hand : MonoBehaviour
         Invoke("DisableGridLayoutGroup", 0.2f);
     }
 
+    public void UnSelectCards() {
+        for(int i = 0; i < uiCards.Count; i++) {
+            uiCards[i].GetComponent<UICard>().selectedBorder.gameObject.SetActive(false);
+        }
 
+        GameManager.Singleton.needsToSelectTile = false;
+        GameManager.Singleton.selectedCard = null;
+        GameManager.Singleton.selectedCardNumber = -5;
+        GameManager.Singleton.ChangeAllTileMaterials();
+    }
     private void RotateCards() {
         int left = 0, right = uiCards.Count - 1;
         int mid = (left + right) / 2;

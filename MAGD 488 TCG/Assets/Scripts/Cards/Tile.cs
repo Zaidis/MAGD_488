@@ -19,12 +19,14 @@ public class Tile : MonoBehaviour, IPointerClickHandler {
     }
     public void SetToken(GameObject token) {
         this.token = token;
-        
+
+        Token t = token.GetComponent<Token>();
         //new material texture
-        Renderer r = token.GetComponent<Token>().cardArtHolder.GetComponent<Renderer>();
-        
-        r.material = new Material(GameManager.Singleton.defaultShader);
-        r.material.mainTexture = token.GetComponent<Token>().Art.texture;
+        //Renderer r = token.GetComponent<Token>().cardArtHolder.GetComponent<Renderer>();
+
+        //r.material = new Material(GameManager.Singleton.defaultShader);
+        //r.material.mainTexture = token.GetComponent<Token>().Art.texture;
+        t.artHolder.sprite = t.Art;
 
         if (GameManager.Singleton.isHost) {
             token.transform.position = new Vector3(hostSpawnLocation.position.x, 0.006f, hostSpawnLocation.position.z);
@@ -94,38 +96,66 @@ public class Tile : MonoBehaviour, IPointerClickHandler {
 
     }
 
-    public void ChangeMaterial(Material mat) {
+    public void ChangeTokenMaterial(Material mat) {
         if(token != null)
             token.GetComponent<Token>().ChangeMaterial(mat);
         //GetComponent<MeshRenderer>().material = mat;
     }
+
+    public void ChangeTileMaterial(Material mat) {
+        GetComponent<MeshRenderer>().material = mat;
+    }
     public void OnPointerClick(PointerEventData eventData) {
         Debug.Log("I clicked on a tile!");
+        
         if (token == null) {
             if (GameManager.Singleton.needsToSelectTile) { //if you need to select a tile (you are playing a card)
                                                            //we have selected the tile
                 if((GameManager.Singleton.isHost && hostTile) || (!GameManager.Singleton.isHost && !hostTile)) {
-                    int manaReductionAmount = GameManager.Singleton.selectedCard.manaCost;
-                    int newCurrentMana = 0;
-                    Player p = GameManager.Singleton._networkManager.SpawnManager.GetLocalPlayerObject().GetComponent<Player>();
-                    p.UpdatePlaceCardServerRpc(GameManager.Singleton._networkManager.IsHost, GetTileID(), GameManager.Singleton.selectedCard.ID);
+                    if(GameManager.Singleton.selectedCard is Creature c) {
+                        if((c.isMelee && meleeTile) || (!c.isMelee && !meleeTile)) {
+                            int manaReductionAmount = GameManager.Singleton.selectedCard.manaCost;
+                            int newCurrentMana = 0;
+                            Player p = GameManager.Singleton._networkManager.SpawnManager.GetLocalPlayerObject().GetComponent<Player>();
+                            p.UpdatePlaceCardServerRpc(GameManager.Singleton._networkManager.IsHost, GetTileID(), GameManager.Singleton.selectedCard.ID);
 
-                    if (GameManager.Singleton.isHost) { //reduce host mana
-                        newCurrentMana = GameManager.Singleton.hostCurrentMana - manaReductionAmount;
-                        p.UpdateManaServerRpc(newCurrentMana, GameManager.Singleton.clientCurrentMana,
-                            GameManager.Singleton.hostMaxMana, GameManager.Singleton.clientMaxMana);
+                            if (GameManager.Singleton.isHost) { //reduce host mana
+                                newCurrentMana = GameManager.Singleton.hostCurrentMana - manaReductionAmount;
+                                p.UpdateManaServerRpc(newCurrentMana, GameManager.Singleton.clientCurrentMana,
+                                    GameManager.Singleton.hostMaxMana, GameManager.Singleton.clientMaxMana);
+                            }
+                            else { //reduce client mana
+                                newCurrentMana = GameManager.Singleton.clientCurrentMana - manaReductionAmount;
+                                p.UpdateManaServerRpc(GameManager.Singleton.hostCurrentMana, newCurrentMana,
+                                    GameManager.Singleton.hostMaxMana, GameManager.Singleton.clientMaxMana);
+                            }
+                            GameManager.Singleton.ChangeAllTileMaterials();
+
+                            Hand.instance.RemoveCardFromHand();
+                            GameManager.Singleton.ResetSelectedCard();
+                        }
+                    } else if (GameManager.Singleton.selectedCard is Artifact a) {
+                        int manaReductionAmount = GameManager.Singleton.selectedCard.manaCost;
+                        int newCurrentMana = 0;
+                        Player p = GameManager.Singleton._networkManager.SpawnManager.GetLocalPlayerObject().GetComponent<Player>();
+                        p.UpdatePlaceCardServerRpc(GameManager.Singleton._networkManager.IsHost, GetTileID(), GameManager.Singleton.selectedCard.ID);
+
+                        if (GameManager.Singleton.isHost) { //reduce host mana
+                            newCurrentMana = GameManager.Singleton.hostCurrentMana - manaReductionAmount;
+                            p.UpdateManaServerRpc(newCurrentMana, GameManager.Singleton.clientCurrentMana,
+                                GameManager.Singleton.hostMaxMana, GameManager.Singleton.clientMaxMana);
+                        }
+                        else { //reduce client mana
+                            newCurrentMana = GameManager.Singleton.clientCurrentMana - manaReductionAmount;
+                            p.UpdateManaServerRpc(GameManager.Singleton.hostCurrentMana, newCurrentMana,
+                                GameManager.Singleton.hostMaxMana, GameManager.Singleton.clientMaxMana);
+                        }
+                        GameManager.Singleton.ChangeAllTileMaterials();
+
+                        Hand.instance.RemoveCardFromHand();
+                        GameManager.Singleton.ResetSelectedCard();
                     }
-                    else { //reduce client mana
-                        newCurrentMana = GameManager.Singleton.clientCurrentMana - manaReductionAmount;
-                        p.UpdateManaServerRpc(GameManager.Singleton.hostCurrentMana, newCurrentMana,
-                            GameManager.Singleton.hostMaxMana, GameManager.Singleton.clientMaxMana);
-                    }
-
-
-                    Hand.instance.RemoveCardFromHand();
-                    GameManager.Singleton.ResetSelectedCard();
                 }
-
             }
         }
     }
