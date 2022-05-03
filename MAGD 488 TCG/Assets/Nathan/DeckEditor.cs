@@ -42,7 +42,7 @@ public class DeckEditor : MonoBehaviour {
     [SerializeField] TextMeshProUGUI description;
     [SerializeField] TextMeshProUGUI manaCost;
     [SerializeField] Image cardArt;
-
+    [SerializeField] TextMeshProUGUI attack, health;
     [Header("Prefabs")]
     public GameObject PrefabDL;    
 
@@ -149,6 +149,14 @@ public class DeckEditor : MonoBehaviour {
         description.text = card.description;
         manaCost.text = card.manaCost.ToString();
         cardArt.sprite = card.cardArt;
+        
+        if(card is Creature c) {
+            health.text = c.defaultHealthAmount.ToString();
+            attack.text = c.defaultPowerAmount.ToString();
+        } else if (card is Artifact a) {
+            health.text = a.defaultHealthAmount.ToString();
+        }
+
     }    
 
     public void IncreaseDeckListScale() { //gives more room
