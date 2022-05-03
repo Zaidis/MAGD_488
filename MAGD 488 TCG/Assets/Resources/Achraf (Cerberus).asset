@@ -16,13 +16,28 @@ MonoBehaviour:
   type: 0
   manaCost: 9
   cardName: Achraf
-  cardArt: {fileID: 0}
+  cardArt: {fileID: 21300000, guid: fc7384eb7510c194bb4593b4f513c0f1, type: 3}
   cardBorder: {fileID: 0}
   cardFaction: 2
   description: '1 Mana: Sacrifice a friendly creature: Heal 2 health.'
-  lore: 
-  artistName: 
+  lore: Developed in the pits of hell, Achraf assists in ruling the underworld with
+    its tremendous destructive power, now ready to overtake the rest of the world.
+    Being sealed away for centuries, Cerberus has been trained to be the official
+    watchdog of hell. Achraf is the strongest beast in hell and has been ordered
+    to leave hell to create a new hell. His only goal is to make as many beings suffer
+    as possible. The sinister presence this monster emits is so powerful that it
+    can make the weak-willed faint. It will not be before long that this monster
+    creates hell. This beast is unique in a sense that each of its heads have a different
+    type of ability. The middle one is the one that controls the body. It has a muscular
+    physique and has very powerful legs. The middle head also has the ability to
+    walk on and withstand deep red fire (600-800 degrees celsius). The left head
+    has the ability to breath
+  artistName: Kelsey Preisler
   defaultHealthAmount: 8
   defaultPowerAmount: 4
   myAttributes: 01000000
   isMelee: 1
+  hasAbility: 0
+  hasTargetedAbility: 0
+  abilityCost: 0
+  abilityCost: 0

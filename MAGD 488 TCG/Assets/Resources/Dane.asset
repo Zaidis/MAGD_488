@@ -20,9 +20,24 @@ MonoBehaviour:
   cardBorder: {fileID: 0}
   cardFaction: 1
   description: Pierce should be endure
-  lore: 
+  lore: "Dane is a human who comes across as mischievous and sometimes cruel. She
+    likes to play pranks and mess with people. She never lets it interfere with her
+    work however. Everything she turns in and works on is 100% done to its fullest
+    potential. She is the head detective for the Guiding Light faction and worked
+    hard to prove her position. Before she was in this realm she was an informant
+    for the police while working in one of the biggest crime syndicates. She always
+    dreamed of being a police officer but with rampant corruption of the police department
+    she could never fully trust them. Now in this new world she always does her best
+    to be the police officer she wanted to have before. Her untrusting nature might
+    not make her have the most bright, white glow but she has a more touch of gray,
+    dim glow around her. She still likes to prank other police officers in good jest,
+    but to those she feels like is lying to others or to themselves she\u2019ll play
+    pranks on them that force them to expose the truth."
   artistName: 
   defaultHealthAmount: 5
   defaultPowerAmount: 3
   myAttributes: 0500000000000000
   isMelee: 1
+  hasAbility: 0
+  hasTargetedAbility: 0
+  abilityCost: 0

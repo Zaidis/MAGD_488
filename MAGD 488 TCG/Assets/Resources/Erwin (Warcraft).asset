@@ -20,9 +20,15 @@ MonoBehaviour:
   cardBorder: {fileID: 0}
   cardFaction: 4
   description: "When you attack with Erwin, draw a card. \nAttribute should be parry"
-  lore: 
+  lore: 'This dwarf is great with battle strategy. He usually leads the rest of the
+    dwarves when they are feeling threatened. Erwin is a clever dwarf with the ability
+    to overturn almost any situation into his favor. He has a stocky build with an
+    unproportionally big head. '
   artistName: 
   defaultHealthAmount: 4
   defaultPowerAmount: 4
   myAttributes: 00000000
   isMelee: 1
+  hasAbility: 0
+  hasTargetedAbility: 0
+  abilityCost: 0

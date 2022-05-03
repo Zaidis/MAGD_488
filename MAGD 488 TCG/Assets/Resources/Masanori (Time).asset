@@ -20,9 +20,17 @@ MonoBehaviour:
   cardBorder: {fileID: 0}
   cardFaction: 0
   description: 
-  lore: 
+  lore: Masanori is a time kitsune with 2 tails. Masanori has recently gotten his
+    second tail and is quite proud of that fact. He got it when he came into this
+    realm. When he got to this realm he met with the other kitsune, but was scared
+    of Kimi and intimidated by Kiyoshi. Tsukiko was the most approachable but it
+    still took him a long time to try and approach her for advice and guidance. He
+    has a youthful need to impress and grow and a child's innocence.
   artistName: 
   defaultHealthAmount: 2
   defaultPowerAmount: 1
   myAttributes: 
   isMelee: 1
+  hasAbility: 0
+  hasTargetedAbility: 0
+  abilityCost: 0

@@ -20,9 +20,16 @@ MonoBehaviour:
   cardBorder: {fileID: 0}
   cardFaction: 4
   description: 
-  lore: 
+  lore: Freida, trying her best to keep the snow biome safe and healthy, is willing
+    to suit up and take on the challenges that come her way. She always wanted to
+    help protect her home and now she has the opportunity. Whether she is war fodder
+    or makes the final blow to her enemy, she knows her life has value and will help
+    protect her home.
   artistName: 
   defaultHealthAmount: 2
   defaultPowerAmount: 2
   myAttributes: 
   isMelee: 0
+  hasAbility: 0
+  hasTargetedAbility: 0
+  abilityCost: 0

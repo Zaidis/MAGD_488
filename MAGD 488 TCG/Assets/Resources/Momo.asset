@@ -25,7 +25,9 @@ MonoBehaviour:
     Token in hand.
 
     Pierce should be parry'
-  lore: 
+  lore: Tauro is a dragon that is all muscle. Tauro is a strong dragon with unimaginable
+    destructive power. He uses his strength to get whatever he wants. Also a retainer
+    of Celestial
   artistName: 
   defaultHealthAmount: 7
   defaultPowerAmount: 4

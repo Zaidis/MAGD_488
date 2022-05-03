@@ -20,9 +20,15 @@ MonoBehaviour:
   cardBorder: {fileID: 0}
   cardFaction: 4
   description: 
-  lore: 
+  lore: "Zwerg is very familiar with the physical geography of his region. He is
+    a welder and finds the best material to make world class shields. He has high
+    durability and isn\u2019t too aggressive. He is a protective dwarf and is willing
+    to help anyone in need."
   artistName: 
   defaultHealthAmount: 5
   defaultPowerAmount: 1
   myAttributes: 05000000
   isMelee: 1
+  hasAbility: 0
+  hasTargetedAbility: 0
+  abilityCost: 0

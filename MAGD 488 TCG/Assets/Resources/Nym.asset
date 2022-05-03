@@ -20,9 +20,25 @@ MonoBehaviour:
   cardBorder: {fileID: 0}
   cardFaction: 1
   description: All friendly ranged creatures +1/ +1
-  lore: 
+  lore: Nym is an elf who seems to be able to get away with anything. Though they
+    could, they never intentionally do something to harm another. They just have
+    good intentions that tend to translate into inconveniences and trouble for others.
+    Though their sincerity shines through so no one can be mad at them for too long.
+    They are the leader of a monster hunting group, and each member of that squad
+    would sacrifice themselves for them in an instant. Nym themselves do not know
+    about this, nor would they ever ask that of them. They would sooner sacrifice
+    themselves than ask it of them. Nym can charm anyone they talk to within minutes
+    of meeting them. Nym has a habit of talking too much about their own business
+    and other people's business. Everyone that knows of Nym knows not to gossip with
+    them or tell them secrets because Nym will accidentally blab it to the next person
+    they talk to. One of Nym's favorite places to be in is the kitchen. They seem
+    to have a bottomless stomach and is an excellent cook. If there ever comes a
+    time when Nym could retire they would open a restaurant of their very own.
   artistName: 
   defaultHealthAmount: 4
   defaultPowerAmount: 3
   myAttributes: 
   isMelee: 0
+  hasAbility: 0
+  hasTargetedAbility: 0
+  abilityCost: 0

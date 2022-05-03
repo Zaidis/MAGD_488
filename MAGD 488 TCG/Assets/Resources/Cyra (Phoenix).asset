@@ -23,9 +23,27 @@ MonoBehaviour:
 
     Sacrifices themselves for surrounding
     Ally''s or player if about to die (restores health based on cyra''s attack) (Passive)'
-  lore: 
+  lore: "Cyra is a phoenix who has lived for about 1300 years. They are currently
+    on their 12th life, being reborn 11 times, and has been in this cycle for about
+    80 years. Their longest life was about 200 years and the shortest 1 month. They
+    are rambunctious and daring, to a frightening degree. If someone asks \u201CWhat
+    would happen if you\u2026\u201D or \u201CDo you think you could survive\u2026\u201D
+    Cyra is the first to volunteer to do it. Without prompting sometimes and with
+    absolutely no warning. Their disregard for their own safety has been a cause
+    of concern for those closest to them, and the arguments that ensue have lost
+    some. What gave them their lack of sense of safety and care for one\u2019s life
+    was an incident that happened in their fourth life. Cyra came from a realm where
+    magical creatures were taken and experimented on. They did their best to protect
+    the other creatures before their capture, but sacrificed themselves to protect
+    a group of magical creatures. They were captured and experimented on multiple
+    times and were forced to die in gruesome manners multiple times. Even in captivity
+    they would try and protect those that they can. It still haunts them the lives
+    they couldn\u2019t save and their own screams"
   artistName: 
   defaultHealthAmount: 4
   defaultPowerAmount: 2
   myAttributes: 00000000
   isMelee: 0
+  hasAbility: 0
+  hasTargetedAbility: 0
+  abilityCost: 0

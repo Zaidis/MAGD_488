@@ -21,9 +21,17 @@ MonoBehaviour:
   cardFaction: 0
   description: Tornado - captures surrounding enemies (sides, front, back, diagonally)
     and randomizes their landing stop and dealing 2 damage
-  lore: 
+  lore: Kimi is a wind kitsune with 9 tails. Kimi is an old kitsune and has gotten
+    her 9 tails before coming to this realm. Kimi is a proud kitsune with an arrogant
+    attitude. When Masanori went to Tsukiko for advice and guidance rather than her,
+    her pride got wounded. She became more bristly towards Masanori and Tsukiko.
+    She likes to go and find Kiyoshi and tease him, but also finds herself becoming
+    proud when she sees him coming closer and closer to getting his new tail.
   artistName: 
   defaultHealthAmount: 4
   defaultPowerAmount: 5
   myAttributes: 01000000
   isMelee: 0
+  hasAbility: 0
+  hasTargetedAbility: 0
+  abilityCost: 0

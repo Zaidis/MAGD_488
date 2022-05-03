@@ -16,13 +16,20 @@ MonoBehaviour:
   type: 0
   manaCost: 6
   cardName: Rosalia
-  cardArt: {fileID: 0}
+  cardArt: {fileID: 21300000, guid: a0f2e9db307487c42a99b8cea3b5ad27, type: 3}
   cardBorder: {fileID: 0}
   cardFaction: 3
   description: 'If damaged gain +2 atk for next turn '
-  lore: 
-  artistName: 
+  lore: Rosalia is a strong centaur that has consistently competed at the battle
+    royals throughout the years. She has not been the luckiest however. Her best
+    finish was 2nd in what was the previous Dons final victory. Rosalia has a rough
+    coat of black and white fur. She has scars all over his body from the numerous
+    battles she has partaken in. Rosalia fights for the thrill, nothing more.
+  artistName: Salem Radey
   defaultHealthAmount: 6
   defaultPowerAmount: 3
   myAttributes: 
   isMelee: 1
+  hasAbility: 0
+  hasTargetedAbility: 0
+  abilityCost: 0

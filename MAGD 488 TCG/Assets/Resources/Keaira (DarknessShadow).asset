@@ -20,9 +20,18 @@ MonoBehaviour:
   cardBorder: {fileID: 0}
   cardFaction: 3
   description: Undetected - cannot be targeted for a turn (3 mana cost)
-  lore: 
+  lore: "Keaira is a materialistic and sticky finger fairy. She loves to surround
+    herself with jewels and shiny objects. She\u2019ll use her darkness to shroud
+    her movements as she finds something shiny. It\u2019s almost compulsory at this
+    point for her to take something that draws her in. She becomes giddy like a child
+    when she is playing with her jewels and collected items. It becomes hard to part
+    with her objects when she has them even if she needs to trade them or sell them;
+    or to add magic to any of her jewels for her protection."
   artistName: 
   defaultHealthAmount: 2
   defaultPowerAmount: 2
   myAttributes: 
   isMelee: 1
+  hasAbility: 0
+  hasTargetedAbility: 0
+  abilityCost: 0
