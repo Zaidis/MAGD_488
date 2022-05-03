@@ -60,6 +60,9 @@ public class GameManager : MonoBehaviour {
     public Compass compass;
     public int compassYRotation;
 
+    [Header("Attribute Tool Tips")]
+    public Tooltip tooltip;
+
     #region End Turn Buttons
     [Header("End Turn Buttons")]
     public GameObject hostButton;
