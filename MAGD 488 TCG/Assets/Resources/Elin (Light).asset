@@ -20,8 +20,16 @@ MonoBehaviour:
   cardBorder: {fileID: 21300000, guid: 6e84f5d82359fb34cbd7b1833a4668db, type: 3}
   cardFaction: 3
   description: Ranged
-  lore: 
-  artistName: 
+  lore: Elin is a temperamental and passionate fairy. He has had trouble with his
+    temper since he was a young child and has done his best to control it. He has
+    made great strides throughout his life, but in the last debate for who should
+    lead the fairies he was becoming frustrated with the stagnation of who should
+    lead and blew up at his opponent, Aodhan. This led to the declaration that Aodhan
+    would represent the fairies. While he understands the reasoning behind it it
+    still leaves a bitter taste in his mouth. While remaining to be a sort of leader
+    or go to for people in official matters he tends to stay quiet at meetings to
+    avoid blowing up.
+  artistName: Salem Radey
   defaultHealthAmount: 3
   defaultPowerAmount: 4
   myAttributes: 

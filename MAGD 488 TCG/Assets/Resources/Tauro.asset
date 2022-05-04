@@ -16,15 +16,17 @@ MonoBehaviour:
   type: 0
   manaCost: 8
   cardName: Tauro
-  cardArt: {fileID: 21300000, guid: 7bea572f0548ae84eb26522f1e7dd022, type: 3}
+  cardArt: {fileID: 21300000, guid: 0ebb96fb7c7397842889a758dc820f79, type: 3}
   cardBorder: {fileID: 21300000, guid: b684ef2707edd2643a9a053886bd2d40, type: 3}
   cardFaction: 2
   description: 'Melee
 
     If you summoned Arcane and Momo, create a Celestial Token
     in hand. '
-  lore: 
-  artistName: 
+  lore: Tauro is a dragon that is all muscle. Tauro is a strong dragon with unimaginable
+    destructive power. He uses his strength to get whatever he wants. Also a retainer
+    of Celestial
+  artistName: Kelsey Preisler
   defaultHealthAmount: 8
   defaultPowerAmount: 7
   myAttributes: 01000000

@@ -20,7 +20,9 @@ MonoBehaviour:
   cardBorder: {fileID: 0}
   cardFaction: 0
   description: '5 Mana: Give target creature +1/+4.'
-  lore: 
+  lore: "One of the first to meet with Erland,  the mistress has kept the tomb shrouded
+    in  a heavy fog. Though Erland has to help secure sacrifices for her \u201CDark
+    God\u201D, she has been invaluable in keeping the capital safe. \r"
   artistName: 
   defaultHealthAmount: 3
   defaultPowerAmount: 2

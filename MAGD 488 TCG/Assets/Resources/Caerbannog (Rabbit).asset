@@ -23,9 +23,16 @@ MonoBehaviour:
     Mana)
 
     Attribute should be Endure'
-  lore: 
+  lore: "Caerbannog is an unknown, a ferocious piece of work that could be anything
+    from an eldritch abomination to a simple rabbit possessed with the spirit of
+    a berserker. It is unclear how the tiny rabbit has become the way it is, the
+    tribes are lucky that it\u2019s aggression is pointed at those wishing to hunt
+    the"
   artistName: 
   defaultHealthAmount: 2
   defaultPowerAmount: 1
   myAttributes: 00000000
   isMelee: 1
+  hasAbility: 0
+  hasTargetedAbility: 0
+  abilityCost: 0

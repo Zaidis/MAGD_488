@@ -20,9 +20,26 @@ MonoBehaviour:
   cardBorder: {fileID: 0}
   cardFaction: 1
   description: Copy Health and Attack of target creature
-  lore: 
+  lore: "Faelyn is, at heart, a performer. Always acting with a flourish and flamboyance.
+    They can\u2019t help but try to have a grand speech and performance for every
+    interaction. They were a well-known actor before coming to this realm; and an
+    equally well-known thief. Though no one made the connection between the two of
+    them. Faelyn enjoyed having the secret of being a thief and made it into another
+    role of theirs. With all of their roles and the actor's urge to become their
+    character they have found themselves occasionally wondering who they really are.
+    They always try to be the perfect character. The perfect friend, the perfect
+    employee, the perfect mentor that they always change their personality to fit
+    what that perfection means to who they are interacting with. More than once they
+    have been caught staring into the mirror, like they are searching for something
+    that they want to be there but can\u2019t find it. Those that find them like
+    that don\u2019t know what to do, but to tell them it\u2019s time for the show
+    to start. They take a second and with a flourish of their hand wave them off
+    and tell them to lead the way."
   artistName: 
   defaultHealthAmount: 1
   defaultPowerAmount: 1
   myAttributes: 
   isMelee: 0
+  hasAbility: 0
+  hasTargetedAbility: 0
+  abilityCost: 0

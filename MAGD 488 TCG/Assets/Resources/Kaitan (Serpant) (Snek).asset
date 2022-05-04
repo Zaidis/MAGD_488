@@ -20,9 +20,15 @@ MonoBehaviour:
   cardBorder: {fileID: 0}
   cardFaction: 2
   description: 
-  lore: 
+  lore: "Known as the \u201CSea Snake\u201D, Kaitan ruled a few territories and counting
+    in the ocean biome. This came to a halt when Hafgufa came to power. Having surrendered
+    his territories, Kaitan is now under the protection of Hafgufa but is still a
+    very formidable beast. "
   artistName: 
   defaultHealthAmount: 7
   defaultPowerAmount: 7
   myAttributes: 
   isMelee: 1
+  hasAbility: 0
+  hasTargetedAbility: 0
+  abilityCost: 0

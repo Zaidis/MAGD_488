@@ -20,9 +20,26 @@ MonoBehaviour:
   cardBorder: {fileID: 0}
   cardFaction: 1
   description: 
-  lore: 
+  lore: "Rowan was a wanted criminal before coming into this new realm. He came from
+    a realm that didn\u2019t have any fantastical creatures like mermaids or fairies,
+    so when he came here and the awesome power of other creatures he realized how
+    small he could be. When he was settling down he saw a young child that was left
+    alone, lost and confused. He looked at the child and saw himself when he was
+    young, so he decided to be the adult that he needed when he was young and took
+    the child, Kerian, in. He took the child and went to a village and settled down
+    there. The village knows him as a kind and caring father who was always helpful.
+    Whenever someone was harassing or trying to start any trouble he was the one
+    that would take care of it. Sometimes he seemed to slip into his previous life\u2019s
+    mentality but would quickly come out of it and apologizes for it. The specifics
+    of his past, the village doesn\u2019t know, though they can guess,  but they
+    don\u2019t care. He might not have a pure white glow or even more than a dim,
+    but he protects them and is kind and fair to them. He became the representative
+    of the village and goes to the Valysus capital on the village's behalf."
   artistName: 
   defaultHealthAmount: 2
   defaultPowerAmount: 3
   myAttributes: 01000000
   isMelee: 1
+  hasAbility: 0
+  hasTargetedAbility: 0
+  abilityCost: 0

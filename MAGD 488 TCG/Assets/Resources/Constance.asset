@@ -20,9 +20,23 @@ MonoBehaviour:
   cardBorder: {fileID: 0}
   cardFaction: 1
   description: 
-  lore: 
+  lore: "Constance will do anything to uphold her honor and be true to her word.
+    In her past life she was the right hand person to a duke, and is still trying
+    to uphold her honor to him and return. She travels around trying to figure out
+    the secrets of this realm and how they all got there. She currently leads a small
+    group of people who are searching for the same thing. With each passing year
+    that they fail to find the answer her resolve is shaken. She is desperately searching
+    for an answer and does not know what she will do if it comes to be that there
+    is no way back. In her moments of doubt she sits and meditates with the weapon
+    that was given to her by the duke when she swore to him. She continues to reinforce
+    the dukedom\u2019s official armor and refuses to get rid of the weapon. She will
+    always be loyal to the Duke and no matter what comes her way she will be his
+    right hand person once again."
   artistName: 
   defaultHealthAmount: 3
   defaultPowerAmount: 4
   myAttributes: 
   isMelee: 1
+  hasAbility: 0
+  hasTargetedAbility: 0
+  abilityCost: 0

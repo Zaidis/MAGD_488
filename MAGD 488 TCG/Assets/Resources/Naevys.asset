@@ -20,9 +20,27 @@ MonoBehaviour:
   cardBorder: {fileID: 0}
   cardFaction: 1
   description: Pierce should be Endure
-  lore: 
+  lore: "Naevys is a contender for the next in line to be leader of Valysus, if Alvtir
+    ever decides to retire. Naevys, to others, is a himbo. He works out for fun and
+    is large and very very strong. Someone once saw him go to an orphanage and give
+    a piggy-back ride to all 13 kids at the same time and do laps around the orphanage.
+    He is incredibly adorable and is nice to everyone that he meets. He always gives
+    everyone the benefit of the doubt, and always seems to have the right words that
+    reach people\u2019s hearts. Though he might not look like, or act like it, he
+    is actually very insightful. Everyone thinks he\u2019s just a bear with a heart
+    of gold, but actually has a keen eye for body language and detail and is very
+    methodical in his research and learning. Naevys is the one that can enter a room
+    on the verge of war and walk away leaving peace and merry hand-shaking behind
+    him. While it, at first, comes at a surprise to people that Naevys is the most
+    likely to inherit the leadership from Alvtir, when they think about it it makes
+    perfect sense. Unlike Alvtir who\u2019s aura of justice can seem blinding and
+    unapproachable, his, an equally bright aura, is like being bathed in sunlight
+    on a perfect day."
   artistName: 
   defaultHealthAmount: 7
   defaultPowerAmount: 2
   myAttributes: 0200000000000000
   isMelee: 1
+  hasAbility: 0
+  hasTargetedAbility: 0
+  abilityCost: 0

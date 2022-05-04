@@ -16,15 +16,27 @@ MonoBehaviour:
   type: 0
   manaCost: 6
   cardName: 'Leandro '
-  cardArt: {fileID: 0}
+  cardArt: {fileID: 21300000, guid: 82660433e7d0366499d815494dbfa25e, type: 3}
   cardBorder: {fileID: 0}
   cardFaction: 3
   description: 'Attribute shoiuld be Parry
 
     4 Mana:Perm Buff Self or Ally: +1/+2'
-  lore: 
-  artistName: 
+  lore: Every 4 years the centaurs participate in a savage battle royal to find the
+    next Don (leader). Leandro was not a favorite by any means to win this competition.
+    This was his first year eligible to participate and Leandro exceeded the expectations
+    that were set for him. Continuing to surpass his limitations he even defeated
+    the previous Don who has won the last 7 of these events. Leandro defied all odds
+    to acquire the title of the Don and now his legacy begins. What separates Leandro
+    from the rest of the bunch is that he is a pegasus centaur. His majestical wings
+    extend to 14ft long and can allow him to fly at speeds over 100mph. Leandro is
+    the first pegasus centaur born in the last 150 years and has been training since
+    his birth to fulfill his dream to become the Don of the Centaurs.
+  artistName: Salem Radey
   defaultHealthAmount: 4
   defaultPowerAmount: 5
   myAttributes: 00000000
   isMelee: 1
+  hasAbility: 0
+  hasTargetedAbility: 0
+  abilityCost: 0

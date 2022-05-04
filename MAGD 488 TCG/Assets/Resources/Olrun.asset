@@ -21,9 +21,20 @@ MonoBehaviour:
   cardFaction: 1
   description: Applies dizzy to enemy has a chance to render unusable next opponent 
     turn (4 mana cost)
-  lore: 
+  lore: Olrun became friends with Alvitr and Svanhvit when they were all on the same
+    battlefield fighting for Freya, Norse Goddess. Olrun was never one to make a
+    big scene or become the center of attention. She mostly stayed within her lane
+    and appeared when she was told to do and do what needed to be done. She likes
+    to spend her time hiking, mountain climbing, and fishing. She is a very outdoorsy
+    person. Because of this she has many friends within the nymph, fairy, and other
+    nature communities. Her closest friends remain to be Alvitr and Svanhvit but
+    she is still close with Laiken, a water fairy that stays in the waters near her
+    home.
   artistName: 
   defaultHealthAmount: 3
   defaultPowerAmount: 3
   myAttributes: 
   isMelee: 0
+  hasAbility: 0
+  hasTargetedAbility: 0
+  abilityCost: 0

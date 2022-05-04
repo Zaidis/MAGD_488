@@ -20,7 +20,8 @@ MonoBehaviour:
   cardBorder: {fileID: 0}
   cardFaction: 2
   description: '3 Mana: +1 / -1'
-  lore: 
+  lore: Having random urges to kill, Lucio meanders the lands without a purpose.
+    If he is spotted he kills on sight.
   artistName: 
   defaultHealthAmount: 2
   defaultPowerAmount: 3
@@ -28,6 +29,7 @@ MonoBehaviour:
   isMelee: 1
   hasAbility: 1
   hasTargetedAbility: 0
+  abilityCost: 3
   abilityCost: 3
   attackMod: 1
   healthMod: -1

@@ -20,9 +20,14 @@ MonoBehaviour:
   cardBorder: {fileID: 0}
   cardFaction: 3
   description: 20% chance to completely dodge attack but also do no damage
-  lore: 
+  lore: While they are a little bit more jovial and tricksy than their counterparts,
+    the Naiad have been good for both looking out for those looking to gather water
+    and a deterrent for those approaching too close to any campsites.
   artistName: 
   defaultHealthAmount: 4
   defaultPowerAmount: 1
   myAttributes: 05000000
   isMelee: 1
+  hasAbility: 0
+  hasTargetedAbility: 0
+  abilityCost: 0
