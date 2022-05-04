@@ -16,13 +16,20 @@ MonoBehaviour:
   type: 0
   manaCost: 3
   cardName: 'Amazonia '
-  cardArt: {fileID: 0}
+  cardArt: {fileID: 21300000, guid: 4027fbca56533c544ad45a124752651f, type: 3}
   cardBorder: {fileID: 0}
   cardFaction: 4
   description: Reduce opponent's creature's attack by -4/0 (2 Mana)
-  lore: 
-  artistName: 
+  lore: Nothing too special about Amazonia except that she is a hard working gnome
+    that takes care of a family of four. She gathers food, hunts, cooks, cleans,
+    and sells jewelry to make money. Amazonia is a very old gnome and she has been
+    to every forest this world has to offer. She now resides in her favorite forest
+    where she thinks she can be the most profitable and beneficial for her family.
+  artistName: Katie Pollock
   defaultHealthAmount: 5
   defaultPowerAmount: 0
   myAttributes: 04000000
   isMelee: 1
+  hasAbility: 0
+  hasTargetedAbility: 0
+  abilityCost: 0

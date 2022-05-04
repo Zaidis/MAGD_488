@@ -20,9 +20,22 @@ MonoBehaviour:
   cardBorder: {fileID: 0}
   cardFaction: 1
   description: 
-  lore: 
+  lore: "Gova is a runner (she\u2019s a runner, she's a trackstar). She is someone
+    who gets nervous when around people. She tends to stick behind people and be
+    a wallflower. Sometimes she gets stuck inside her own head, so she heads down
+    to the beaches and runs alongside the coast line to clear her head. Unlike the
+    others, Gova came to this realm alone. Before she was in the realm she was in
+    the rear of her vanguard. She is always someone to come in as support, both in
+    battle and personal. Due to her quiet nature people find themselves talking to
+    her just to vent and not have someone offer unwanted advice or judgment. Just
+    quiet encouragement. Also because of this, she loves gossip. She gets excited
+    to hear gossip from other people who tell her and just what she can hear when
+    others think no one else is listening."
   artistName: 
   defaultHealthAmount: 5
   defaultPowerAmount: 3
   myAttributes: 00000000
   isMelee: 0
+  hasAbility: 0
+  hasTargetedAbility: 0
+  abilityCost: 0

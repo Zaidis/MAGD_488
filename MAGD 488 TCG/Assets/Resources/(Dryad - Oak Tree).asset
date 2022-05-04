@@ -20,9 +20,16 @@ MonoBehaviour:
   cardBorder: {fileID: 0}
   cardFaction: 3
   description: buff target ally +2 health (2 mana)
-  lore: 
+  lore: 'On the edge of the overall territory all tribes are within, she and her
+    fellow dryads act like an early warning system. Any incoming enemy, large or
+    small, hunter or army, will be heading into traps set up specifically for them. 
+    As one of the oldest nymphs on the planet, she has been pivotal in preventing
+    major possible disasters from befalling various tribes. '
   artistName: 
   defaultHealthAmount: 5
   defaultPowerAmount: 2
   myAttributes: 04000000
   isMelee: 1
+  hasAbility: 0
+  hasTargetedAbility: 0
+  abilityCost: 0

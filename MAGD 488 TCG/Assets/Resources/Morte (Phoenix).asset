@@ -16,7 +16,7 @@ MonoBehaviour:
   type: 0
   manaCost: 4
   cardName: 'Morte '
-  cardArt: {fileID: 0}
+  cardArt: {fileID: 21300000, guid: 5babcc2b902fae74582a5949ce7f8284, type: 3}
   cardBorder: {fileID: 0}
   cardFaction: 1
   description: 'Attribute should bne Endure
@@ -26,9 +26,27 @@ MonoBehaviour:
 
     applies poison to enemy directly ahead of
     placement and in 2 rounds lose 1 health (3 mana cost)'
-  lore: 
-  artistName: 
+  lore: "Morte is one of the first children born in this new realm. Their parents
+    are Reagan and Cyra. They have a couple decades, about 80 years, and haven\u2019t
+    experienced a rebirth yet. Morte is a chaotic child. They have the chaotic mind
+    of Cyra but Reagan\u2019s patience. Which means that they have insane plans that
+    never seem like they are going to work or are so complicated that no one can
+    follow; and yet they still somehow work in Morte\u2019s favor. Morte likes to
+    follow the delegation groups and travel to different capitals and observe the
+    political atmosphere. When they go to different places and see a group of people
+    who want to fight back against oppression or injustice they enter the group and
+    tell them plans on how to win. When they first did this they just told the plan
+    and the people executed it. They won and were able to overturn their oppressors,
+    but they did not have the capability to maintain or retain what Morte taught
+    them. They lost their newfound freedom and became frustrated with themselves
+    and blamed Morte. Morte became jaded from that experience but Reagan explained
+    to them what Morte should have done. He is following the delegation to observe
+    not only how they plan but how they instruct and teach people to live justly."
+  artistName: Katie Pollock
   defaultHealthAmount: 3
   defaultPowerAmount: 3
   myAttributes: 00000000
   isMelee: 0
+  hasAbility: 0
+  hasTargetedAbility: 0
+  abilityCost: 0

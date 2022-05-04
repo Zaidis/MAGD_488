@@ -21,9 +21,17 @@ MonoBehaviour:
   cardFaction: 4
   description: Electrifies an enemy - does 1 dmg every other round to affected enemies
     (2 mana)
-  lore: 
+  lore: 'Kiyoshi is a thunder kitsune with 4 tails. Kiyoshi is trying to get his
+    5th tail after spending many years in his previous realm in stagnation. He was
+    becoming frustrated with himself and is now exploring the realm trying to use
+    this new experience as a new tactic to get one. When he comes across Kimi she
+    often teases him for his progress and he snaps at her. It has become his mission
+    to at least land a hit on Kimi. '
   artistName: 
   defaultHealthAmount: 2
   defaultPowerAmount: 2
   myAttributes: 
   isMelee: 0
+  hasAbility: 0
+  hasTargetedAbility: 0
+  abilityCost: 0

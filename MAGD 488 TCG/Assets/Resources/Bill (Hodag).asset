@@ -20,9 +20,13 @@ MonoBehaviour:
   cardBorder: {fileID: 0}
   cardFaction: 3
   description: Surrounding creatures gain thorns for 1 turn (2 Mana)
-  lore: 
+  lore: Confused by the shift and the last of his species, Bill misses the easy hunting
+    of Wisconsin. Now he must participate in hunts like a hunting dog.
   artistName: 
   defaultHealthAmount: 3
   defaultPowerAmount: 2
   myAttributes: 02000000
   isMelee: 1
+  hasAbility: 0
+  hasTargetedAbility: 0
+  abilityCost: 0

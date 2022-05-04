@@ -22,9 +22,15 @@ MonoBehaviour:
   description: '3 Mana: Heal target for 2 health
 
     Remove Debuff'
-  lore: 
+  lore: 'An angelic creature who spends most of her time singing to Hafgufa. She
+    is the one person Hafgufa could not convince himself to kill. Angelica was chosen
+    for her voice and her beauty. Now she is ready to show Hafgufa her real worth
+    by risking her life. '
   artistName: 
   defaultHealthAmount: 4
   defaultPowerAmount: 2
   myAttributes: 
   isMelee: 0
+  hasAbility: 0
+  hasTargetedAbility: 0
+  abilityCost: 0

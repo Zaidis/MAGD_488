@@ -20,9 +20,22 @@ MonoBehaviour:
   cardBorder: {fileID: 0}
   cardFaction: 1
   description: Rage (+1 to attack -1 health) Perm (3 mana cost)
-  lore: 
+  lore: Svanhvit always looked up to her older sister, Alvitr. She trained for years
+    with her sister in multiple forms of combat. When her and their friend, Olrun,
+    fell into this strange realm Svanhvit first went to look for her sister. When
+    Alvitr was trying to wrangle everyone together it was Svanhvit who was acting
+    as a mediator when tensions were getting too high and hostility was brewing.
+    She stood next to her sister and welcomed the people that looked up to Alvitr.
+    Svanhvit has a kind face with warm eyes. She seems to always be smiling, even
+    passively just a small smile. When other factions are having trouble with each
+    other or within their own faction people go to her to act as a mediator. She
+    is someone that people always feel like will listen to them and that she is willing
+    to do what she can to help others find peace.
   artistName: 
   defaultHealthAmount: 4
   defaultPowerAmount: 2
   myAttributes: 05000000
   isMelee: 1
+  hasAbility: 0
+  hasTargetedAbility: 0
+  abilityCost: 0

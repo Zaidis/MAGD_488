@@ -23,7 +23,9 @@ MonoBehaviour:
 
     If damaged, gain +2/+1 and Pierce. If you summoned Momo
     and Tauro, create a Celestial Token in hand.'
-  lore: 
+  lore: Arcane is an elegant white dragon with an appearance that captivates everyone
+    that witnesses her. She is a violent dragon that acts based on her feelings.
+    This is a very dangerous trait because she is so unpredictable. Retainer of Celestial.
   artistName: 
   defaultHealthAmount: 2
   defaultPowerAmount: 3

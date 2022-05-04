@@ -16,11 +16,13 @@ MonoBehaviour:
   type: 0
   manaCost: 4
   cardName: Ragnick
-  cardArt: {fileID: 0}
+  cardArt: {fileID: 21300000, guid: 25c015d4257408e41bdfbb438858ce37, type: 3}
   cardBorder: {fileID: 0}
   cardFaction: 0
   description: '2 Mana: Increase Max Health by 1'
-  lore: 
+  lore: 'Ragnick is a monster that is a servant to the underworld. He collects humans
+    and other monsters to bring them back to the underworld for others to feast upon.
+    He is a very strong creature, most have to submit Ragnick when comes. '
   artistName: 
   defaultHealthAmount: 3
   defaultPowerAmount: 3
@@ -28,5 +30,6 @@ MonoBehaviour:
   isMelee: 1
   hasAbility: 1
   hasTargetedAbility: 0
+  abilityCost: 2
   abilityCost: 2
   healthIncrease: 1

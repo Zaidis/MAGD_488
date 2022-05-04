@@ -20,9 +20,13 @@ MonoBehaviour:
   cardBorder: {fileID: 0}
   cardFaction: 4
   description: 
-  lore: 
+  lore: Roaming the planes in search of food and treasure, ogres have been persuaded
+    to assist various factions in combat for one of the two things they look for.
   artistName: 
   defaultHealthAmount: 4
   defaultPowerAmount: 3
   myAttributes: 
   isMelee: 1
+  hasAbility: 0
+  hasTargetedAbility: 0
+  abilityCost: 0

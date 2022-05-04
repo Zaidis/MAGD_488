@@ -20,9 +20,14 @@ MonoBehaviour:
   cardBorder: {fileID: 0}
   cardFaction: 3
   description: 
-  lore: 
+  lore: Though they typically assist the Dryads with scouting for trouble, the Meliae
+    are more free to spend their time taking care of the forests that the hunted
+    call home.
   artistName: 
   defaultHealthAmount: 3
   defaultPowerAmount: 4
   myAttributes: 
   isMelee: 0
+  hasAbility: 0
+  hasTargetedAbility: 0
+  abilityCost: 0

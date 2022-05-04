@@ -20,7 +20,23 @@ MonoBehaviour:
   cardBorder: {fileID: 21300000, guid: b684ef2707edd2643a9a053886bd2d40, type: 3}
   cardFaction: 2
   description: N/A. CAN'T GO IN DECK!!!
-  lore: 
+  lore: "Trying to make the world its own, this beasts' true instincts have taken
+    over and leveled every biome in this world. Celestial, the mightiest of beasts,
+    has been dormant for hundreds of years since its last assault. During Celestial\u2019s
+    slumber, the survivors have been restoring their lands and homes as best as they
+    can. Now, the strongest beast this world has seen has finally been summoned to
+    reclaim its title from these emerging beasts and will attempt to lead this world
+    to a new dawn. This new dawn, Celestial envisions, is a world of solely dragons.
+    A world  where they are the only species alive. Celestial was summoned by three
+    younger dragons who see Celestial as their master. They believe in Celestial\u2019s
+    dream and want to see it through.  What seemed impossible, is much more of reality
+    now that a true beast has reemerged. What stands out about this beast is it's
+    slick but tough scales. This beast knows how to take a hit. Celestial is known
+    for its defensive capabilities, its scales are nearly impossible to penetrate.
+    Defense is not it's only specialty. Celestial breathes white fire (1500 degrees
+    celsius) but it is so powerful it appears more of a laser-like beam. Not having
+    wings, it resorts to using the steam clouds it produces from its nose as footing
+    for him to move in the air. "
   artistName: 
   defaultHealthAmount: 12
   defaultPowerAmount: 12

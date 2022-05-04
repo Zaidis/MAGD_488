@@ -16,16 +16,40 @@ MonoBehaviour:
   type: 0
   manaCost: 7
   cardName: Raegan
-  cardArt: {fileID: 0}
+  cardArt: {fileID: 21300000, guid: 42dae13a24558e14498d313ba17d1706, type: 3}
   cardBorder: {fileID: 0}
   cardFaction: 1
   description: 'Can make enemy flee (back into deck) (Only those that match or lower
     than mana cost) (4 mana cost)
 
     Attribute should be endure'
-  lore: 
-  artistName: 
+  lore: "Raegan is a phoenix that has lived for about 1700 years. Their longest life
+    was about 800 years, his shortest about 90 years, and has been reborn about 4
+    times. Raegan is the Chief of Police. They are currently on their 5th life and
+    have been alive for about 300 years now. Morte is their child and their partner
+    for Morte was Cyra. Phoenix\u2019s do not have life partners, since they can
+    live multiple lives, but Cyra and Raegan remain good friends. Phoenixes also
+    live in communal nesting to help raise the children. Raegan is like everyone\u2019s
+    parent. They are always looking out for everyone under them. The officers and
+    detectives under them look up to Raegan and appreciate their wisdom and experience.
+    The puns are something they can do without but Raegan has no plans to stop. They
+    are patient and wise. Before coming to this realm Raegan lived peacefully in
+    the mountains with their communal nest. However, after an attack on their nest
+    leaving Raegan as the only survivor they became bitter and filled with rage.
+    After tracking down who attacked them and exacting their revenge they found themselves
+    not filled with satisfaction nor closure. Their family was still gone and nothing
+    could bring them back. They wandered for a bit, traveling from nest to nest,
+    for years. Seeing all the young chicks and playing with them as they traveled
+    helped bring Raegan back. When Raegan and the other phoenixes were brought to
+    this realm they saw Lumine, a young chick that hasn\u2019t even had their first
+    rebirth, they immediately went into parent mode to protect them. Raegan became
+    the Chief of Police at the Guiding Light faction due to their personality and
+    their experience in life and in tracking down clues and knowing true justice."
+  artistName: Katie Pollock
   defaultHealthAmount: 5
   defaultPowerAmount: 4
   myAttributes: 00000000
   isMelee: 0
+  hasAbility: 0
+  hasTargetedAbility: 0
+  abilityCost: 0

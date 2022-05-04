@@ -20,9 +20,27 @@ MonoBehaviour:
   cardBorder: {fileID: 0}
   cardFaction: 2
   description: Attribute should be Endure
-  lore: 
+  lore: The snow biomes strongest beast has been terrorizing the villiages all over
+    the land for centuries in search for a worthy opponent. Demonstrating tremendous
+    strength through his pilages, Haaland is not to be taken lightly. He is a tall
+    muscular humanoid creature covered in white fur which allows him to endure the
+    cold temperatures during his pilages. A somewhat lazy monster, Haaland relies
+    on the villagers across the biome in order to survive. Instead of hunting himself,
+    he prefers to steal from the villagers and cleans them out of their supplies.
+    After he is satisfied he murders the villagers so they do not have to suffer
+    in the freezing climate. Haaland firmly believes in survival of the fittest.
+    He towers over most creatures with long legs and tree trunk calves. His arms
+    are the size of cannons and are just as powerful. He is a monster that relies
+    on his survival instincts and his brute strength to survive. Haaland might not
+    be the most terrifying monster out there as he looks more human than most, but
+    he is the smartest. Haaland has been able to adapt to his surroundings and take
+    advantage of things in his surroundings, such as using a tree branch as a weapon
+    or using a weapon a villager he saw use.
   artistName: 
   defaultHealthAmount: 7
   defaultPowerAmount: 4
   myAttributes: 00000000
   isMelee: 1
+  hasAbility: 0
+  hasTargetedAbility: 0
+  abilityCost: 0

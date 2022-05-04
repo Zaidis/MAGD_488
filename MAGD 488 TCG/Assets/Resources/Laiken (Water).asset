@@ -16,13 +16,22 @@ MonoBehaviour:
   type: 0
   manaCost: 1
   cardName: Laiken
-  cardArt: {fileID: 0}
+  cardArt: {fileID: 21300000, guid: cbfd580d90745f547929e12027541fd7, type: 3}
   cardBorder: {fileID: 0}
   cardFaction: 3
   description: 
-  lore: 
-  artistName: 
+  lore: "Laiken is a calm and quiet fairy. She doesn\u2019t really do much and tends
+    to just swim with the currents of life. She likes to play the harp and flute
+    while floating down a stream. When the topic of representative for the fairies
+    she immediately turned down the position saying that it was too much work. She
+    has gotten into trouble with Elin before about her carefree nature and tends
+    to avoid him. She doesn\u2019t know much about Aodhan and avoids him because
+    he is too loud. "
+  artistName: Salem Radey
   defaultHealthAmount: 2
   defaultPowerAmount: 1
   myAttributes: 
   isMelee: 1
+  hasAbility: 0
+  hasTargetedAbility: 0
+  abilityCost: 0

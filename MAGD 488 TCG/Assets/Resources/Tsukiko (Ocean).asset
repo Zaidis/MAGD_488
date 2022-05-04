@@ -21,9 +21,21 @@ MonoBehaviour:
   cardFaction: 4
   description: Whirpool - does atk dmg to surrounding enemies (sides, front, back,
     diagonally)
-  lore: 
+  lore: "Tsukiko is an ocean kitsune with 6 tails. Tsukiko got her sixth tail after
+    coming to this realm and beating a sea monster and taking control over its territory.
+    She is not someone who seeks out other people\u2019s presence, but she also does
+    not tell people to leave when they come to her. She is prideful in her own right
+    and seeks out a place of her own. When she found an ocean of her liking she took
+    it away from the one that was currently controlling it. She did not hesitate
+    in attacking the creature and fought it for many hours before defeating it. Recently
+    a young kit, Masanori, approached her for stories and guidance. She knew that
+    he was near her for some time but let him come to her before speaking to him.
+    She likes to tell stories about herself and her conquests."
   artistName: 
   defaultHealthAmount: 3
   defaultPowerAmount: 4
   myAttributes: 01000000
   isMelee: 1
+  hasAbility: 0
+  hasTargetedAbility: 0
+  abilityCost: 0

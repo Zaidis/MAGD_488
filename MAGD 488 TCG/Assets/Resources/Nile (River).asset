@@ -16,13 +16,21 @@ MonoBehaviour:
   type: 0
   manaCost: 4
   cardName: Nile
-  cardArt: {fileID: 0}
+  cardArt: {fileID: 21300000, guid: 60c05ba52c1f778479975f014f966ec3, type: 3}
   cardBorder: {fileID: 0}
   cardFaction: 4
   description: Gain parry for 1 turn (2 Mana)
-  lore: 
-  artistName: 
+  lore: Nile is a gnome that can breathe underwater. He is a special type of gnome
+    and is the only one with this unique ability. For a living, Nile travels from
+    river to river to make sure each river is flowing properly, he checks to make
+    sure each river is clean and habitable, and finally he final job is to keep people
+    from stealing all of the river's creatures. He vows to protect as many river
+    animals as he can.
+  artistName: Katie Pollock
   defaultHealthAmount: 4
   defaultPowerAmount: 2
   myAttributes: 00000000
   isMelee: 0
+  hasAbility: 0
+  hasTargetedAbility: 0
+  abilityCost: 0
