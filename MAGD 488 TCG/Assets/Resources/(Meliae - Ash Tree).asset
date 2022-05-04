@@ -16,14 +16,14 @@ MonoBehaviour:
   type: 0
   manaCost: 3
   cardName: Meliae
-  cardArt: {fileID: 0}
-  cardBorder: {fileID: 0}
+  cardArt: {fileID: 21300000, guid: a9e5ee167f69d804c94817be68ce09f8, type: 3}
+  cardBorder: {fileID: 21300000, guid: 6e84f5d82359fb34cbd7b1833a4668db, type: 3}
   cardFaction: 3
-  description: 
+  description: Ranged
   lore: Though they typically assist the Dryads with scouting for trouble, the Meliae
     are more free to spend their time taking care of the forests that the hunted
     call home.
-  artistName: 
+  artistName: Salem Radey
   defaultHealthAmount: 3
   defaultPowerAmount: 4
   myAttributes: 

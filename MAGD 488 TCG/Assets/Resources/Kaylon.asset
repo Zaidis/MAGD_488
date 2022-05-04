@@ -16,14 +16,10 @@ MonoBehaviour:
   type: 0
   manaCost: 3
   cardName: Kaylon
-  cardArt: {fileID: 0}
-  cardBorder: {fileID: 0}
+  cardArt: {fileID: 21300000, guid: 61a75222f22d51c498b7bfcb8f319828, type: 3}
+  cardBorder: {fileID: 21300000, guid: cd82d8bc9b47f2846bc65f4d3de8a764, type: 3}
   cardFaction: 1
-  description: 'Special Effect Arrows (fire/burn, etc) (4-5 mana cost)
-
-    Send
-    animal to attack (can send hawk for range attack or boar to attack melee) (4-5
-    mana cost) (send individual animal hawk = 3 mana boar = 4) (or set one animal)'
+  description: Ranged
   lore: "Kaylon was a mercenary in his ordinary realm and continued to do so when
     he was thrust into the Mythos Realm. However, unlike ordinary mercenaries that
     take whatever job is the most paying, Kaylon chooses his job by his morals. If
@@ -39,7 +35,7 @@ MonoBehaviour:
     be naturally drawn to him. He has a kind and guarded expression that makes people
     underestimate him. However in the heat of battle his face becomes closed off
     and he becomes a ruthless machine."
-  artistName: 
+  artistName: 'Lara '
   defaultHealthAmount: 2
   defaultPowerAmount: 3
   myAttributes: 

@@ -16,16 +16,18 @@ MonoBehaviour:
   type: 0
   manaCost: 2
   cardName: Lucio (Sasquatch)
-  cardArt: {fileID: 0}
-  cardBorder: {fileID: 0}
+  cardArt: {fileID: 21300000, guid: 47ecb98b386c280408e63f9e3e2b5087, type: 3}
+  cardBorder: {fileID: 21300000, guid: b684ef2707edd2643a9a053886bd2d40, type: 3}
   cardFaction: 2
-  description: '3 Mana: +1 / -1'
+  description: 'Melee
+
+    3 Mana: +1 / -1'
   lore: Having random urges to kill, Lucio meanders the lands without a purpose.
     If he is spotted he kills on sight.
-  artistName: 
+  artistName: Kelsey Preisler
   defaultHealthAmount: 2
   defaultPowerAmount: 3
-  myAttributes: 00000000
+  myAttributes: 
   isMelee: 1
   hasAbility: 1
   hasTargetedAbility: 0

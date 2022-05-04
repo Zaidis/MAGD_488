@@ -16,13 +16,13 @@ MonoBehaviour:
   type: 0
   manaCost: 1
   cardName: Cultist
-  cardArt: {fileID: 0}
-  cardBorder: {fileID: 0}
+  cardArt: {fileID: 21300000, guid: 06b8018beb71fed40bbb8ed85362f7a7, type: 3}
+  cardBorder: {fileID: 21300000, guid: 50a19f21e799ebe429f8c3762fb0b38f, type: 3}
   cardFaction: 0
-  description: Pierce
+  description: Melee Pierce
   lore: 'To those who devote themselves to the dark god, they become willing servants
     to their mistress. '
-  artistName: 
+  artistName: Jake Sefranek
   defaultHealthAmount: 2
   defaultPowerAmount: 1
   myAttributes: 00000000

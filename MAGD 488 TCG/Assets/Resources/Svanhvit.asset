@@ -16,10 +16,10 @@ MonoBehaviour:
   type: 0
   manaCost: 3
   cardName: Svanhvit
-  cardArt: {fileID: 0}
-  cardBorder: {fileID: 0}
+  cardArt: {fileID: 21300000, guid: 96aa03ce7bf8ead47ad22bded2ba8958, type: 3}
+  cardBorder: {fileID: 21300000, guid: cd82d8bc9b47f2846bc65f4d3de8a764, type: 3}
   cardFaction: 1
-  description: Rage (+1 to attack -1 health) Perm (3 mana cost)
+  description: Melee
   lore: Svanhvit always looked up to her older sister, Alvitr. She trained for years
     with her sister in multiple forms of combat. When her and their friend, Olrun,
     fell into this strange realm Svanhvit first went to look for her sister. When
@@ -31,7 +31,7 @@ MonoBehaviour:
     other or within their own faction people go to her to act as a mediator. She
     is someone that people always feel like will listen to them and that she is willing
     to do what she can to help others find peace.
-  artistName: 
+  artistName: Katie Pollock
   defaultHealthAmount: 4
   defaultPowerAmount: 2
   myAttributes: 05000000

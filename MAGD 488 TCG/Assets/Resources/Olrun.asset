@@ -17,10 +17,9 @@ MonoBehaviour:
   manaCost: 3
   cardName: Olrun
   cardArt: {fileID: 0}
-  cardBorder: {fileID: 0}
+  cardBorder: {fileID: 21300000, guid: cd82d8bc9b47f2846bc65f4d3de8a764, type: 3}
   cardFaction: 1
-  description: Applies dizzy to enemy has a chance to render unusable next opponent 
-    turn (4 mana cost)
+  description: Ranged
   lore: Olrun became friends with Alvitr and Svanhvit when they were all on the same
     battlefield fighting for Freya, Norse Goddess. Olrun was never one to make a
     big scene or become the center of attention. She mostly stayed within her lane
@@ -30,7 +29,7 @@ MonoBehaviour:
     nature communities. Her closest friends remain to be Alvitr and Svanhvit but
     she is still close with Laiken, a water fairy that stays in the waters near her
     home.
-  artistName: 
+  artistName: Katie Pollock
   defaultHealthAmount: 3
   defaultPowerAmount: 3
   myAttributes: 

@@ -16,11 +16,10 @@ MonoBehaviour:
   type: 0
   manaCost: 3
   cardName: Tsukiko
-  cardArt: {fileID: 0}
-  cardBorder: {fileID: 0}
+  cardArt: {fileID: 21300000, guid: 28b21cd41bbbbde4789d1d48ff7a1b9a, type: 3}
+  cardBorder: {fileID: 21300000, guid: 90d1e6c3f21edfb45b759f3bcf9f6ddd, type: 3}
   cardFaction: 4
-  description: Whirpool - does atk dmg to surrounding enemies (sides, front, back,
-    diagonally)
+  description: Melee Cleave
   lore: "Tsukiko is an ocean kitsune with 6 tails. Tsukiko got her sixth tail after
     coming to this realm and beating a sea monster and taking control over its territory.
     She is not someone who seeks out other people\u2019s presence, but she also does
@@ -31,7 +30,7 @@ MonoBehaviour:
     a young kit, Masanori, approached her for stories and guidance. She knew that
     he was near her for some time but let him come to her before speaking to him.
     She likes to tell stories about herself and her conquests."
-  artistName: 
+  artistName: Kelsey Preisler
   defaultHealthAmount: 3
   defaultPowerAmount: 4
   myAttributes: 01000000

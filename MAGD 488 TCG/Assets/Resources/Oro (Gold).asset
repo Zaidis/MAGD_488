@@ -16,10 +16,10 @@ MonoBehaviour:
   type: 0
   manaCost: 5
   cardName: Oro
-  cardArt: {fileID: 0}
-  cardBorder: {fileID: 0}
+  cardArt: {fileID: 21300000, guid: a84a2f9c876d1ea4a92daddaa76c9f44, type: 3}
+  cardBorder: {fileID: 21300000, guid: 90d1e6c3f21edfb45b759f3bcf9f6ddd, type: 3}
   cardFaction: 4
-  description: '2 Mana, Discard a card: Gain +2 attack. '
+  description: Melee
   lore: Greedy and will do anything to get his hands on more gold. The only thing
     in the world this dwarf values is gold. Oro is a gold collector and does not
     have a preference on how he obtains his gold. Whether he stumbles upon it or
@@ -27,7 +27,7 @@ MonoBehaviour:
     to spend some of his gold in order to protect himself from predators, is now
     trying to make up the difference as quickly as possible by searching in places
     he has never been to before.
-  artistName: 
+  artistName: Jake Sefranek
   defaultHealthAmount: 4
   defaultPowerAmount: 4
   myAttributes: 

@@ -16,16 +16,16 @@ MonoBehaviour:
   type: 0
   manaCost: 2
   cardName: Freida
-  cardArt: {fileID: 0}
-  cardBorder: {fileID: 0}
+  cardArt: {fileID: 21300000, guid: 7c0c77faa413ee24eba56088f6fa7f67, type: 3}
+  cardBorder: {fileID: 21300000, guid: 90d1e6c3f21edfb45b759f3bcf9f6ddd, type: 3}
   cardFaction: 4
-  description: 
+  description: Ranged
   lore: Freida, trying her best to keep the snow biome safe and healthy, is willing
     to suit up and take on the challenges that come her way. She always wanted to
     help protect her home and now she has the opportunity. Whether she is war fodder
     or makes the final blow to her enemy, she knows her life has value and will help
     protect her home.
-  artistName: 
+  artistName: Jake Sefranek
   defaultHealthAmount: 2
   defaultPowerAmount: 2
   myAttributes: 

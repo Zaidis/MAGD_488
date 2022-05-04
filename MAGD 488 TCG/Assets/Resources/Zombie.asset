@@ -16,7 +16,7 @@ MonoBehaviour:
   type: 0
   manaCost: 2
   cardName: Zombie
-  cardArt: {fileID: 21300000, guid: 7bea572f0548ae84eb26522f1e7dd022, type: 3}
+  cardArt: {fileID: 21300000, guid: 0a1bf91a2d7f1704a818e37906b0be87, type: 3}
   cardBorder: {fileID: 21300000, guid: 50a19f21e799ebe429f8c3762fb0b38f, type: 3}
   cardFaction: 0
   description: 'Melee Pierce

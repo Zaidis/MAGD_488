@@ -17,9 +17,9 @@ MonoBehaviour:
   manaCost: 3
   cardName: JerGnome
   cardArt: {fileID: 21300000, guid: 6864acc258d44f147b0116f4278e1eb4, type: 3}
-  cardBorder: {fileID: 0}
+  cardBorder: {fileID: 21300000, guid: 90d1e6c3f21edfb45b759f3bcf9f6ddd, type: 3}
   cardFaction: 4
-  description: 
+  description: Melee
   lore: The original lawn gnome. Now after being so popular in his neighborhood,
     he has seen more and more houses with these fake ceramic gnomes. Absolutely flabbergasted,
     JerGnome gathered up all the neighborhood gnomes at night and threw them into

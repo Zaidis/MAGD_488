@@ -16,13 +16,13 @@ MonoBehaviour:
   type: 0
   manaCost: 2
   cardName: Devils
-  cardArt: {fileID: 0}
-  cardBorder: {fileID: 0}
+  cardArt: {fileID: 21300000, guid: 3a83654814de8154db760439365ff2fd, type: 3}
+  cardBorder: {fileID: 21300000, guid: 50a19f21e799ebe429f8c3762fb0b38f, type: 3}
   cardFaction: 0
-  description: 
+  description: Melee
   lore: 'From the deepest pits of the realm of brass and blood and cut off of its
     god, this red faced devil still thirsts for blood. '
-  artistName: 
+  artistName: Jake Sefranek
   defaultHealthAmount: 2
   defaultPowerAmount: 1
   myAttributes: 

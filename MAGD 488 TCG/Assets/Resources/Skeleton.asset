@@ -16,10 +16,10 @@ MonoBehaviour:
   type: 0
   manaCost: 1
   cardName: Skeleton
-  cardArt: {fileID: 0}
-  cardBorder: {fileID: 0}
+  cardArt: {fileID: 21300000, guid: 56f85008dfb7ffc40ba211198bce558f, type: 3}
+  cardBorder: {fileID: 21300000, guid: 50a19f21e799ebe429f8c3762fb0b38f, type: 3}
   cardFaction: 0
-  description: 
+  description: Ranged
   lore: 'While fragile the animated bones of foes either freshly killed or long dead
     provide a good phalanx to support the heavy hitters on the battlefield. '
   artistName: Jake Sefranek

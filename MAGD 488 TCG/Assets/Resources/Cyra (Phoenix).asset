@@ -16,13 +16,10 @@ MonoBehaviour:
   type: 0
   manaCost: 5
   cardName: Cyra (Phoenix)
-  cardArt: {fileID: 0}
-  cardBorder: {fileID: 0}
+  cardArt: {fileID: 21300000, guid: 2edcb084b8a41d943be41a620ff5214e, type: 3}
+  cardBorder: {fileID: 21300000, guid: cd82d8bc9b47f2846bc65f4d3de8a764, type: 3}
   cardFaction: 1
-  description: 'Attribute shoiuld be Endure
-
-    Sacrifices themselves for surrounding
-    Ally''s or player if about to die (restores health based on cyra''s attack) (Passive)'
+  description: Ranged Pierce
   lore: "Cyra is a phoenix who has lived for about 1300 years. They are currently
     on their 12th life, being reborn 11 times, and has been in this cycle for about
     80 years. Their longest life was about 200 years and the shortest 1 month. They
@@ -39,7 +36,7 @@ MonoBehaviour:
     times and were forced to die in gruesome manners multiple times. Even in captivity
     they would try and protect those that they can. It still haunts them the lives
     they couldn\u2019t save and their own screams"
-  artistName: 
+  artistName: Katie Pollock
   defaultHealthAmount: 4
   defaultPowerAmount: 2
   myAttributes: 00000000

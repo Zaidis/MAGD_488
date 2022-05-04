@@ -8133,12 +8133,13 @@ MonoBehaviour:
   aspectRation: 1
   IFsearch: {fileID: 265498442}
   Text_name: {fileID: 1123141963}
-  Button_save: {fileID: 0}
+  Button_save: {fileID: 1878788561}
   GOcard: {fileID: 1413685241}
   cardName: {fileID: 2086693630}
   description: {fileID: 342160251}
   manaCost: {fileID: 2120485536}
   cardArt: {fileID: 714180570}
+  border: {fileID: 1120010930}
   attack: {fileID: 1422372072}
   health: {fileID: 748020255}
   PrefabDL: {fileID: 3169702027782735365, guid: ae4474a4684e92940ab4bdfddbca8c0e, type: 3}
@@ -16693,7 +16694,7 @@ GameObject:
   - component: {fileID: 1878788562}
   - component: {fileID: 1878788561}
   m_Layer: 5
-  m_Name: ButtonExit (1)
+  m_Name: ButtonSave
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

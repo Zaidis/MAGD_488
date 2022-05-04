@@ -16,16 +16,16 @@ MonoBehaviour:
   type: 0
   manaCost: 4
   cardName: Dryad
-  cardArt: {fileID: 0}
-  cardBorder: {fileID: 0}
+  cardArt: {fileID: 21300000, guid: cf58ea5d6d091e3419bc20f7d2775e53, type: 3}
+  cardBorder: {fileID: 21300000, guid: 6e84f5d82359fb34cbd7b1833a4668db, type: 3}
   cardFaction: 3
-  description: buff target ally +2 health (2 mana)
+  description: Melee
   lore: 'On the edge of the overall territory all tribes are within, she and her
     fellow dryads act like an early warning system. Any incoming enemy, large or
     small, hunter or army, will be heading into traps set up specifically for them. 
     As one of the oldest nymphs on the planet, she has been pivotal in preventing
     major possible disasters from befalling various tribes. '
-  artistName: 
+  artistName: Salem Radey
   defaultHealthAmount: 5
   defaultPowerAmount: 2
   myAttributes: 04000000

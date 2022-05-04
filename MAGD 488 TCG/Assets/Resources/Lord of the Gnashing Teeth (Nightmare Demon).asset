@@ -16,15 +16,17 @@ MonoBehaviour:
   type: 0
   manaCost: 5
   cardName: Lord of the Gnashing Teeth
-  cardArt: {fileID: 0}
-  cardBorder: {fileID: 0}
+  cardArt: {fileID: 21300000, guid: 9be6f9caef874674c9986d985de2b0dc, type: 3}
+  cardBorder: {fileID: 21300000, guid: 50a19f21e799ebe429f8c3762fb0b38f, type: 3}
   cardFaction: 0
-  description: 'Self-Buff: Add Thorns for the next (2) turns + -2/0 (2 Mana Cost)'
+  description: 'Ranged
+
+    Self-Buff: Gain Thorns'
   lore: 'Though this demon has no true form, it acts like an advisor to Erland. Assisting
     in battle plans and taking what can be guessed as pleasure when it unleashes
     itself upon targets of strategic import so the rabble can do what they do best,
     cause chaos and take more for feeding and rituals. '
-  artistName: 
+  artistName: Jake Sefranek
   defaultHealthAmount: 6
   defaultPowerAmount: 3
   myAttributes: 05000000

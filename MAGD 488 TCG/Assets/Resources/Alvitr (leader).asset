@@ -16,13 +16,10 @@ MonoBehaviour:
   type: 0
   manaCost: 5
   cardName: Alvitr
-  cardArt: {fileID: 0}
-  cardBorder: {fileID: 0}
+  cardArt: {fileID: 21300000, guid: 05265878d8102214c96565488ba36cad, type: 3}
+  cardBorder: {fileID: 21300000, guid: cd82d8bc9b47f2846bc65f4d3de8a764, type: 3}
   cardFaction: 1
-  description: 'Area attack does half attack to surrounding (including sides and
-    back) enemies (2 Mana Cost)
-
-    Attribute should be Endure'
+  description: Melee Pierce
   lore: Alvtir spent many years training alongside her sister, Svanhvit, and their
     dear friend Olrun. One day they were bathing in a spring and were found by three
     brothers, and were married to them. They spent 8 years together and in their
@@ -43,7 +40,7 @@ MonoBehaviour:
     that made them feel safe, but also could not look at her for too long. Though
     she seems unapproachable everyone knows how kind she is, blunt and cutting at
     times, but gentle as well.
-  artistName: 
+  artistName: Katie Pollock
   defaultHealthAmount: 4
   defaultPowerAmount: 4
   myAttributes: 00000000

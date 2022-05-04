@@ -17,9 +17,9 @@ MonoBehaviour:
   manaCost: 6
   cardName: Haaland
   cardArt: {fileID: 0}
-  cardBorder: {fileID: 0}
+  cardBorder: {fileID: 21300000, guid: b684ef2707edd2643a9a053886bd2d40, type: 3}
   cardFaction: 2
-  description: Attribute should be Endure
+  description: Melee Pierce
   lore: The snow biomes strongest beast has been terrorizing the villiages all over
     the land for centuries in search for a worthy opponent. Demonstrating tremendous
     strength through his pilages, Haaland is not to be taken lightly. He is a tall
@@ -36,7 +36,7 @@ MonoBehaviour:
     he is the smartest. Haaland has been able to adapt to his surroundings and take
     advantage of things in his surroundings, such as using a tree branch as a weapon
     or using a weapon a villager he saw use.
-  artistName: 
+  artistName: Kelsey Preisler
   defaultHealthAmount: 7
   defaultPowerAmount: 4
   myAttributes: 00000000

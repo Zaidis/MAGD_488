@@ -16,10 +16,10 @@ MonoBehaviour:
   type: 0
   manaCost: 3
   cardName: Gova
-  cardArt: {fileID: 0}
-  cardBorder: {fileID: 0}
+  cardArt: {fileID: 21300000, guid: 2135dba1a0ebbda43bda2fd4a7e6bd12, type: 3}
+  cardBorder: {fileID: 21300000, guid: cd82d8bc9b47f2846bc65f4d3de8a764, type: 3}
   cardFaction: 1
-  description: 
+  description: Ranged Pierce
   lore: "Gova is a runner (she\u2019s a runner, she's a trackstar). She is someone
     who gets nervous when around people. She tends to stick behind people and be
     a wallflower. Sometimes she gets stuck inside her own head, so she heads down
@@ -31,7 +31,7 @@ MonoBehaviour:
     quiet encouragement. Also because of this, she loves gossip. She gets excited
     to hear gossip from other people who tell her and just what she can hear when
     others think no one else is listening."
-  artistName: 
+  artistName: Katie Pollock
   defaultHealthAmount: 5
   defaultPowerAmount: 3
   myAttributes: 00000000

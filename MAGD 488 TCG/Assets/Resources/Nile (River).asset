@@ -17,9 +17,9 @@ MonoBehaviour:
   manaCost: 4
   cardName: Nile
   cardArt: {fileID: 21300000, guid: 60c05ba52c1f778479975f014f966ec3, type: 3}
-  cardBorder: {fileID: 0}
+  cardBorder: {fileID: 21300000, guid: 90d1e6c3f21edfb45b759f3bcf9f6ddd, type: 3}
   cardFaction: 4
-  description: Gain parry for 1 turn (2 Mana)
+  description: Ranged Pierce
   lore: Nile is a gnome that can breathe underwater. He is a special type of gnome
     and is the only one with this unique ability. For a living, Nile travels from
     river to river to make sure each river is flowing properly, he checks to make

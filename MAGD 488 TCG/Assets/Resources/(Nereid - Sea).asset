@@ -16,13 +16,13 @@ MonoBehaviour:
   type: 0
   manaCost: 4
   cardName: Nereid
-  cardArt: {fileID: 0}
-  cardBorder: {fileID: 0}
+  cardArt: {fileID: 21300000, guid: 98d8ee91255609949ab0a0995adf9651, type: 3}
+  cardBorder: {fileID: 21300000, guid: 6e84f5d82359fb34cbd7b1833a4668db, type: 3}
   cardFaction: 3
-  description: 
+  description: Ranged
   lore: 'These nymphs have been rather helpful in both finding the best catches and
     preventing fishermen from accidentally wandering into the territory of sea monsters. '
-  artistName: 
+  artistName: Salem Radey
   defaultHealthAmount: 4
   defaultPowerAmount: 3
   myAttributes: 

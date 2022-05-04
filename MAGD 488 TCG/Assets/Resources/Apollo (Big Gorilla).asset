@@ -17,9 +17,9 @@ MonoBehaviour:
   manaCost: 4
   cardName: Apollo
   cardArt: {fileID: 21300000, guid: e6fef42d5ecae9e49a70fb67702e762a, type: 3}
-  cardBorder: {fileID: 0}
+  cardBorder: {fileID: 21300000, guid: b684ef2707edd2643a9a053886bd2d40, type: 3}
   cardFaction: 2
-  description: 
+  description: Melee
   lore: 'Apollo is a giant ape who lives in the jungle biome. He is a monster only
     to the creatures who he believes deserves it. He is the least monstrous of the
     monsters but that does not mean he lacks strength. Apollo destroys based on how

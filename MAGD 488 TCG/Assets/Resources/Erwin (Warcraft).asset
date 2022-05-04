@@ -16,15 +16,15 @@ MonoBehaviour:
   type: 0
   manaCost: 5
   cardName: Erwin
-  cardArt: {fileID: 0}
-  cardBorder: {fileID: 0}
+  cardArt: {fileID: 21300000, guid: 19e761101f306634faf9ea11b60dc9d4, type: 3}
+  cardBorder: {fileID: 21300000, guid: 90d1e6c3f21edfb45b759f3bcf9f6ddd, type: 3}
   cardFaction: 4
-  description: "When you attack with Erwin, draw a card. \nAttribute should be parry"
+  description: "Melee Pierce\nWhen you attack with Erwin, draw a card. \n"
   lore: 'This dwarf is great with battle strategy. He usually leads the rest of the
     dwarves when they are feeling threatened. Erwin is a clever dwarf with the ability
     to overturn almost any situation into his favor. He has a stocky build with an
     unproportionally big head. '
-  artistName: 
+  artistName: Jake Sefranek
   defaultHealthAmount: 4
   defaultPowerAmount: 4
   myAttributes: 00000000

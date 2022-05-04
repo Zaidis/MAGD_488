@@ -16,10 +16,10 @@ MonoBehaviour:
   type: 0
   manaCost: 4
   cardName: Naevys
-  cardArt: {fileID: 0}
-  cardBorder: {fileID: 0}
+  cardArt: {fileID: 21300000, guid: 6fe9ab01b61622e4dace1bf6dafea30d, type: 3}
+  cardBorder: {fileID: 21300000, guid: cd82d8bc9b47f2846bc65f4d3de8a764, type: 3}
   cardFaction: 1
-  description: Pierce should be Endure
+  description: Melee Thorns Pierce
   lore: "Naevys is a contender for the next in line to be leader of Valysus, if Alvtir
     ever decides to retire. Naevys, to others, is a himbo. He works out for fun and
     is large and very very strong. Someone once saw him go to an orphanage and give
@@ -36,7 +36,7 @@ MonoBehaviour:
     perfect sense. Unlike Alvtir who\u2019s aura of justice can seem blinding and
     unapproachable, his, an equally bright aura, is like being bathed in sunlight
     on a perfect day."
-  artistName: 
+  artistName: Katie Pollock
   defaultHealthAmount: 7
   defaultPowerAmount: 2
   myAttributes: 0200000000000000

@@ -17,9 +17,9 @@ MonoBehaviour:
   manaCost: 3
   cardName: Winston
   cardArt: {fileID: 21300000, guid: 245f7dc1b50dea0409528c097f2011b7, type: 3}
-  cardBorder: {fileID: 0}
+  cardBorder: {fileID: 21300000, guid: 90d1e6c3f21edfb45b759f3bcf9f6ddd, type: 3}
   cardFaction: 4
-  description: Can't increase attack by any means
+  description: Ranged
   lore: This Gnome loves to go around and impersonate other gnomes. Winston does
     whatever he can to get underneath people's skin. He is energetic, flamboyant,
     and has no boundaries. Size does not matter to Winston, you can be three times

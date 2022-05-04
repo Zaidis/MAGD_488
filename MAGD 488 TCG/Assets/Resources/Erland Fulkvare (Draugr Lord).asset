@@ -16,10 +16,10 @@ MonoBehaviour:
   type: 0
   manaCost: 5
   cardName: Erland Fulkvare
-  cardArt: {fileID: 21300000, guid: 61951c544aebe7247947dbddbbc869e5, type: 3}
+  cardArt: {fileID: 21300000, guid: 9be6f9caef874674c9986d985de2b0dc, type: 3}
   cardBorder: {fileID: 21300000, guid: 50a19f21e799ebe429f8c3762fb0b38f, type: 3}
   cardFaction: 0
-  description: 'Cleave
+  description: 'Ranged Cleave
 
     4 Mana Cost: All allied tokens get 0/+2'
   lore: 'As the tomb of his family was brought into this strange and dangerous world,

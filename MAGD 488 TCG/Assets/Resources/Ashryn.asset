@@ -17,9 +17,11 @@ MonoBehaviour:
   manaCost: 5
   cardName: Ashryn
   cardArt: {fileID: 21300000, guid: b90784d1f3e236744857c229561384a0, type: 3}
-  cardBorder: {fileID: 0}
+  cardBorder: {fileID: 21300000, guid: cd82d8bc9b47f2846bc65f4d3de8a764, type: 3}
   cardFaction: 1
-  description: 'Self-Buff: +1 / +1 (2 mana) perm buff'
+  description: 'Melee Pierce
+
+    2 Mana: Gain +1/-1.'
   lore: "Ashryn is a bookworm. They spend most of their time with their nose in a
     book. Her parents were both knights that served Alvtir proudly until their untimely
     deaths after being sent to deal with a monster raid in a village. The monster

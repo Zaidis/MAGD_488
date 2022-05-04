@@ -16,10 +16,10 @@ MonoBehaviour:
   type: 0
   manaCost: 3
   cardName: Dane
-  cardArt: {fileID: 0}
-  cardBorder: {fileID: 0}
+  cardArt: {fileID: 21300000, guid: 6cfda1ee26ea3084aa4b07c01625f94d, type: 3}
+  cardBorder: {fileID: 21300000, guid: cd82d8bc9b47f2846bc65f4d3de8a764, type: 3}
   cardFaction: 1
-  description: Pierce should be endure
+  description: Melee Pierce
   lore: "Dane is a human who comes across as mischievous and sometimes cruel. She
     likes to play pranks and mess with people. She never lets it interfere with her
     work however. Everything she turns in and works on is 100% done to its fullest
@@ -33,7 +33,7 @@ MonoBehaviour:
     dim glow around her. She still likes to prank other police officers in good jest,
     but to those she feels like is lying to others or to themselves she\u2019ll play
     pranks on them that force them to expose the truth."
-  artistName: 
+  artistName: Katie Pollock
   defaultHealthAmount: 5
   defaultPowerAmount: 3
   myAttributes: 0500000000000000

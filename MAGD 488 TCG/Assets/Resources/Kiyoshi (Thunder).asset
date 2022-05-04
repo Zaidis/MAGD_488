@@ -16,18 +16,17 @@ MonoBehaviour:
   type: 0
   manaCost: 2
   cardName: Kiyoshi
-  cardArt: {fileID: 0}
-  cardBorder: {fileID: 0}
+  cardArt: {fileID: 21300000, guid: 787d261d4f6b7434483d4349e61468cd, type: 3}
+  cardBorder: {fileID: 21300000, guid: 90d1e6c3f21edfb45b759f3bcf9f6ddd, type: 3}
   cardFaction: 4
-  description: Electrifies an enemy - does 1 dmg every other round to affected enemies
-    (2 mana)
+  description: Ranged
   lore: 'Kiyoshi is a thunder kitsune with 4 tails. Kiyoshi is trying to get his
     5th tail after spending many years in his previous realm in stagnation. He was
     becoming frustrated with himself and is now exploring the realm trying to use
     this new experience as a new tactic to get one. When he comes across Kimi she
     often teases him for his progress and he snaps at her. It has become his mission
     to at least land a hit on Kimi. '
-  artistName: 
+  artistName: Kelsey Preisler
   defaultHealthAmount: 2
   defaultPowerAmount: 2
   myAttributes: 

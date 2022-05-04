@@ -16,15 +16,15 @@ MonoBehaviour:
   type: 0
   manaCost: 3
   cardName: Zwerg
-  cardArt: {fileID: 0}
-  cardBorder: {fileID: 0}
+  cardArt: {fileID: 21300000, guid: 2a8c1f53bd5e6224cb1e72309427bd40, type: 3}
+  cardBorder: {fileID: 21300000, guid: 90d1e6c3f21edfb45b759f3bcf9f6ddd, type: 3}
   cardFaction: 4
-  description: 
+  description: Melee
   lore: "Zwerg is very familiar with the physical geography of his region. He is
     a welder and finds the best material to make world class shields. He has high
     durability and isn\u2019t too aggressive. He is a protective dwarf and is willing
     to help anyone in need."
-  artistName: 
+  artistName: Jake Sefranek
   defaultHealthAmount: 5
   defaultPowerAmount: 1
   myAttributes: 05000000

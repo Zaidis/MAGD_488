@@ -17,12 +17,9 @@ MonoBehaviour:
   manaCost: 7
   cardName: Raegan
   cardArt: {fileID: 21300000, guid: 42dae13a24558e14498d313ba17d1706, type: 3}
-  cardBorder: {fileID: 0}
+  cardBorder: {fileID: 21300000, guid: cd82d8bc9b47f2846bc65f4d3de8a764, type: 3}
   cardFaction: 1
-  description: 'Can make enemy flee (back into deck) (Only those that match or lower
-    than mana cost) (4 mana cost)
-
-    Attribute should be endure'
+  description: Ranged Pierce
   lore: "Raegan is a phoenix that has lived for about 1700 years. Their longest life
     was about 800 years, his shortest about 90 years, and has been reborn about 4
     times. Raegan is the Chief of Police. They are currently on their 5th life and

@@ -17,9 +17,9 @@ MonoBehaviour:
   manaCost: 3
   cardName: 'Amazonia '
   cardArt: {fileID: 21300000, guid: 4027fbca56533c544ad45a124752651f, type: 3}
-  cardBorder: {fileID: 0}
+  cardBorder: {fileID: 21300000, guid: 90d1e6c3f21edfb45b759f3bcf9f6ddd, type: 3}
   cardFaction: 4
-  description: Reduce opponent's creature's attack by -4/0 (2 Mana)
+  description: Melee
   lore: Nothing too special about Amazonia except that she is a hard working gnome
     that takes care of a family of four. She gathers food, hunts, cooks, cleans,
     and sells jewelry to make money. Amazonia is a very old gnome and she has been

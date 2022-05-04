@@ -17,12 +17,12 @@ MonoBehaviour:
   manaCost: 6
   cardName: Lenny
   cardArt: {fileID: 21300000, guid: f88b7be787fd5fa488fd88183cb00331, type: 3}
-  cardBorder: {fileID: 0}
+  cardBorder: {fileID: 21300000, guid: b684ef2707edd2643a9a053886bd2d40, type: 3}
   cardFaction: 2
-  description: 
+  description: Melee
   lore: 'One of the biggest tyrants in the sea Lenny is a fierce megalodon that takes
     no prisoners. '
-  artistName: 
+  artistName: Kelsey Preisler
   defaultHealthAmount: 2
   defaultPowerAmount: 6
   myAttributes: 01000000

@@ -17,11 +17,9 @@ MonoBehaviour:
   manaCost: 6
   cardName: 'Leandro '
   cardArt: {fileID: 21300000, guid: 82660433e7d0366499d815494dbfa25e, type: 3}
-  cardBorder: {fileID: 0}
+  cardBorder: {fileID: 21300000, guid: 6e84f5d82359fb34cbd7b1833a4668db, type: 3}
   cardFaction: 3
-  description: 'Attribute shoiuld be Parry
-
-    4 Mana:Perm Buff Self or Ally: +1/+2'
+  description: Melee
   lore: Every 4 years the centaurs participate in a savage battle royal to find the
     next Don (leader). Leandro was not a favorite by any means to win this competition.
     This was his first year eligible to participate and Leandro exceeded the expectations

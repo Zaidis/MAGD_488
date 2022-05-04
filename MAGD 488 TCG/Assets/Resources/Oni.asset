@@ -16,10 +16,10 @@ MonoBehaviour:
   type: 0
   manaCost: 4
   cardName: Oni
-  cardArt: {fileID: 0}
-  cardBorder: {fileID: 0}
+  cardArt: {fileID: 21300000, guid: b72c8c836bfd83146afb83a2a1b3e373, type: 3}
+  cardBorder: {fileID: 21300000, guid: 50a19f21e799ebe429f8c3762fb0b38f, type: 3}
   cardFaction: 0
-  description: 'Cleave
+  description: 'Melee Cleave
 
     2 Mana Cost:  Surrounding creatures and this creature
     gain +1/-1.'

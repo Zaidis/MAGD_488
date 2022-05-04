@@ -16,10 +16,10 @@ MonoBehaviour:
   type: 0
   manaCost: 8
   cardName: Celestial
-  cardArt: {fileID: 21300000, guid: 7bea572f0548ae84eb26522f1e7dd022, type: 3}
+  cardArt: {fileID: 21300000, guid: 190c8b0e3472be744818dd0c92d14bee, type: 3}
   cardBorder: {fileID: 21300000, guid: b684ef2707edd2643a9a053886bd2d40, type: 3}
   cardFaction: 2
-  description: N/A. CAN'T GO IN DECK!!!
+  description: Melee
   lore: "Trying to make the world its own, this beasts' true instincts have taken
     over and leveled every biome in this world. Celestial, the mightiest of beasts,
     has been dormant for hundreds of years since its last assault. During Celestial\u2019s
@@ -37,7 +37,7 @@ MonoBehaviour:
     celsius) but it is so powerful it appears more of a laser-like beam. Not having
     wings, it resorts to using the steam clouds it produces from its nose as footing
     for him to move in the air. "
-  artistName: 
+  artistName: Kelsey Preisler
   defaultHealthAmount: 12
   defaultPowerAmount: 12
   myAttributes: 05000000

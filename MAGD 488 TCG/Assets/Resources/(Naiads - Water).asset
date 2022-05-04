@@ -16,14 +16,14 @@ MonoBehaviour:
   type: 0
   manaCost: 3
   cardName: Naiads
-  cardArt: {fileID: 0}
-  cardBorder: {fileID: 0}
+  cardArt: {fileID: 21300000, guid: 810ada719437f2e4e8dbad1f95625fc1, type: 3}
+  cardBorder: {fileID: 21300000, guid: 6e84f5d82359fb34cbd7b1833a4668db, type: 3}
   cardFaction: 3
-  description: 20% chance to completely dodge attack but also do no damage
+  description: Melee
   lore: While they are a little bit more jovial and tricksy than their counterparts,
     the Naiad have been good for both looking out for those looking to gather water
     and a deterrent for those approaching too close to any campsites.
-  artistName: 
+  artistName: Salem Radey
   defaultHealthAmount: 4
   defaultPowerAmount: 1
   myAttributes: 05000000

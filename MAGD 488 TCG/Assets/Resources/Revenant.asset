@@ -16,10 +16,10 @@ MonoBehaviour:
   type: 0
   manaCost: 3
   cardName: Revenant
-  cardArt: {fileID: 0}
-  cardBorder: {fileID: 0}
+  cardArt: {fileID: 21300000, guid: 27e428c44929813408133c82e17df245, type: 3}
+  cardBorder: {fileID: 21300000, guid: 50a19f21e799ebe429f8c3762fb0b38f, type: 3}
   cardFaction: 0
-  description: Thorn
+  description: Melee Thorns
   lore: 'Now trapped in a place where the target of their vengeance is now impossible
     to kill; their rage has now been turned towards any unfortunate bastard who they
     are sent after. '

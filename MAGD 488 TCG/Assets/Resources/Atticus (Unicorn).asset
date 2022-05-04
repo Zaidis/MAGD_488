@@ -16,10 +16,10 @@ MonoBehaviour:
   type: 0
   manaCost: 3
   cardName: Atticus
-  cardArt: {fileID: 0}
-  cardBorder: {fileID: 0}
+  cardArt: {fileID: 21300000, guid: f6963982f51b50a49a531d5ed3d53e52, type: 3}
+  cardBorder: {fileID: 21300000, guid: 6e84f5d82359fb34cbd7b1833a4668db, type: 3}
   cardFaction: 3
-  description: 
+  description: Melee Pierce
   lore: Atticus, a slightly older Centaur, has an exceptional talent for battle but
     chooses not to participate in such activity. Atticus believes all battles can
     be dueled with words. He has come to this conclusion after his rigorous battles
@@ -27,7 +27,7 @@ MonoBehaviour:
     this war due to being drafted into the proud centaur army. Atticus has long flowing
     white hair with a chic white coat. His tail hair is also very long and thick.
     His skin is smooth with no scratches on it.
-  artistName: 
+  artistName: Salem Radey
   defaultHealthAmount: 3
   defaultPowerAmount: 2
   myAttributes: 00000000

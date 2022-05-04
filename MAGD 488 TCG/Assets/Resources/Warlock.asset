@@ -22,7 +22,7 @@ MonoBehaviour:
   description: Ranged Lifesteal
   lore: "To those who\u2019ve shown their devotion to the mistress and her dark god,
     they are imbued with powers beyond their wildest dreams."
-  artistName: 
+  artistName: Jake Sefranek
   defaultHealthAmount: 4
   defaultPowerAmount: 3
   myAttributes: 03000000

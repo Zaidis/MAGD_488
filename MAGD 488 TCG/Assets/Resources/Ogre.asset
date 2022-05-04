@@ -16,13 +16,13 @@ MonoBehaviour:
   type: 0
   manaCost: 4
   cardName: Ogre
-  cardArt: {fileID: 0}
-  cardBorder: {fileID: 0}
+  cardArt: {fileID: 21300000, guid: 51d11548b39ff8243aaea90eaffea6f9, type: 3}
+  cardBorder: {fileID: 21300000, guid: 90d1e6c3f21edfb45b759f3bcf9f6ddd, type: 3}
   cardFaction: 4
-  description: 
+  description: Melee
   lore: Roaming the planes in search of food and treasure, ogres have been persuaded
     to assist various factions in combat for one of the two things they look for.
-  artistName: 
+  artistName: Salem Radey
   defaultHealthAmount: 4
   defaultPowerAmount: 3
   myAttributes: 

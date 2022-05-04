@@ -16,10 +16,10 @@ MonoBehaviour:
   type: 0
   manaCost: 3
   cardName: Constance
-  cardArt: {fileID: 0}
-  cardBorder: {fileID: 0}
+  cardArt: {fileID: 21300000, guid: 6f999793c0bfadc489e41cfa01df293b, type: 3}
+  cardBorder: {fileID: 21300000, guid: cd82d8bc9b47f2846bc65f4d3de8a764, type: 3}
   cardFaction: 1
-  description: 
+  description: Melee
   lore: "Constance will do anything to uphold her honor and be true to her word.
     In her past life she was the right hand person to a duke, and is still trying
     to uphold her honor to him and return. She travels around trying to figure out
@@ -32,7 +32,7 @@ MonoBehaviour:
     the dukedom\u2019s official armor and refuses to get rid of the weapon. She will
     always be loyal to the Duke and no matter what comes her way she will be his
     right hand person once again."
-  artistName: 
+  artistName: Katie Pollock
   defaultHealthAmount: 3
   defaultPowerAmount: 4
   myAttributes: 

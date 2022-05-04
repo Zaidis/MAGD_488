@@ -16,17 +16,15 @@ MonoBehaviour:
   type: 0
   manaCost: 3
   cardName: Angelica
-  cardArt: {fileID: 0}
-  cardBorder: {fileID: 0}
+  cardArt: {fileID: 21300000, guid: 4c7518b7f67ae1c4c8d37ac864252949, type: 3}
+  cardBorder: {fileID: 21300000, guid: b684ef2707edd2643a9a053886bd2d40, type: 3}
   cardFaction: 2
-  description: '3 Mana: Heal target for 2 health
-
-    Remove Debuff'
+  description: Ranged
   lore: 'An angelic creature who spends most of her time singing to Hafgufa. She
     is the one person Hafgufa could not convince himself to kill. Angelica was chosen
     for her voice and her beauty. Now she is ready to show Hafgufa her real worth
     by risking her life. '
-  artistName: 
+  artistName: Kelsey Preisler
   defaultHealthAmount: 4
   defaultPowerAmount: 2
   myAttributes: 

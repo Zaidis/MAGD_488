@@ -16,17 +16,17 @@ MonoBehaviour:
   type: 0
   manaCost: 1
   cardName: Masanori
-  cardArt: {fileID: 0}
-  cardBorder: {fileID: 0}
-  cardFaction: 0
-  description: 
+  cardArt: {fileID: 21300000, guid: c30c36518f2441a4ea6324e9f8907acb, type: 3}
+  cardBorder: {fileID: 21300000, guid: 90d1e6c3f21edfb45b759f3bcf9f6ddd, type: 3}
+  cardFaction: 4
+  description: Melee
   lore: Masanori is a time kitsune with 2 tails. Masanori has recently gotten his
     second tail and is quite proud of that fact. He got it when he came into this
     realm. When he got to this realm he met with the other kitsune, but was scared
     of Kimi and intimidated by Kiyoshi. Tsukiko was the most approachable but it
     still took him a long time to try and approach her for advice and guidance. He
     has a youthful need to impress and grow and a child's innocence.
-  artistName: 
+  artistName: Kelsey Preisler
   defaultHealthAmount: 2
   defaultPowerAmount: 1
   myAttributes: 

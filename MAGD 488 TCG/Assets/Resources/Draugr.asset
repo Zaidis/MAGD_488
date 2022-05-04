@@ -16,10 +16,10 @@ MonoBehaviour:
   type: 0
   manaCost: 2
   cardName: Draugr
-  cardArt: {fileID: 0}
-  cardBorder: {fileID: 0}
+  cardArt: {fileID: 21300000, guid: 11d88767823a3694085c91454b8f20cc, type: 3}
+  cardBorder: {fileID: 21300000, guid: 50a19f21e799ebe429f8c3762fb0b38f, type: 3}
   cardFaction: 0
-  description: 
+  description: Melee
   lore: At the beck and call of Erland, as well as retaining their martial prowess,
     they have been pivotal in both  key raids against better defended targets and
     the overall defense of the tomb.

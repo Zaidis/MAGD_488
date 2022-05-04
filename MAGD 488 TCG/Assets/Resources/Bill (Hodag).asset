@@ -16,13 +16,13 @@ MonoBehaviour:
   type: 0
   manaCost: 3
   cardName: Bill (Hodag)
-  cardArt: {fileID: 0}
-  cardBorder: {fileID: 0}
+  cardArt: {fileID: 21300000, guid: 25843ea550a025d40bb77d846fd4328b, type: 3}
+  cardBorder: {fileID: 21300000, guid: 6e84f5d82359fb34cbd7b1833a4668db, type: 3}
   cardFaction: 3
-  description: Surrounding creatures gain thorns for 1 turn (2 Mana)
+  description: Melee Thorns
   lore: Confused by the shift and the last of his species, Bill misses the easy hunting
     of Wisconsin. Now he must participate in hunts like a hunting dog.
-  artistName: 
+  artistName: Salem Radey
   defaultHealthAmount: 3
   defaultPowerAmount: 2
   myAttributes: 02000000

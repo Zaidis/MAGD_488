@@ -16,10 +16,10 @@ MonoBehaviour:
   type: 0
   manaCost: 4
   cardName: Faelyn
-  cardArt: {fileID: 0}
-  cardBorder: {fileID: 0}
+  cardArt: {fileID: 21300000, guid: 5b4497769695c9e41939da2c94712155, type: 3}
+  cardBorder: {fileID: 21300000, guid: cd82d8bc9b47f2846bc65f4d3de8a764, type: 3}
   cardFaction: 1
-  description: Copy Health and Attack of target creature
+  description: Ranged
   lore: "Faelyn is, at heart, a performer. Always acting with a flourish and flamboyance.
     They can\u2019t help but try to have a grand speech and performance for every
     interaction. They were a well-known actor before coming to this realm; and an
@@ -35,7 +35,7 @@ MonoBehaviour:
     that don\u2019t know what to do, but to tell them it\u2019s time for the show
     to start. They take a second and with a flourish of their hand wave them off
     and tell them to lead the way."
-  artistName: 
+  artistName: Katie Pollock
   defaultHealthAmount: 1
   defaultPowerAmount: 1
   myAttributes: 

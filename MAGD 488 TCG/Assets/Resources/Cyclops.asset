@@ -16,15 +16,13 @@ MonoBehaviour:
   type: 0
   manaCost: 4
   cardName: Cyclops
-  cardArt: {fileID: 0}
-  cardBorder: {fileID: 0}
+  cardArt: {fileID: 21300000, guid: 87b1f81cac16b0340b873f4992bc4f81, type: 3}
+  cardBorder: {fileID: 21300000, guid: 90d1e6c3f21edfb45b759f3bcf9f6ddd, type: 3}
   cardFaction: 4
-  description: 'Will attack a random enemy
-
-    Attribute SHould be Endure'
+  description: Melee Pierce
   lore: What they lack in depth perception they make up for in bulk in the willingness
     to work with anything as long as there is a benefit for them.
-  artistName: 
+  artistName: Salem Radey
   defaultHealthAmount: 3
   defaultPowerAmount: 5
   myAttributes: 00000000
