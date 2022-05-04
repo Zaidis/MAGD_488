@@ -16,7 +16,7 @@ MonoBehaviour:
   type: 0
   manaCost: 6
   cardName: Haaland
-  cardArt: {fileID: 0}
+  cardArt: {fileID: 21300000, guid: ef35be6ed6f3d7e4ca788727adfa635f, type: 3}
   cardBorder: {fileID: 21300000, guid: b684ef2707edd2643a9a053886bd2d40, type: 3}
   cardFaction: 2
   description: Melee Pierce
