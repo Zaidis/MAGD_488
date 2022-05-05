@@ -95,15 +95,14 @@ public class ArtifactToken : Token, IPointerEnterHandler, IPointerExitHandler, I
         artifact.OnAbility(GameManager.Singleton.hostBoard, GameManager.Singleton.clientBoard, transform.parent.GetComponent<Tile>(), GameManager.Singleton.isHost);
         castedAbility = true;
 
-        
-
-
-
         // GameManager.Singleton.TurnOffOptionsAndUnselect();
         GameManager.Singleton.TurnOffOptionsAndUnselect();
 
-
     }
+
+
+
+
 
     public void OnPointerEnter(PointerEventData eventData) {
         GameManager.Singleton.cardPopup.UpdateHoverPopup(artifact);

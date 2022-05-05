@@ -18,7 +18,16 @@ public class O_Ability : MonoBehaviour, IPointerClickHandler {
                  else {
                      GameManager.Singleton.ActivateTilesWithTokensInBoard(GameManager.Singleton.hostBoard);
                  } */
-                GameManager.Singleton.ActivateAllTilesWithTokens();
+
+                if (c.creature.targetFriendly) {
+                    GameManager.Singleton.ActivateAllFriendlyTilesWithTokens();
+                } else if (c.creature.targetEnemy) {
+                    GameManager.Singleton.ActivateAllEnemyTilesWithTokens();
+                } else {
+                    GameManager.Singleton.ActivateAllTilesWithTokens();
+                }
+
+                
 
                 GameManager.Singleton.isUsingAbility = true;
                 GameManager.Singleton.selectedCreature = c;

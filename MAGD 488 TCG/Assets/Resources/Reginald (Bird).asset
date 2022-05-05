@@ -21,7 +21,7 @@ MonoBehaviour:
   cardFaction: 3
   description: 'Ranged
 
-    1 Mana: Reginald'
+    1 Mana: Draw a card.'
   lore: 'Not the brightest creature, affectionately labeled reginald; he and his
     ilk are pivotal in the communication between tribes. '
   artistName: Salem Radey
@@ -31,4 +31,6 @@ MonoBehaviour:
   isMelee: 0
   hasAbility: 1
   hasTargetedAbility: 0
+  targetFriendly: 0
+  targetEnemy: 0
   abilityCost: 1

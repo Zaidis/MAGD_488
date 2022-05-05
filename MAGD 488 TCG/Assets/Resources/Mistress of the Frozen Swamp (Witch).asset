@@ -21,7 +21,7 @@ MonoBehaviour:
   cardFaction: 0
   description: 'Ranged
 
-    5 Mana: Give target creature +1/+4.'
+    5 Mana: Give friendly target creature +1/+4.'
   lore: "One of the first to meet with Erland,  the mistress has kept the tomb shrouded
     in  a heavy fog. Though Erland has to help secure sacrifices for her \u201CDark
     God\u201D, she has been invaluable in keeping the capital safe. \r"
@@ -32,6 +32,8 @@ MonoBehaviour:
   isMelee: 0
   hasAbility: 1
   hasTargetedAbility: 1
+  targetFriendly: 1
+  targetEnemy: 0
   abilityCost: 5
   attackMod: 1
   healthMod: 4

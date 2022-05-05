@@ -17,9 +17,13 @@ public class SelectDeck : MonoBehaviour, IPointerClickHandler
     }
     public void ButtonEdit()
     {        
+
         Menu.instance.OpenEditor();
         MythosClient.instance.OnRetrieveDeckContent(name);
         DeckEditor.instance.SetDeckName(name);
+
+        TempDeck.instance.AddListToTemporaryDeck(DeckEditor.instance.deckID);
+        TempDeck.instance.usingCustomDeck = true;
     }
     public void ButtonDelete()
     {

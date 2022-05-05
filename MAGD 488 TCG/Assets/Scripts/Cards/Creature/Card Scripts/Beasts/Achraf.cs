@@ -4,7 +4,7 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "New Creature/Achraf", fileName = "Card")]
 public class Achraf : Creature
 {
-    [SerializeField] int abilityCost;
+    
     public override void OnAttack(Tile[] hostBoard, Tile[] clientBoard, Tile attacker, bool isHost, Tile attacked)
     {
         base.OnAttack(hostBoard, clientBoard, attacker, isHost, attacked);
@@ -42,6 +42,17 @@ public class Achraf : Creature
         if (victim.token.GetComponent<Token>() is CreatureToken c)
         {
             //TODO: Adam fix meh
+            victim.DealtDamage(100);
+
+            if (user.hostTile) {
+                Player p = GameManager.Singleton._networkManager.SpawnManager.GetLocalPlayerObject().GetComponent<Player>();
+                p.UpdateHealthServerRpc(2, 0);
+            } else {
+                Player p = GameManager.Singleton._networkManager.SpawnManager.GetLocalPlayerObject().GetComponent<Player>();
+                p.UpdateHealthServerRpc(0, 2);
+            }
+
+
         }
     }
 }

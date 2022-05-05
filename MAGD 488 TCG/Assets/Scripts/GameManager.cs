@@ -32,6 +32,8 @@ public class GameManager : MonoBehaviour {
     public OpponentHand opponentHand;
     public List<Card> deck;
     private List<Card> cards;
+    private Dictionary<int, Card> dictionaryOfCards = new Dictionary<int, Card>();
+
 
     public GameObject[] CreatureTokenPrefab;
     public GameObject SpellTokenPrefab;
@@ -143,7 +145,9 @@ public class GameManager : MonoBehaviour {
             _networkManager.StartHost();
 
         cards = new List<Card>(Resources.LoadAll("", typeof(Card)).Cast<Card>().ToArray());
-
+        foreach(Card card in cards) {
+            dictionaryOfCards.Add(card.ID, card);
+        }
         //TurnStatus = GameObject.Find("TurnStatus").GetComponent<TextMeshProUGUI>();
        // NextTurn = GameObject.Find("NextTurn").GetComponent<Button>();
         if (_networkManager.IsHost) {
@@ -178,7 +182,10 @@ public class GameManager : MonoBehaviour {
 
         }
 
-        
+        //affect deck
+        for(int i = 0; i < TempDeck.instance.deckID.Count; i++) {
+            deck[i] = dictionaryOfCards[TempDeck.instance.deckID[i]];
+        }
 
 
         AffectHealthValues(maxHostHealth, maxClientHealth);
@@ -409,30 +416,53 @@ public class GameManager : MonoBehaviour {
 
     public void UseTargetedAbility(int userID, int victimID, bool isHostSide) {
 
-        if (selectedCreature.GetComponentInParent<Tile>().hostTile) {
-            Token t = hostBoard[userID].token.GetComponent<Token>();
-            if(t is CreatureToken c) {
-                if (isHostSide) {
-                    c.UseTargetedAbility(hostBoard[victimID]);
-                    c.PlayParticles();
-                }
-                else {
-                    c.UseTargetedAbility(clientBoard[victimID]);
-                    c.PlayParticles();
+        
+        if (isHostSide) {
+            if(hostBoard[userID].token != null) {
+                Token t = hostBoard[userID].token.GetComponent<Token>();
+
+                if (t is CreatureToken c) {
+                    if (c.creature.targetFriendly) {
+                        c.UseTargetedAbility(hostBoard[victimID]);
+                        c.PlayParticles();
+                    }
+                    else if (c.creature.targetEnemy) {
+                        c.UseTargetedAbility(clientBoard[victimID]);
+                        c.PlayParticles();
+                    }
+                    else {
+
+                    }
                 }
             }
+            
         } else {
-            Token t = clientBoard[userID].token.GetComponent<Token>();
-            if (t is CreatureToken c) {
-                if (isHostSide) {
-                    c.UseTargetedAbility(hostBoard[victimID]);
-                    c.PlayParticles();
-                }
-                else {
-                    c.UseTargetedAbility(clientBoard[victimID]);
-                    c.PlayParticles();
+            if(clientBoard[userID].token != null) {
+                Token t = clientBoard[userID].token.GetComponent<Token>();
+                if (t is CreatureToken c) {
+
+                    if (c.creature.targetFriendly) {
+                        c.UseTargetedAbility(clientBoard[victimID]);
+                        c.PlayParticles();
+                    }
+                    else if (c.creature.targetEnemy) {
+                        c.UseTargetedAbility(hostBoard[victimID]);
+                        c.PlayParticles();
+                    }
+                    else {
+
+                    }
+                    /*if (isHostSide) {
+                        c.UseTargetedAbility(hostBoard[victimID]);
+                        c.PlayParticles();
+                    }
+                    else {
+                        c.UseTargetedAbility(clientBoard[victimID]);
+                        c.PlayParticles();
+                    }*/
                 }
             }
+            
         }
     }
 
@@ -551,6 +581,46 @@ public class GameManager : MonoBehaviour {
         }
     }
 
+    public void ActivateAllFriendlyTilesWithTokens() {
+        if (isHost) {
+            for (int i = 0; i < hostBoard.Length; i++) {
+                Tile t = hostBoard[i].GetComponent<Tile>();
+                if (t.token != null) {
+                    t.ChangeTokenMaterial(m_active);
+                    t.active = true;
+                }
+            }
+        } else {
+            for (int i = 0; i < clientBoard.Length; i++) {
+                Tile t = clientBoard[i].GetComponent<Tile>();
+                if (t.token != null) {
+                    t.ChangeTokenMaterial(m_active);
+                    t.active = true;
+                }
+            }
+        }
+    }
+
+    public void ActivateAllEnemyTilesWithTokens() {
+        if (isHost) {
+            for (int i = 0; i < clientBoard.Length; i++) {
+                Tile t = clientBoard[i].GetComponent<Tile>();
+                if (t.token != null) {
+                    t.ChangeTokenMaterial(m_active);
+                    t.active = true;
+                }
+            }
+        }
+        else {
+            for (int i = 0; i < hostBoard.Length; i++) {
+                Tile t = hostBoard[i].GetComponent<Tile>();
+                if (t.token != null) {
+                    t.ChangeTokenMaterial(m_active);
+                    t.active = true;
+                }
+            }
+        }
+    }
 
     public bool CheckIfCreatureCanAttackPlayer(Tile[] board, int attackerID) {
         //checks to see if you can attack the opponent with this particular creature. 

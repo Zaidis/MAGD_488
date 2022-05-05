@@ -12,6 +12,8 @@ public class Creature : Card
     public bool isMelee;
     public bool hasAbility;
     public bool hasTargetedAbility;
+    public bool targetFriendly;
+    public bool targetEnemy;
     public int abilityCost;
     public virtual void OnAttack(Tile[] hostBoard, Tile[] clientBoard, Tile attacker, bool isHost, Tile attacked)
     {

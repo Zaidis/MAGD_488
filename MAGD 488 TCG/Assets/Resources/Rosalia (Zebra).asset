@@ -21,7 +21,7 @@ MonoBehaviour:
   cardFaction: 3
   description: 'Melee
 
-    If damaged gain +2/+0 '
+    If damaged gain +2/+0.'
   lore: Rosalia is a strong centaur that has consistently competed at the battle
     royals throughout the years. She has not been the luckiest however. Her best
     finish was 2nd in what was the previous Dons final victory. Rosalia has a rough
@@ -34,4 +34,7 @@ MonoBehaviour:
   isMelee: 1
   hasAbility: 0
   hasTargetedAbility: 0
+  targetFriendly: 0
+  targetEnemy: 0
   abilityCost: 0
+  attackMod: 2

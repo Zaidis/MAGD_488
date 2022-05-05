@@ -51,6 +51,10 @@ MonoBehaviour:
   defaultPowerAmount: 4
   myAttributes: 00000000
   isMelee: 1
-  hasAbility: 0
+  hasAbility: 1
   hasTargetedAbility: 0
-  abilityCost: 0
+  targetFriendly: 0
+  targetEnemy: 0
+  abilityCost: 2
+  attackMod: 1
+  healthMod: 1

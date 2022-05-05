@@ -21,7 +21,7 @@ MonoBehaviour:
   cardFaction: 2
   description: 'Melee
 
-    3 Mana: +1 / -1'
+    3 Mana: Gain +1/-1'
   lore: Having random urges to kill, Lucio meanders the lands without a purpose.
     If he is spotted he kills on sight.
   artistName: Kelsey Preisler
@@ -31,6 +31,8 @@ MonoBehaviour:
   isMelee: 1
   hasAbility: 1
   hasTargetedAbility: 0
+  targetFriendly: 0
+  targetEnemy: 0
   abilityCost: 3
   abilityCost: 3
   attackMod: 1

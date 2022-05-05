@@ -4,6 +4,9 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "New Creature/Hafgufa", fileName = "Card")]
 public class Hafgufa : Creature
 {
+
+    public Creature newToken;
+
     public override void OnAttack(Tile[] hostBoard, Tile[] clientBoard, Tile attacker, bool isHost, Tile attacked)
     {
         base.OnAttack(hostBoard, clientBoard, attacker, isHost, attacked);
@@ -11,5 +14,37 @@ public class Hafgufa : Creature
     public override void OnAbility(Tile[] hostBoard, Tile[] clientBoard, Tile attacker, bool isHost)
     {
 
+    }
+
+    public override void OnTargetedAbility(Tile user, Tile victim, bool isHostSide) {
+        if (GameManager.Singleton.isHost) {
+            if (GameManager.Singleton.hostCurrentMana >= abilityCost) {
+                int newMana = GameManager.Singleton.hostCurrentMana - abilityCost;
+
+                GameManager.Singleton.AffectManaValues(newMana, GameManager.Singleton.clientCurrentMana,
+                    GameManager.Singleton.hostMaxMana, GameManager.Singleton.clientMaxMana);
+            }
+            else {
+                return;
+            }
+        }
+        else {
+            if (GameManager.Singleton.clientCurrentMana >= abilityCost) {
+                int newMana = GameManager.Singleton.clientCurrentMana - abilityCost;
+
+                GameManager.Singleton.AffectManaValues(GameManager.Singleton.hostCurrentMana, newMana,
+                    GameManager.Singleton.hostMaxMana, GameManager.Singleton.clientMaxMana);
+            }
+            else {
+                return;
+            }
+        }
+
+        if (victim.token.GetComponent<Token>() is CreatureToken c) {
+            //TODO: Adam fix meh
+            victim.DealtDamage(100); //sacrifice
+
+            GameManager.Singleton.myHand.AddCardToHand(newToken);
+        }
     }
 }

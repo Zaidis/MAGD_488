@@ -21,7 +21,7 @@ MonoBehaviour:
   cardFaction: 1
   description: 'Ranged
 
-    All friendly ranged creatures +1/ +1'
+    4 Mana: All friendly ranged creatures +1/ +1'
   lore: Nym is an elf who seems to be able to get away with anything. Though they
     could, they never intentionally do something to harm another. They just have
     good intentions that tend to translate into inconveniences and trouble for others.
@@ -41,6 +41,8 @@ MonoBehaviour:
   defaultPowerAmount: 3
   myAttributes: 
   isMelee: 0
-  hasAbility: 0
+  hasAbility: 1
   hasTargetedAbility: 0
-  abilityCost: 0
+  targetFriendly: 0
+  targetEnemy: 0
+  abilityCost: 4

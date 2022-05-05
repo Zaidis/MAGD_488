@@ -30,20 +30,23 @@ public class SelectCL : MonoBehaviour, IPointerClickHandler
 
     void AddToDeck()
     {
-        if (count == 0)
-        {
-            GameObject selected = Instantiate(DeckEditor.instance.PrefabDL);
-            selected.transform.SetParent(GameObject.Find("DeckList").transform);
-            selected.GetComponent<SelectDL>().card = this;
-            count++;
-            selected.GetComponent<SelectDL>().UpdateInfo();
-            selectDL = selected.GetComponent<SelectDL>();
-            DeckEditor.instance.SetDeckListButtonAmount(1);
-        } else {
-            count++;
-            selectDL.UpdateInfo();
-        }
+        if(DeckEditor.instance.deckID.Count < 40) {
+            if (count == 0) {
+                GameObject selected = Instantiate(DeckEditor.instance.PrefabDL);
+                selected.transform.SetParent(GameObject.Find("DeckList").transform);
+                selected.GetComponent<SelectDL>().card = this;
+                count++;
+                selected.GetComponent<SelectDL>().UpdateInfo();
+                selectDL = selected.GetComponent<SelectDL>();
+                DeckEditor.instance.SetDeckListButtonAmount(1);
+            }
+            else {
+                count++;
+                selectDL.UpdateInfo();
+            }
 
-        DeckEditor.instance.deckID.Add(card.ID);
+            DeckEditor.instance.deckID.Add(card.ID);
+        }
+        
     }
 }
