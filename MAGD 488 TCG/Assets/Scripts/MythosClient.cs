@@ -219,8 +219,10 @@ public class MythosClient : MonoBehaviour {
     public void OnMatchMake() {
         if (!connection.Connected)
             return;
-        status.text = "Matchmaking...";
-        status.color = Color.white;
+        if(status != null) {
+            status.text = "Matchmaking...";
+            status.color = Color.white;
+        }        
         Debug.Log("Sent Matchmaking Request");
         connection.Send(EncryptStringToBase64Bytes("matchmake\r\n"));
     }
