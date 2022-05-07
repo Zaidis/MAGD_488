@@ -4,21 +4,33 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.UI;
 using UnityEngine.UIElements;
 
 public class Settings : MonoBehaviour {
     public AudioMixer audioMixer;
-    [SerializeField] Toggle fsToggle;
-    [SerializeField] Toggle vsToggle;
+    UnityEngine.UI.Toggle fsToggle;
+    UnityEngine.UI.Toggle vsToggle;
+    UnityEngine.UI.Slider audioSlider;
     List<Resolution> resolutions = new List<Resolution>();
     Display[] displays;
+    
     [SerializeField] TMP_Dropdown ResolutionDropdown;
     Dictionary<int, int> resolutionDict = new Dictionary<int, int>();
     private void OnEnable() {
         LoadScreenResolutions();
         audioMixer = FindObjectOfType<AudioSource>().outputAudioMixerGroup.audioMixer;
-        fsToggle.value = Screen.fullScreen;
-        vsToggle.value = QualitySettings.vSyncCount > 0 ? true : false;
+        foreach(Selectable s in Selectable.allSelectablesArray){
+            if(s.name == "VSync")
+                vsToggle = s as UnityEngine.UI.Toggle;
+            if(s.name == "ToggleFullscreen")
+                fsToggle = s as UnityEngine.UI.Toggle;
+            if(s.name == "VolumeSlider")
+                audioSlider = s as UnityEngine.UI.Slider;
+        }
+        fsToggle.isOn = Screen.fullScreen;
+        vsToggle.isOn = QualitySettings.vSyncCount > 0 ? true : false;
+        audioSlider.value = PlayerPrefs.GetFloat("volume");
         audioMixer.SetFloat("MasterVolume", PlayerPrefs.GetFloat("volume"));
     }
     private void LoadScreenResolutions() {
@@ -44,6 +56,7 @@ public class Settings : MonoBehaviour {
             value = -80;
         audioMixer.SetFloat("MasterVolume", value);
         PlayerPrefs.SetFloat("volume", value);
+        PlayerPrefs.Save();
     }
     public void ToggleFullscreen(bool boolean) {
         Screen.fullScreen = boolean;
