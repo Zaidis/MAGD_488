@@ -4,23 +4,30 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.UIElements;
 
 public class Settings : MonoBehaviour {
     public AudioMixer audioMixer;
-    Resolution[] resolutions;
+    [SerializeField] Toggle fsToggle;
+    [SerializeField] Toggle vsToggle;
+    List<Resolution> resolutions = new List<Resolution>();
     Display[] displays;
     [SerializeField] TMP_Dropdown ResolutionDropdown;
     Dictionary<int, int> resolutionDict = new Dictionary<int, int>();
     private void OnEnable() {
         LoadScreenResolutions();
+        audioMixer = FindObjectOfType<AudioSource>().outputAudioMixerGroup.audioMixer;
+        fsToggle.value = Screen.fullScreen;
+        vsToggle.value = QualitySettings.vSyncCount > 0 ? true : false;
+        audioMixer.SetFloat("MasterVolume", PlayerPrefs.GetFloat("volume"));
     }
     private void LoadScreenResolutions() {
-        resolutions = Screen.resolutions;
+        resolutions = new List<Resolution>(Screen.resolutions);
         resolutionDict.Clear();
         ResolutionDropdown.ClearOptions();
         List<string> resolutionList = new List<string>();
         Vector2Int lastRes = Vector2Int.zero;
-        for (int i = 0; i < resolutions.Length; i++) {
+        for (int i = 0; i < resolutions.Count; i++) {
             if ((lastRes.x != resolutions[i].width || lastRes.y != resolutions[i].height) && (resolutions[i].width / (float)resolutions[i].height > 1.7f && resolutions[i].width / (float)resolutions[i].height < 1.8f)) {
                 string resolution = resolutions[i].width + " x " + resolutions[i].height;
                 resolutionList.Add(resolution);
@@ -28,14 +35,21 @@ public class Settings : MonoBehaviour {
                 lastRes = new Vector2Int(resolutions[i].width, resolutions[i].height);
             }
         }
-
         ResolutionDropdown.AddOptions(resolutionList);
+        int key = resolutionDict.First(x => x.Value == resolutions.FindIndex(r => r.width == Display.main.renderingWidth && r.height == Display.main.renderingHeight)).Key;
+        ResolutionDropdown.value = key;
+    }
+    public void SetAudioLevel(float value) {
+        if (value == -20)
+            value = -80;
+        audioMixer.SetFloat("MasterVolume", value);
+        PlayerPrefs.SetFloat("volume", value);
     }
     public void ToggleFullscreen(bool boolean) {
         Screen.fullScreen = boolean;
         if (boolean) {
             LoadScreenResolutions();
-            Screen.SetResolution(resolutions[resolutions.Length - 1].width, resolutions[resolutions.Length - 1].height, true);
+            Screen.SetResolution(resolutions[resolutions.Count - 1].width, resolutions[resolutions.Count - 1].height, true);
         }        
     }
     public void ToggleVsync(bool boolean) => QualitySettings.vSyncCount = boolean ? 1 : 0;
