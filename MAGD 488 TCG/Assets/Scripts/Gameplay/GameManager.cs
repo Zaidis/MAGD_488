@@ -111,12 +111,12 @@ public class GameManager : MonoBehaviour {
     #endregion
 
     #region Player Variables
-        public int hostHealth;
-        public int clientHealth;
-        public int maxHostHealth = 20;
-        public int maxClientHealth = 20;
+    public int hostHealth;
+    public int clientHealth;
+    public int maxHostHealth = 20;
+    public int maxClientHealth = 20;
     [SerializeField] TextMeshPro hostHealthText;
-        [SerializeField] TextMeshPro clientHealthText;
+    [SerializeField] TextMeshPro clientHealthText;
 
     public Transform hostHealthGemPosition;
     public Transform clientHealthGemPosition;
@@ -129,36 +129,27 @@ public class GameManager : MonoBehaviour {
     public Material m_selected;
     #endregion
     private void Awake() {
-        if(_singleton == null) {
+        if (_singleton == null) {
             _singleton = this;
         } else {
             Destroy(this);
         }
     }
-
-    float timer = 0;
-    private void Update() {
-        timer += Time.deltaTime;
-        if (timer > 2f) {
-            timer = 0f;
-            Debug.Log(hostHealth + " : " + clientHealth);
-        }
-    }
     private void Start() {
-        
+
         AffectManaValues(1, 0, 1, 0); //INITIAL MANA
-        
+
         //isHost = true;
         _networkManager = NetworkManager.Singleton;
         if (!_networkManager.IsClient && !_networkManager.IsServer && !_networkManager.IsHost)
             _networkManager.StartHost();
 
         cards = new List<Card>(Resources.LoadAll("", typeof(Card)).Cast<Card>().ToArray());
-        foreach(Card card in cards) {
+        foreach (Card card in cards) {
             dictionaryOfCards.Add(card.ID, card);
         }
         //TurnStatus = GameObject.Find("TurnStatus").GetComponent<TextMeshProUGUI>();
-       // NextTurn = GameObject.Find("NextTurn").GetComponent<Button>();
+        // NextTurn = GameObject.Find("NextTurn").GetComponent<Button>();
         if (_networkManager.IsHost) {
             TurnStatus.text = "Your Turn!";
             NextTurn.interactable = true;
@@ -174,7 +165,7 @@ public class GameManager : MonoBehaviour {
         } else {
             opponent.text = "Join Code: " + MythosClient.instance.joinCode;
         }
-        
+
         StartCoroutine(ClearConnectingOnConnect());
 
         isHost = NetworkManager.Singleton.IsHost;
@@ -185,20 +176,20 @@ public class GameManager : MonoBehaviour {
             hostManaParent.transform.rotation = Quaternion.Euler(0, 180, 0);
             clientManaParent.transform.rotation = Quaternion.Euler(0, 180, 0);
 
-            attackPlayerOption.transform.rotation = Quaternion.Euler(0, 180, 0); 
+            attackPlayerOption.transform.rotation = Quaternion.Euler(0, 180, 0);
             attackTokenOption.transform.rotation = Quaternion.Euler(0, 180, 0);
             abilityOption.transform.rotation = Quaternion.Euler(0, 180, 0);
 
         }
 
         //affect deck
-        for(int i = 0; i < TempDeck.instance.deckID.Count; i++) {
+        for (int i = 0; i < TempDeck.instance.deckID.Count; i++) {
             deck[i] = dictionaryOfCards[TempDeck.instance.deckID[i]];
         }
 
 
-       AffectHealthValues(20, 20);
-       
+        AffectHealthValues(20, 20);
+
     }
 
     public void YourTurnAnimation() {
@@ -235,7 +226,7 @@ public class GameManager : MonoBehaviour {
 
 
     }
-    
+
     /// <summary>
     /// 
     /// </summary>
@@ -248,13 +239,13 @@ public class GameManager : MonoBehaviour {
         hostHealthText.text = hostHealth.ToString();
         clientHealthText.text = clientHealth.ToString();
 
-        if(hostHealth <= 0) {    //Check for eitherplayer death, load respective scene on either with a safe, delayed, scene change
+        if (hostHealth <= 0) {    //Check for eitherplayer death, load respective scene on either with a safe, delayed, scene change
             MythosClient.instance.OnOutcome(false);
             if (isHost)
                 StartCoroutine(SafeSceneChange(1, loseScene));
             else
                 StartCoroutine(SafeSceneChange(1, winScene));
-        } else if(clientHealth <= 0) {
+        } else if (clientHealth <= 0) {
             MythosClient.instance.OnOutcome(true);
             if (!isHost)
                 StartCoroutine(SafeSceneChange(1, loseScene));
@@ -289,8 +280,7 @@ public class GameManager : MonoBehaviour {
         if (isHost) {
             hostButton.SetActive(true);
             myEndTurnButton = hostButton.transform.GetChild(0).GetComponent<EndTurnButton>();
-        }
-        else {
+        } else {
             clientButton.SetActive(true);
             myEndTurnButton = clientButton.transform.GetChild(0).GetComponent<EndTurnButton>();
         }
@@ -300,7 +290,7 @@ public class GameManager : MonoBehaviour {
     /// Shuffles the deck. 
     /// </summary>
     /// <param name="deck"></param>
-    public void ShuffleDeck(List<Card> deck) {         
+    public void ShuffleDeck(List<Card> deck) {
         int n = deck.Count;
         while (n > 1) {
             n--;
@@ -313,36 +303,36 @@ public class GameManager : MonoBehaviour {
 
     public void DrawTopCard(List<Card> deck) {
         //myHand.myCards.Add(deck[0]);
-        if(deck.Count >= 1) {
+        if (deck.Count >= 1) {
             if (deck[0] != null) {
                 myHand.AddCardToHand(deck[0]);
                 deck.RemoveAt(0);
             }
         }
-        
-        
+
+
     }
 
     public void DrawTopCard() {
         //myHand.myCards.Add(deck[0]);
-        if(deck.Count >= 1) {
+        if (deck.Count >= 1) {
             if (deck[0] != null) {
                 myHand.AddCardToHand(deck[0]);
                 deck.RemoveAt(0);
             }
         }
-        
+
 
     }
     public GameObject NewToken(int cardID) //Creates Token based on card type and return gameObject
-    {        
+    {
         Card card = cards.Find(c => c.ID == cardID);
         GameObject tokenObject = null;
         if (card is Creature creature) {
 
-            if(card.cardFaction == faction.empire) {
+            if (card.cardFaction == faction.empire) {
                 tokenObject = Instantiate(CreatureTokenPrefab[0]);
-            } else if(card.cardFaction == faction.beasts) {
+            } else if (card.cardFaction == faction.beasts) {
                 tokenObject = Instantiate(CreatureTokenPrefab[1]);
             } else if (card.cardFaction == faction.guidingLight) {
                 tokenObject = Instantiate(CreatureTokenPrefab[2]);
@@ -352,7 +342,7 @@ public class GameManager : MonoBehaviour {
                 tokenObject = Instantiate(CreatureTokenPrefab[4]);
             }
 
-            
+
             CreatureToken creatureToken = tokenObject.GetComponent<CreatureToken>();
             creatureToken.creature = creature;
             creatureToken.ApplyCard();
@@ -361,17 +351,13 @@ public class GameManager : MonoBehaviour {
 
             if (card.cardFaction == faction.empire) {
                 tokenObject = Instantiate(ArtifactTokenPrefab[0]);
-            }
-            else if (card.cardFaction == faction.beasts) {
+            } else if (card.cardFaction == faction.beasts) {
                 tokenObject = Instantiate(ArtifactTokenPrefab[1]);
-            }
-            else if (card.cardFaction == faction.guidingLight) {
+            } else if (card.cardFaction == faction.guidingLight) {
                 tokenObject = Instantiate(ArtifactTokenPrefab[2]);
-            }
-            else if (card.cardFaction == faction.hunted) {
+            } else if (card.cardFaction == faction.hunted) {
                 tokenObject = Instantiate(ArtifactTokenPrefab[3]);
-            }
-            else if (card.cardFaction == faction.unaligned) {
+            } else if (card.cardFaction == faction.unaligned) {
                 tokenObject = Instantiate(ArtifactTokenPrefab[4]);
             }
 
@@ -380,7 +366,7 @@ public class GameManager : MonoBehaviour {
             artifactToken.ApplyCard();
         }
 
-        
+
 
         return tokenObject;
     }
@@ -388,12 +374,12 @@ public class GameManager : MonoBehaviour {
 
 
     public void PlaceCard(bool isHost, int cardID, int id) {
-        GameObject token = NewToken(cardID);        
+        GameObject token = NewToken(cardID);
         if (isHost) {
-            if(hostBoard[id].token == null)
-                hostBoard[id].SetToken(token);         
+            if (hostBoard[id].token == null)
+                hostBoard[id].SetToken(token);
         } else {
-            if(clientBoard[id].token == null)
+            if (clientBoard[id].token == null)
                 clientBoard[id].SetToken(token);
         }
     }
@@ -410,15 +396,13 @@ public class GameManager : MonoBehaviour {
                 a.UseAbility();
                 a.PlayParticles();
             }
-        }
-        else {
+        } else {
             Token t = clientBoard[userID].token.GetComponent<Token>();
 
             if (t is CreatureToken c) {
                 c.UseAbility();
                 c.PlayParticles();
-            }
-            else if (t is ArtifactToken a) {
+            } else if (t is ArtifactToken a) {
                 a.UseAbility();
                 a.PlayParticles();
             }
@@ -427,40 +411,36 @@ public class GameManager : MonoBehaviour {
 
     public void UseTargetedAbility(int userID, int victimID, bool isHostSide) {
 
-        
+
         if (isHostSide) {
-            if(hostBoard[userID].token != null) {
+            if (hostBoard[userID].token != null) {
                 Token t = hostBoard[userID].token.GetComponent<Token>();
 
                 if (t is CreatureToken c) {
                     if (c.creature.targetFriendly) {
                         c.UseTargetedAbility(hostBoard[victimID]);
                         c.PlayParticles();
-                    }
-                    else if (c.creature.targetEnemy) {
+                    } else if (c.creature.targetEnemy) {
                         c.UseTargetedAbility(clientBoard[victimID]);
                         c.PlayParticles();
-                    }
-                    else {
+                    } else {
 
                     }
                 }
             }
-            
+
         } else {
-            if(clientBoard[userID].token != null) {
+            if (clientBoard[userID].token != null) {
                 Token t = clientBoard[userID].token.GetComponent<Token>();
                 if (t is CreatureToken c) {
 
                     if (c.creature.targetFriendly) {
                         c.UseTargetedAbility(clientBoard[victimID]);
                         c.PlayParticles();
-                    }
-                    else if (c.creature.targetEnemy) {
+                    } else if (c.creature.targetEnemy) {
                         c.UseTargetedAbility(hostBoard[victimID]);
                         c.PlayParticles();
-                    }
-                    else {
+                    } else {
 
                     }
                     /*if (isHostSide) {
@@ -473,7 +453,7 @@ public class GameManager : MonoBehaviour {
                     }*/
                 }
             }
-            
+
         }
     }
 
@@ -494,15 +474,15 @@ public class GameManager : MonoBehaviour {
         Player player = _networkManager.SpawnManager.GetLocalPlayerObject().GetComponent<Player>();
         player.UpdateTurnServerRpc(IsHostTurn);
 
-        
 
-    }    
+
+    }
     private IEnumerator ClearConnectingOnConnect() { //Guarentees that connecting screen is shown until all users are connected and it's safe to start gameplay
         if (_networkManager.IsServer) {
             while (_networkManager.ConnectedClients.Count < 2)
                 yield return null;
         } else {
-            while(!_networkManager.IsConnectedClient)
+            while (!_networkManager.IsConnectedClient)
                 yield return null;
         }
         Connecting.SetActive(false);
@@ -510,9 +490,9 @@ public class GameManager : MonoBehaviour {
     }
 
     public void ResetTokens(Tile[] board) {
-        for(int i = 0; i < 10; i++) {
-            if(board[i].token != null) {
-                if(board[i].token.GetComponent<Token>() is CreatureToken c) {
+        for (int i = 0; i < 10; i++) {
+            if (board[i].token != null) {
+                if (board[i].token.GetComponent<Token>() is CreatureToken c) {
                     c.ResetToken();
                 } else if (board[i].token.GetComponent<Token>() is ArtifactToken a) {
                     a.ResetToken();
@@ -521,9 +501,9 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    
 
-    
+
+
 
     public void TestDrawCard(Card card) {
         myHand.AddCardToHand(card);
@@ -537,21 +517,21 @@ public class GameManager : MonoBehaviour {
     /// <param name="attackerID">The creature that is attacking.</param>
     public void ChangeTilesMaterial(Tile[] board, bool isMelee, int attackerID) {
         if (isMelee) {
-             for(int i = 9; i > 4; i--) {
+            for (int i = 9; i > 4; i--) {
                 Tile t = board[i].GetComponent<Tile>();
                 Tile t2 = board[i - 5].GetComponent<Tile>();
                 if (t.token != null) {
                     t.ChangeTokenMaterial(m_active);
                     t.active = true;
-                } else if(t2.token != null) { //checks the tile behind
+                } else if (t2.token != null) { //checks the tile behind
                     t2.ChangeTokenMaterial(m_active);
                     t2.active = true;
                 }
             }
         } else { //if you are ranged, check ALL tiles
-            for(int i = 0; i < board.Length; i++) {
+            for (int i = 0; i < board.Length; i++) {
                 Tile t = board[i].GetComponent<Tile>();
-                if(t.token != null) {
+                if (t.token != null) {
                     t.ChangeTokenMaterial(m_active);
                     t.active = true;
                 }
@@ -622,8 +602,7 @@ public class GameManager : MonoBehaviour {
                     t.active = true;
                 }
             }
-        }
-        else {
+        } else {
             for (int i = 0; i < hostBoard.Length; i++) {
                 Tile t = hostBoard[i].GetComponent<Tile>();
                 if (t.token != null) {
@@ -639,15 +618,15 @@ public class GameManager : MonoBehaviour {
         //in order to attack the opponent, the entire enemy column that matches the attacking creature must be empty.
         //that goes for both melee and ranged creatures. The difference is ranged can attack the backline even if
         //there is a melee creature in front.
-        
-        if(attackerID >= 0 && attackerID <= 4) {
+
+        if (attackerID >= 0 && attackerID <= 4) {
             //this creature is in the back row
-            if(board[attackerID].GetComponent<Tile>().token == null && board[attackerID + 5].GetComponent<Tile>().token == null) {
+            if (board[attackerID].GetComponent<Tile>().token == null && board[attackerID + 5].GetComponent<Tile>().token == null) {
                 return true;
             }
-        } else if(attackerID >= 5 && attackerID <= 9) {
+        } else if (attackerID >= 5 && attackerID <= 9) {
             if (board[attackerID].GetComponent<Tile>().token == null && board[attackerID - 5].GetComponent<Tile>().token == null) {
-                
+
                 return true;
             }
         }
@@ -658,7 +637,7 @@ public class GameManager : MonoBehaviour {
     /// All tiles become unactive.
     /// </summary>
     public void ResetAllTiles(Tile[] board) {
-        for(int i = 0; i < board.Length; i++) {
+        for (int i = 0; i < board.Length; i++) {
             Tile t = board[i].GetComponent<Tile>();
             t.ChangeTokenMaterial(m_default);
             t.active = false;
@@ -666,7 +645,7 @@ public class GameManager : MonoBehaviour {
     }
 
     public bool CheckIfMyCreature(Tile[] board, Tile t) {
-        for(int i = 0; i < board.Length; i++) {
+        for (int i = 0; i < board.Length; i++) {
             if (t == board[i]) return true;
         }
 
@@ -717,7 +696,7 @@ public class GameManager : MonoBehaviour {
             }
 
             if (token.creature.hasAbility) {
-                if(token.creature.abilityCost <= hostCurrentMana) {
+                if (token.creature.abilityCost <= hostCurrentMana) {
                     if (!token.castedAbility) {
 
                         abilityOption.transform.position = hostOptionSpawnLocations[counter].position;
@@ -725,7 +704,7 @@ public class GameManager : MonoBehaviour {
                         counter++;
                     }
                 }
-                
+
             }
 
             //ability
@@ -746,7 +725,7 @@ public class GameManager : MonoBehaviour {
             }
 
             if (token.creature.hasAbility) {
-                if(token.creature.abilityCost <= clientCurrentMana) {
+                if (token.creature.abilityCost <= clientCurrentMana) {
                     if (!token.castedAbility) {
 
                         abilityOption.transform.position = clientOptionSpawnLocations[counter].position;
@@ -756,17 +735,16 @@ public class GameManager : MonoBehaviour {
                 }
             }
         }
-        
 
-        
+
+
     }
 
     public void ArtifactOptionButton(ArtifactToken token) {
 
         if (isHost) {
             ResetAllTiles(hostBoard);
-        }
-        else {
+        } else {
             ResetAllTiles(clientBoard);
         }
         int counter = 0;
@@ -779,7 +757,7 @@ public class GameManager : MonoBehaviour {
 
         if (Singleton.isHost) {
             if (token.artifact.hasAbility) {
-                if(token.artifact.abilityCost <= hostCurrentMana) {
+                if (token.artifact.abilityCost <= hostCurrentMana) {
                     if (!token.castedAbility) {
                         abilityOption.transform.position = hostOptionSpawnLocations[counter].position;
                         abilityOption.gameObject.SetActive(true);
@@ -825,8 +803,7 @@ public class GameManager : MonoBehaviour {
                 opponentHand.AddCardToHand();
 
             }
-        }
-        else {
+        } else {
             if (t) {
                 //if you are the host, and the drawn card was from the client...
                 opponentHand.AddCardToHand();
@@ -846,8 +823,7 @@ public class GameManager : MonoBehaviour {
                 opponentHand.RemoveCardFromHand();
 
             }
-        }
-        else {
+        } else {
             if (t) {
                 //if you are the host, and the drawn card was from the client...
                 opponentHand.RemoveCardFromHand();
@@ -856,12 +832,12 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    
+
     public void ChangeAllTileMaterials() {
         if (isHost) {
-            for(int i = 0; i < hostBoard.Length; i++) {
+            for (int i = 0; i < hostBoard.Length; i++) {
                 hostBoard[i].ChangeTileMaterial(m_default);
-            } 
+            }
         } else {
             for (int i = 0; i < clientBoard.Length; i++) {
                 clientBoard[i].ChangeTileMaterial(m_default);
@@ -875,63 +851,52 @@ public class GameManager : MonoBehaviour {
                     for (int i = 5; i < 10; i++) {
                         if (hostBoard[i].token != null) {
                             continue;
-                        }
-                        else {
+                        } else {
                             hostBoard[i].ChangeTileMaterial(m_active);
                         }
                     }
-                }
-                else {
+                } else {
                     for (int i = 0; i < 5; i++) {
                         if (hostBoard[i].token != null) {
                             continue;
-                        }
-                        else {
+                        } else {
                             hostBoard[i].ChangeTileMaterial(m_active);
                         }
                     }
                 }
-            }
-            else if (card is Artifact a) {
+            } else if (card is Artifact a) {
                 for (int i = 0; i < 10; i++) {
                     if (hostBoard[i].token != null) {
                         continue;
-                    }
-                    else {
+                    } else {
                         hostBoard[i].ChangeTileMaterial(m_active);
                     }
                 }
             }
-        }
-        else {
+        } else {
             if (card is Creature c) {
                 if (c.isMelee) {
                     for (int i = 5; i < 10; i++) {
                         if (clientBoard[i].token != null) {
                             continue;
-                        }
-                        else {
+                        } else {
                             clientBoard[i].ChangeTileMaterial(m_active);
                         }
                     }
-                }
-                else {
+                } else {
                     for (int i = 0; i < 5; i++) {
                         if (clientBoard[i].token != null) {
                             continue;
-                        }
-                        else {
+                        } else {
                             clientBoard[i].ChangeTileMaterial(m_active);
                         }
                     }
                 }
-            }
-            else if (card is Artifact a) {
+            } else if (card is Artifact a) {
                 for (int i = 0; i < 10; i++) {
                     if (clientBoard[i].token != null) {
                         continue;
-                    }
-                    else {
+                    } else {
                         clientBoard[i].ChangeTileMaterial(m_active);
                     }
 
@@ -947,7 +912,7 @@ public class GameManager : MonoBehaviour {
         if (hostTile) {
             Token t = hostBoard[ID].token.GetComponent<Token>();
 
-            if(t is CreatureToken c) {
+            if (t is CreatureToken c) {
                 c.PlayParticles();
             } else if (t is ArtifactToken a) {
                 a.PlayParticles();
@@ -957,8 +922,7 @@ public class GameManager : MonoBehaviour {
 
             if (t is CreatureToken c) {
                 c.PlayParticles();
-            }
-            else if (t is ArtifactToken a) {
+            } else if (t is ArtifactToken a) {
                 a.PlayParticles();
             }
         }
