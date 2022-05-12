@@ -8,12 +8,13 @@ public class Menu : MonoBehaviour
     public static Menu instance;
     private void Awake() => instance = this;
 
-    [SerializeField] GameObject play;
+    public GameObject play;
     [SerializeField] GameObject deckSelect;
     [SerializeField] GameObject settings;
     [SerializeField] GameObject deckEditor;
     [SerializeField] GameObject direct;
     [SerializeField] GameObject credits;
+    [SerializeField] GameObject deckSelectPregame;
     private void Start() {
         AudioMixer audioMixer = FindObjectOfType<AudioSource>().outputAudioMixerGroup.audioMixer;
         audioMixer.SetFloat("MasterVolume", PlayerPrefs.GetFloat("volume"));
@@ -21,7 +22,7 @@ public class Menu : MonoBehaviour
     }    
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape) && !play.activeInHierarchy)
             ButtonSetFalse();
     }
     public void ButtonSetFalse()
@@ -32,6 +33,7 @@ public class Menu : MonoBehaviour
         settings.SetActive(false);
         direct.SetActive(false);
         credits.SetActive(false);
+        deckSelectPregame.SetActive(false);
     }
 
 
@@ -45,6 +47,11 @@ public class Menu : MonoBehaviour
         MythosClient.instance.OnMatchMake();
         ButtonSetFalse();
         play.SetActive(true);
+    }
+    public void ButtonPregameDeckSelect() {
+        ButtonSetFalse();
+        deckSelectPregame.SetActive(true);
+        deckEditor.SetActive(true);
     }
     public void ButtonDirect() {
 
