@@ -98,18 +98,46 @@ public class Creature : Card
         int attackedID = attacked.token.transform.parent.GetComponent<Tile>().GetTileID();
 
         if (!attacked.token.GetComponentInParent<Tile>().hostTile) {
-            if(clientBoard[attackedID - 1] != null) { //check the tile to the left of the attacked tile
+
+            bool isMelee = clientBoard[attackedID].meleeTile;
+
+            
+            
+            if(attackedID - 1 >= 0 && attackedID - 1 <= 9) { //check the tile to the left of the attacked tile
                 if(clientBoard[attackedID - 1].token != null) { //if there is a token here, attack it
-                    clientBoard[attackedID - 1].DealtDamage(attacker.token.GetComponent<CreatureToken>().currentAttack);
+                    if(clientBoard[attackedID - 1].meleeTile && isMelee)
+                        clientBoard[attackedID - 1].DealtDamage(attacker.token.GetComponent<CreatureToken>().currentAttack);
+                    else if(clientBoard[attackedID - 1].meleeTile == false && !isMelee)
+                        clientBoard[attackedID - 1].DealtDamage(attacker.token.GetComponent<CreatureToken>().currentAttack);
                 }
             }
-            if (clientBoard[attackedID + 1] != null) { //check the tile to the right of the attacked tile
-                if (clientBoard[attackedID + 1].token != null) {
-                    clientBoard[attackedID + 1].DealtDamage(attacker.token.GetComponent<CreatureToken>().currentAttack);
+            if(attackedID + 1 >= 0 && attackedID + 1 <= 9) {
+                if (clientBoard[attackedID + 1].token != null) { //if there is a token here, attack it
+                    if (clientBoard[attackedID + 1].meleeTile && isMelee)
+                        clientBoard[attackedID + 1].DealtDamage(attacker.token.GetComponent<CreatureToken>().currentAttack);
+                    else if (clientBoard[attackedID + 1].meleeTile == false && !isMelee)
+                        clientBoard[attackedID + 1].DealtDamage(attacker.token.GetComponent<CreatureToken>().currentAttack);
                 }
             }
         } else {
-            if (hostBoard[attackedID - 1] != null) {
+            if (attackedID - 1 >= 0 && attackedID - 1 <= 9) { //check the tile to the left of the attacked tile
+                if (hostBoard[attackedID - 1].token != null) { //if there is a token here, attack it
+                    if (hostBoard[attackedID - 1].meleeTile && isMelee)
+                        hostBoard[attackedID - 1].DealtDamage(attacker.token.GetComponent<CreatureToken>().currentAttack);
+                    else if (hostBoard[attackedID - 1].meleeTile == false && !isMelee)
+                        hostBoard[attackedID - 1].DealtDamage(attacker.token.GetComponent<CreatureToken>().currentAttack);
+                }
+            }
+            if (attackedID + 1 >= 0 && attackedID + 1 <= 9) {
+                if (hostBoard[attackedID + 1].token != null) { //if there is a token here, attack it
+                    if (hostBoard[attackedID + 1].meleeTile && isMelee)
+                        hostBoard[attackedID + 1].DealtDamage(attacker.token.GetComponent<CreatureToken>().currentAttack);
+                    else if (hostBoard[attackedID + 1].meleeTile == false && !isMelee)
+                        hostBoard[attackedID + 1].DealtDamage(attacker.token.GetComponent<CreatureToken>().currentAttack);
+                }
+            }
+
+            /*if (hostBoard[attackedID - 1] != null) {
                 if (hostBoard[attackedID - 1].token != null) {
                     hostBoard[attackedID - 1].DealtDamage(attacker.token.GetComponent<CreatureToken>().currentAttack);
                 }
@@ -118,7 +146,7 @@ public class Creature : Card
                 if (hostBoard[attackedID + 1].token != null) {
                     hostBoard[attackedID + 1].DealtDamage(attacker.token.GetComponent<CreatureToken>().currentAttack);
                 }
-            }
+            }*/
         }
     }
 
@@ -134,13 +162,13 @@ public class Creature : Card
         int attackedID = attacked.token.transform.parent.GetComponent<Tile>().GetTileID();
 
         if (!attacked.token.GetComponentInParent<Tile>().hostTile) {
-            if(clientBoard[attackedID - 5] != null) {
-                if(clientBoard[attackedID - 5].token != null) {
+            if (clientBoard[attackedID].meleeTile) {
+                if (clientBoard[attackedID - 5].token != null) {
                     clientBoard[attackedID - 5].DealtDamage(attacker.token.GetComponent<CreatureToken>().currentAttack);
                 }
             }
         } else {
-            if (hostBoard[attackedID - 5] != null) {
+            if (hostBoard[attackedID].meleeTile) {
                 if (hostBoard[attackedID - 5].token != null) {
                     hostBoard[attackedID - 5].DealtDamage(attacker.token.GetComponent<CreatureToken>().currentAttack);
                 }

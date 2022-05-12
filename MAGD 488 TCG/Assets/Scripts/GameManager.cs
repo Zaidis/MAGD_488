@@ -502,8 +502,10 @@ public class GameManager : MonoBehaviour {
     public void ResetTokens(Tile[] board) {
         for(int i = 0; i < 10; i++) {
             if(board[i].token != null) {
-                if(board[i].token.GetComponent<CreatureToken>() is CreatureToken c) {
+                if(board[i].token.GetComponent<Token>() is CreatureToken c) {
                     c.ResetToken();
+                } else if (board[i].token.GetComponent<Token>() is ArtifactToken a) {
+                    a.ResetToken();
                 }
             }
         }

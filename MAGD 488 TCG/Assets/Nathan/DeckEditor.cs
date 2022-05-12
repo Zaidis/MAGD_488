@@ -19,7 +19,7 @@ public class DeckEditor : MonoBehaviour {
     public new string deckName;
     public List<int> deckID = new List<int>();
     private List<SelectCL> selectCLs = new List<SelectCL>();
-    public Card[] cards;
+    public List<Card> cards;
 
     public int deckListPrefabAmount;
 
@@ -47,8 +47,12 @@ public class DeckEditor : MonoBehaviour {
     [SerializeField] TextMeshProUGUI attack, health;
     [Header("Prefabs")]
     public GameObject PrefabDL;
-    private void Start() {        
-        cards = Resources.LoadAll("", typeof(Card)).Cast<Card>().ToArray();
+    private void Start() {
+
+        cards = new List<Card>(Resources.LoadAll("", typeof(Card)).Cast<Card>().ToArray());
+
+        cards.RemoveAll(c => c.ID == 5002 || c.ID == 898989 || c.ID == 567567 || c.ID == 3006);
+
         layoutCL = cardList.GetComponent<GridLayoutGroup>();
         layoutDL = deckList.GetComponent<GridLayoutGroup>();
         Resize();
@@ -70,9 +74,9 @@ public class DeckEditor : MonoBehaviour {
     public void Sort(int sortType) {
         Debug.Log(sortType);
         if (sortType == 0)
-            cards = cards.OrderBy(x => x.cardName).ToArray();
+            cards = cards.OrderBy(x => x.cardName).ToList();
         if (sortType == 1)
-            cards = cards.OrderBy(x => x.manaCost).ToArray();
+            cards = cards.OrderBy(x => x.manaCost).ToList();
         FillDeckEditorPannel();
     }
     void FillDeckEditorPannel() {
@@ -80,7 +84,7 @@ public class DeckEditor : MonoBehaviour {
         foreach (Transform child in cardList)
             Destroy(child.gameObject);
         // cards = Resources.FindObjectsOfTypeAll(typeof(Card)) as Card[];
-        for (int i = 0; i < cards.Length; i++)
+        for (int i = 0; i < cards.Count; i++)
             if (cards[i].cardName.ToLower().Contains(str.ToLower()) || str.Equals(""))
                 selectCLs.Add(CreateCard(cards[i]));
     }

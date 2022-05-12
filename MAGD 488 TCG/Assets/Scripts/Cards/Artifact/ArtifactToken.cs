@@ -24,6 +24,9 @@ public class ArtifactToken : Token, IPointerEnterHandler, IPointerExitHandler, I
             transform.parent.GetComponent<Tile>());
     }
 
+    public void ResetToken() {
+        castedAbility = false;
+    }
     public override void UpdateStats() {
 
         //health
@@ -46,14 +49,33 @@ public class ArtifactToken : Token, IPointerEnterHandler, IPointerExitHandler, I
         if (eventData.button == PointerEventData.InputButton.Left) {
             if ((GameManager.Singleton.isHost && GameManager.Singleton.IsHostTurn) || (!GameManager.Singleton.isHost && !GameManager.Singleton.IsHostTurn)) {
                 if (transform.parent.GetComponent<Tile>().active) {
-                    
-                    /*if (GameManager.Singleton.isUsingAbility) {
+
+                    if (GameManager.Singleton.isAttecking) {
+
+                        if (GameManager.Singleton.isHost) {
+                            if (!transform.GetComponentInParent<Tile>().hostTile) { //you clicked on a client tile
+                                Player p = GameManager.Singleton._networkManager.SpawnManager.GetLocalPlayerObject().GetComponent<Player>();
+                                p.UpdateAttackServerRpc(GameManager.Singleton.selectedCreature.GetComponentInParent<Tile>().GetTileID(), transform.parent.GetComponent<Tile>().GetTileID(), true);
+
+                            }
+
+                        }
+                        else {
+                            if (transform.GetComponentInParent<Tile>().hostTile) { //you clicked on a host tile
+                                Player p = GameManager.Singleton._networkManager.SpawnManager.GetLocalPlayerObject().GetComponent<Player>();
+                                p.UpdateAttackServerRpc(GameManager.Singleton.selectedCreature.GetComponentInParent<Tile>().GetTileID(), transform.parent.GetComponent<Tile>().GetTileID(), false);
+
+                            }
+                        }
+
+                    }
+                    else if (GameManager.Singleton.isUsingAbility) {
 
                         Player p = GameManager.Singleton._networkManager.SpawnManager.GetLocalPlayerObject().GetComponent<Player>();
                         p.UpdateTargetedAbilityServerRpc(GameManager.Singleton.selectedCreature.GetComponentInParent<Tile>().GetTileID(), transform.parent.GetComponent<Tile>().GetTileID(),
                             transform.parent.GetComponent<Tile>().hostTile);
 
-                    } */
+                    }
 
 
                 }
