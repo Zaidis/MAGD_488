@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class Menu : MonoBehaviour
 {
@@ -13,14 +14,18 @@ public class Menu : MonoBehaviour
     [SerializeField] GameObject deckEditor;
     [SerializeField] GameObject direct;
     [SerializeField] GameObject credits;
-    private void Start() => ButtonSetFalse();
+    private void Start() {
+        AudioMixer audioMixer = FindObjectOfType<AudioSource>().outputAudioMixerGroup.audioMixer;
+        audioMixer.SetFloat("MasterVolume", PlayerPrefs.GetFloat("volume"));
+        ButtonSetFalse();
+    }    
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
             ButtonSetFalse();
     }
     public void ButtonSetFalse()
-    {
+    {        
         play.SetActive(false);
         deckSelect.SetActive(false);
         deckEditor.SetActive(false);

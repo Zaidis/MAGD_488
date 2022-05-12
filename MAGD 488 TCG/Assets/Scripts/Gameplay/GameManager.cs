@@ -241,15 +241,15 @@ public class GameManager : MonoBehaviour {
         if(hostHealth <= 0) {    //Check for eitherplayer death, load respective scene on either with a safe, delayed, scene change
             MythosClient.instance.OnOutcome(false);
             if (isHost)
-                StartCoroutine(SafeSceneChange(2, loseScene));
+                StartCoroutine(SafeSceneChange(1, loseScene));
             else
-                StartCoroutine(SafeSceneChange(2, winScene));
+                StartCoroutine(SafeSceneChange(1, winScene));
         } else if(clientHealth <= 0) {
             MythosClient.instance.OnOutcome(true);
             if (!isHost)
-                StartCoroutine(SafeSceneChange(2, loseScene));
+                StartCoroutine(SafeSceneChange(1, loseScene));
             else
-                StartCoroutine(SafeSceneChange(2, winScene));
+                StartCoroutine(SafeSceneChange(1, winScene));
         }
     }
 
