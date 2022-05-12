@@ -13,33 +13,20 @@ public class ErlandFulkvare : Creature
     public override void OnAbility(Tile[] hostBoard, Tile[] clientBoard, Tile attacker, bool isHost)
     {
         //All cards,0/+2 and Taunt (4 Mana Cost)
-        if (GameManager.Singleton.isHost) {
-            if (GameManager.Singleton.hostCurrentMana >= abilityCost) {
-                int newMana = GameManager.Singleton.hostCurrentMana - abilityCost;
-
-                GameManager.Singleton.AffectManaValues(newMana, GameManager.Singleton.clientCurrentMana,
-                    GameManager.Singleton.hostMaxMana, GameManager.Singleton.clientMaxMana);
-            }
-            else {
+        GameManager gm = GameManager.Singleton;
+        if (gm.isHost) {
+            if (gm.hostCurrentMana < abilityCost)
                 return;
-            }
-        }
-        else {
-            if (GameManager.Singleton.clientCurrentMana >= abilityCost) {
-                int newMana = GameManager.Singleton.clientCurrentMana - abilityCost;
-
-                GameManager.Singleton.AffectManaValues(GameManager.Singleton.hostCurrentMana, newMana,
-                    GameManager.Singleton.hostMaxMana, GameManager.Singleton.clientMaxMana);
-            }
-            else {
+            gm.player.UpdateManaServerRpc(gm.hostCurrentMana - abilityCost, gm.clientCurrentMana, gm.hostMaxMana, gm.clientMaxMana);
+        } else {
+            if (gm.clientCurrentMana < abilityCost)
                 return;
-            }
+            gm.player.UpdateManaServerRpc(gm.hostCurrentMana, gm.clientCurrentMana - abilityCost, gm.hostMaxMana, gm.clientMaxMana);
         }
+
         //Token t = attacker.token.GetComponent<Token>();
-        if (isHost)
-        {
-            for (int i = 0; i < 10; i++)
-            {
+        if (isHost) {
+            for (int i = 0; i < 10; i++) {
                 Tile tile = hostBoard[i];
                 if(tile.token != null) {
                     Token t = tile.token.GetComponent<Token>();
@@ -50,10 +37,8 @@ public class ErlandFulkvare : Creature
                 }
                 
             }
-        } else
-        {
-            for (int i = 0; i < 10; i++)
-            {
+        } else {
+            for (int i = 0; i < 10; i++) {
                 Tile tile = clientBoard[i];
                 if(tile.token != null) {
                     Token t = tile.token.GetComponent<Token>();
@@ -61,11 +46,8 @@ public class ErlandFulkvare : Creature
                         c.currentHealth += healthMod;
                         c.UpdateStats();
                     }
-                }
-                
+                }                
             }
-        }
-        
-        
+        }      
     }
 }

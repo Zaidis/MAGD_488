@@ -37,8 +37,6 @@ public class Creature : Card
                     else { //client health goes up
                         Debug.LogError("THORNS -> CLIENT AFFECTED");
                         p.UpdateHealthServerRpc(0, c.currentAttack * -1);
-
-
                     }
                 }
             }

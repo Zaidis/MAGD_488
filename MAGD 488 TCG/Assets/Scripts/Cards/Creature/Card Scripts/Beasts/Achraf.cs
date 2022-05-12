@@ -16,43 +16,24 @@ public class Achraf : Creature
 
     public override void OnTargetedAbility(Tile user, Tile victim, bool isHostSide)
     {
-        if (GameManager.Singleton.isHost) {
-            if (GameManager.Singleton.hostCurrentMana >= abilityCost) {
-                int newMana = GameManager.Singleton.hostCurrentMana - abilityCost;
-
-                GameManager.Singleton.AffectManaValues(newMana, GameManager.Singleton.clientCurrentMana,
-                    GameManager.Singleton.hostMaxMana, GameManager.Singleton.clientMaxMana);
-            }
-            else {
+        GameManager gm = GameManager.Singleton;
+        if (gm.isHost) {
+            if (gm.hostCurrentMana < abilityCost)
                 return;
-            }
-        }
-        else {
-            if (GameManager.Singleton.clientCurrentMana >= abilityCost) {
-                int newMana = GameManager.Singleton.clientCurrentMana - abilityCost;
-
-                GameManager.Singleton.AffectManaValues(GameManager.Singleton.hostCurrentMana, newMana,
-                    GameManager.Singleton.hostMaxMana, GameManager.Singleton.clientMaxMana);
-            }
-            else {
+            gm.player.UpdateManaServerRpc(gm.hostCurrentMana - abilityCost, gm.clientCurrentMana, gm.hostMaxMana, gm.clientMaxMana);
+        } else {
+            if (gm.clientCurrentMana < abilityCost)
                 return;
-            }
+            gm.player.UpdateManaServerRpc(gm.hostCurrentMana, gm.clientCurrentMana - abilityCost, gm.hostMaxMana, gm.clientMaxMana);
         }
-
         if (victim.token.GetComponent<Token>() is CreatureToken c)
         {
             //TODO: Adam fix meh
             victim.DealtDamage(100);
-
-            if (user.hostTile) {
-                Player p = GameManager.Singleton._networkManager.SpawnManager.GetLocalPlayerObject().GetComponent<Player>();
-                p.UpdateHealthServerRpc(2, 0);
-            } else {
-                Player p = GameManager.Singleton._networkManager.SpawnManager.GetLocalPlayerObject().GetComponent<Player>();
-                p.UpdateHealthServerRpc(0, 2);
-            }
-
-
+            if (user.hostTile)
+                gm.player.UpdateHealthServerRpc(2, 0);
+            else
+                gm.player.UpdateHealthServerRpc(0, 2);
         }
     }
 }

@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour {
     private static GameManager _singleton;
     public static GameManager Singleton { get { return _singleton; } }
     public TextMeshProUGUI TurnStatus;
+    public Player player;
 
     public PlayableDirector turnAnim;
     public GameObject turnAnimObject;
@@ -135,6 +136,14 @@ public class GameManager : MonoBehaviour {
         }
     }
 
+    float timer = 0;
+    private void Update() {
+        timer += Time.deltaTime;
+        if (timer > 2f) {
+            timer = 0f;
+            Debug.Log(hostHealth + " : " + clientHealth);
+        }
+    }
     private void Start() {
         
         AffectManaValues(1, 0, 1, 0); //INITIAL MANA
@@ -188,7 +197,8 @@ public class GameManager : MonoBehaviour {
         }
 
 
-        AffectHealthValues(maxHostHealth, maxClientHealth);
+       AffectHealthValues(20, 20);
+       
     }
 
     public void YourTurnAnimation() {
@@ -260,6 +270,7 @@ public class GameManager : MonoBehaviour {
     }
 
     private void BeginGame() {
+        player = _networkManager.SpawnManager.GetLocalPlayerObject().GetComponent<Player>();
         /*
          * The player who goes first will draw 3 cards. 
          * The player who goes second will draw 4 cards. 
@@ -495,7 +506,6 @@ public class GameManager : MonoBehaviour {
                 yield return null;
         }
         Connecting.SetActive(false);
-
         BeginGame();
     }
 

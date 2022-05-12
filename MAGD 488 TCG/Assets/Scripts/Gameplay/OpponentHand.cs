@@ -18,7 +18,7 @@ public class OpponentHand : MonoBehaviour
     public void AddCardToHand() {
 
         GameObject newCard = Instantiate(emptyCard, transform.position, Quaternion.identity);
-        newCard.transform.parent = this.transform;
+        newCard.transform.SetParent(this.transform);
         newCard.transform.localScale = Vector3.one;
         if (uiCards.Count != 0) {
             int j = uiCards.Count;

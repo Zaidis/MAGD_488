@@ -18,31 +18,19 @@ public class MistressOfTheFrozenSwamp : Creature
 
     public override void OnTargetedAbility(Tile user, Tile victim, bool isHostSide)
     {
-        if (GameManager.Singleton.isHost) {
-            if (GameManager.Singleton.hostCurrentMana >= abilityCost) {
-                int newMana = GameManager.Singleton.hostCurrentMana - abilityCost;
-
-                GameManager.Singleton.AffectManaValues(newMana, GameManager.Singleton.clientCurrentMana, 
-                    GameManager.Singleton.hostMaxMana, GameManager.Singleton.clientMaxMana);
-            }
-            else {
+        GameManager gm = GameManager.Singleton;
+        if (gm.isHost) {
+            if (gm.hostCurrentMana < abilityCost)
                 return;
-            }
+            gm.player.UpdateManaServerRpc(gm.hostCurrentMana - abilityCost, gm.clientCurrentMana, gm.hostMaxMana, gm.clientMaxMana);
         } else {
-            if (GameManager.Singleton.clientCurrentMana >= abilityCost) {
-                int newMana = GameManager.Singleton.clientCurrentMana - abilityCost;
-
-                GameManager.Singleton.AffectManaValues(GameManager.Singleton.hostCurrentMana, newMana,
-                    GameManager.Singleton.hostMaxMana, GameManager.Singleton.clientMaxMana);
-            }
-            else {
+            if (gm.clientCurrentMana < abilityCost)
                 return;
-            }
+            gm.player.UpdateManaServerRpc(gm.hostCurrentMana, gm.clientCurrentMana - abilityCost, gm.hostMaxMana, gm.clientMaxMana);
         }
         
         Token t = victim.token.GetComponent<Token>();
-        if(t is CreatureToken c)
-        {
+        if(t is CreatureToken c) {
             c.currentAttack += attackMod;
             c.currentHealth += healthMod;
             c.UpdateStats();

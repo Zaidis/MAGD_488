@@ -31,6 +31,9 @@ public class GameMenu : MonoBehaviour
     }
 
     public void BackToMenu() {
+        Unity.Netcode.NetworkManager nm = GameManager.Singleton._networkManager;
+        nm.Shutdown();
+        MythosClient.instance.OnOutcome(!nm.IsHost);
         SceneManager.LoadScene(1); // <-- menu
     }
 
