@@ -183,13 +183,13 @@ public class GameManager : MonoBehaviour {
         }
 
         //affect deck
-        for (int i = 0; i < TempDeck.instance.deckID.Count; i++) {
-            deck.Add(dictionaryOfCards[TempDeck.instance.deckID[i]]);
+        if (TempDeck.instance.deckID.Count > 0) {
+            deck.Clear();
+            for (int i = 0; i < TempDeck.instance.deckID.Count; i++)
+                deck.Add(dictionaryOfCards[TempDeck.instance.deckID[i]]);
         }
 
-
         AffectHealthValues(20, 20);
-
     }
 
     public void YourTurnAnimation() {

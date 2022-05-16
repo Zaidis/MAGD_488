@@ -3,6 +3,8 @@ using UnityEngine;
 using TMPro;
 using System.Collections.Generic;
 using System.Collections;
+using Unity.Netcode;
+using UnityEngine.SceneManagement;
 
 public class SelectDeck : MonoBehaviour, IPointerClickHandler
 {
@@ -38,9 +40,23 @@ public class SelectDeck : MonoBehaviour, IPointerClickHandler
         MythosClient.instance.OnRetrieveDeckContent(name);
         DeckEditor.instance.SetDeckName(name);        
     }
-    private void SetDeck(List<int> deck) {        
+    public void ButtonSelectDirect() {        
+        MythosClient.OnDeckContentLoaded += SetDeckDirect;
+        MythosClient.instance.OnRetrieveDeckContent(name);
+        DeckEditor.instance.SetDeckName(name);        
+    }
+    private void SetDeck(List<int> deck) {
+        MythosClient.OnDeckContentLoaded -= SetDeck;
         TempDeck.instance.AddListToTemporaryDeck(DeckEditor.instance.deckID);
         TempDeck.instance.usingCustomDeck = true;
         Menu.instance.ButtonPlay();
+    }
+    private void SetDeckDirect(List<int> deck) {
+        MythosClient.OnDeckContentLoaded -= SetDeckDirect;
+        TempDeck.instance.AddListToTemporaryDeck(DeckEditor.instance.deckID);
+        TempDeck.instance.usingCustomDeck = true;        
+        if (!Menu.instance.willBeHost)
+            NetworkManager.Singleton.StartClient();
+        SceneManager.LoadScene("Game");
     }
 }

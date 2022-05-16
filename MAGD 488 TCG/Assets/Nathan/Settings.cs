@@ -17,8 +17,7 @@ public class Settings : MonoBehaviour {
     
     [SerializeField] TMP_Dropdown ResolutionDropdown;
     Dictionary<int, int> resolutionDict = new Dictionary<int, int>();
-    private void OnEnable() {
-        LoadScreenResolutions();
+    private void OnEnable() {        
         audioMixer = FindObjectOfType<AudioSource>().outputAudioMixerGroup.audioMixer;
         foreach(Selectable s in Selectable.allSelectablesArray){
             if(s.name == "VSync")
@@ -32,6 +31,7 @@ public class Settings : MonoBehaviour {
         vsToggle.isOn = QualitySettings.vSyncCount > 0 ? true : false;
         audioSlider.value = PlayerPrefs.GetFloat("volume");
         audioMixer.SetFloat("MasterVolume", PlayerPrefs.GetFloat("volume"));
+        LoadScreenResolutions();
     }
     private void LoadScreenResolutions() {
         resolutions = new List<Resolution>(Screen.resolutions);
