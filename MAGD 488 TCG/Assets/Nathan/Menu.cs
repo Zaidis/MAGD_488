@@ -39,11 +39,6 @@ public class Menu : MonoBehaviour
 
     public void ButtonPlay()
     {
-        if (TempDeck.instance.usingCustomDeck) {
-            TempDeck.instance.AddListToTemporaryDeck(DeckEditor.instance.deckID);
-        }
-
-
         MythosClient.instance.OnMatchMake();
         ButtonSetFalse();
         play.SetActive(true);

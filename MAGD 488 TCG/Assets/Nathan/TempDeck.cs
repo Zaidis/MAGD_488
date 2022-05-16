@@ -19,7 +19,7 @@ public class TempDeck : MonoBehaviour
     }
 
     public void AddListToTemporaryDeck(List<int> newDeck) {
-
+        deckID.Clear();
         for(int i = 0; i < newDeck.Count; i++) {
             deckID.Add(newDeck[i]);
         }
