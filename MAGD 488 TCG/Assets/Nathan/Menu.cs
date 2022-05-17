@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
-
+using UnityEngine.SceneManagement;
 public class Menu : MonoBehaviour
 {
     public static Menu instance;
@@ -87,5 +87,9 @@ public class Menu : MonoBehaviour
     public void ButtonExit()
     {
         Application.Quit();
+    }
+
+    public void ButtonTutorial() {
+        SceneManager.LoadScene(5); //tutorial
     }
 }

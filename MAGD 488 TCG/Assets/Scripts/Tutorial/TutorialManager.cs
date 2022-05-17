@@ -60,6 +60,6 @@ public class TutorialManager : MonoBehaviour
     }
 
     public void ExitTutorial() {
-
+        SceneManager.LoadScene(1);
     }
 }
