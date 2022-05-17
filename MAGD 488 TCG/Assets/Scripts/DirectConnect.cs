@@ -15,14 +15,13 @@ public class DirectConnect : MonoBehaviour
         Debug.Log("Join Code: " + serverOut.joinCode);
         MythosClient.instance.joinCode = serverOut.joinCode;
         NetworkManager.Singleton.GetComponent<UnityTransport>().SetHostRelayData(serverOut.ipv4address, serverOut.port, serverOut.allocationIdBytes, serverOut.key, serverOut.connectionData, true);
-        SceneManager.LoadScene(gameScene);        
+        Menu.instance.ButtonPregameDeckSelectDirect(true);
     }
     public async void OnJoinRequest() {
         string joinCode = joinInput.text;
         clientOut = await MythosClient.JoinRelayServerFromJoinCode(joinCode);
         MythosClient.instance.joinCode = joinCode;
         NetworkManager.Singleton.GetComponent<UnityTransport>().SetClientRelayData(clientOut.ipv4address, clientOut.port, clientOut.allocationIdBytes, clientOut.key, clientOut.connectionData, clientOut.hostConnectionData, true);
-        SceneManager.LoadScene(gameScene);
-        NetworkManager.Singleton.StartClient();        
+        Menu.instance.ButtonPregameDeckSelectDirect(false);    
     }
 }

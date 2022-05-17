@@ -15,6 +15,8 @@ public class Menu : MonoBehaviour
     [SerializeField] GameObject direct;
     [SerializeField] GameObject credits;
     [SerializeField] GameObject deckSelectPregame;
+    [SerializeField] GameObject deckSelectPregameDirect;
+    public bool willBeHost = false;
     private void Start() {
         AudioMixer audioMixer = FindObjectOfType<AudioSource>().outputAudioMixerGroup.audioMixer;
         audioMixer.SetFloat("MasterVolume", PlayerPrefs.GetFloat("volume"));
@@ -34,16 +36,12 @@ public class Menu : MonoBehaviour
         direct.SetActive(false);
         credits.SetActive(false);
         deckSelectPregame.SetActive(false);
+        deckSelectPregameDirect.SetActive(false);
     }
 
 
     public void ButtonPlay()
     {
-        if (TempDeck.instance.usingCustomDeck) {
-            TempDeck.instance.AddListToTemporaryDeck(DeckEditor.instance.deckID);
-        }
-
-
         MythosClient.instance.OnMatchMake();
         ButtonSetFalse();
         play.SetActive(true);
@@ -52,6 +50,12 @@ public class Menu : MonoBehaviour
         ButtonSetFalse();
         deckSelectPregame.SetActive(true);
         deckEditor.SetActive(true);
+    }
+    public void ButtonPregameDeckSelectDirect(bool host) {
+        ButtonSetFalse();
+        deckSelectPregameDirect.SetActive(true);
+        willBeHost = host;
+        deckEditor.SetActive(true);        
     }
     public void ButtonDirect() {
 

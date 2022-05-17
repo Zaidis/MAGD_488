@@ -43,7 +43,7 @@ public class DeckSelector : MonoBehaviour
         layout.padding.top = padding;
         layout.spacing = new Vector2(padding, padding);
         // layout.cellSize = new Vector2(deckList.rect.width - (padding * 2), 100);
-        layout.cellSize = new Vector2(1000, 100);
+        layout.cellSize = new Vector2(Display.main.renderingWidth * .75f, 100);
     }
 
     public void ButtonNewDeck()

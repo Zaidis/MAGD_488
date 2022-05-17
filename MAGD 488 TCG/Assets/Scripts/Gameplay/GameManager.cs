@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviour {
 
     public Hand myHand;
     public OpponentHand opponentHand;
-    public List<Card> deck;
+    public List<Card> deck = new List<Card>();
     private List<Card> cards;
     private Dictionary<int, Card> dictionaryOfCards = new Dictionary<int, Card>();
 
@@ -183,13 +183,13 @@ public class GameManager : MonoBehaviour {
         }
 
         //affect deck
-        for (int i = 0; i < TempDeck.instance.deckID.Count; i++) {
-            deck[i] = dictionaryOfCards[TempDeck.instance.deckID[i]];
+        if (TempDeck.instance.deckID.Count > 0) {
+            deck.Clear();
+            for (int i = 0; i < TempDeck.instance.deckID.Count; i++)
+                deck.Add(dictionaryOfCards[TempDeck.instance.deckID[i]]);
         }
 
-
         AffectHealthValues(20, 20);
-
     }
 
     public void YourTurnAnimation() {

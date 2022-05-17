@@ -15957,7 +15957,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Usernameeeeeee
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: bd713563eff53f64b8239d4c3afddb87, type: 2}
   m_sharedMaterial: {fileID: 5090155605296946063, guid: bd713563eff53f64b8239d4c3afddb87, type: 2}
@@ -18299,7 +18299,7 @@ AudioSource:
   m_GameObject: {fileID: 1698018744}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 24300002, guid: 00a6172b194ffe345b1db357149b6aae, type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
   m_Volume: 0.1
@@ -28233,6 +28233,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TurnStatus: {fileID: 1594578613}
+  player: {fileID: 0}
   turnAnim: {fileID: 485010590}
   turnAnimObject: {fileID: 485010587}
   opponent: {fileID: 23749470}
